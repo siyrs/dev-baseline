@@ -85,6 +85,16 @@ dev-baseline/
 
 ---
 
+### 快捷安装方式
+
+如果 Claude Code 当前可以访问这个仓库，并且有权限写入你本地的 Claude skills 目录，你也可以直接让 Claude 帮你安装这个 skill。
+
+示例：
+
+```text
+请把 https://github.com/siyrs/dev-baseline 里的 Claude skill 安装到我的个人 Claude skills 目录，名称使用 dev-baseline，并检查 /dev-baseline 是否可用。
+```
+
 ## 作为 Claude Code Skill 安装
 
 Claude Code 支持把自定义 skill 放到个人目录或项目目录中。

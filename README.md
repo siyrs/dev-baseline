@@ -89,6 +89,16 @@ Anyone should be able to read the repo and understand the current state within m
 
 Claude Code supports custom skills placed in either the personal skill directory or the project skill directory.
 
+### Quick install with Claude
+
+If Claude Code has access to your repository and can write to your local Claude skill directory, you can often ask Claude to install this skill for you directly from the repository.
+
+Example:
+
+```text
+Please install the Claude skill from https://github.com/siyrs/dev-baseline into my personal Claude skills directory as dev-baseline, and verify that /dev-baseline is available.
+```
+
 ### Personal install
 
 Copy the contents of `claude/` into:
