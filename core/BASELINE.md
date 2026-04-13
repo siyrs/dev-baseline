@@ -28,36 +28,35 @@ When entering any new project or new iteration, establish and maintain a stable 
 9. Update `README.md` when project status, usage, or scope changes.
 10. Docs must reflect the real state of the project.
 
-## Task states
-
-- `todo`
-- `doing`
-- `done`
-- `blocked`
-
 ## Workflow
 
-### Initialization
-- Check whether `README.md` and `docs/` exist
-- Create baseline docs if missing
-- Initialize version goal, scope, risks, and open questions
+### Init
+- scan the repository
+- establish baseline docs
+- enrich project memory
+- do not create detailed iteration tasks by default
 
-### Planning
-- Review the requirement
-- Decide whether it belongs to current iteration, next version, or open questions
-- Update planning docs only
-- Produce a concrete numbered task breakdown
-- Ask for confirmation before implementation
+### Review
+- inspect `PLAN.md`
+- summarize unfinished, blocked, and future work
 
-### Execution
-- Follow the numbered tasks
-- Keep docs and code synchronized
-- Report completed work and remaining tasks
+### Optimize
+- propose improvement candidates
+- only add confirmed items into planning
+
+### Plan
+- turn confirmed work into structured tasks
+- ask for confirmation before implementation
+
+### Execute
+- implement confirmed tasks
+- keep docs and code synchronized
+- record completed timestamps
 
 ## Success criteria
 
 - Project docs are complete enough to guide work
-- Current version goal is clear
+- Current and future work are clearly separated
 - Interface, config, deploy, and change history are traceable
 - README works as the project entry point
 - Another contributor can quickly understand the repo state

@@ -1,10 +1,11 @@
 # API Documentation
 
 ## Document Info
-- Current version: v0.1.0
-- Last updated: YYYY-MM-DD
+- Current version:
+- Last updated:
 
 ## General Conventions
+
 ### Base URL
 ```text
 To be defined
@@ -18,11 +19,11 @@ To be defined
 - Response format: JSON
 - Encoding: UTF-8
 
-## Current Version APIs
+## Current APIs
 
-### 1. Endpoint Name
-- Method: GET / POST / PUT / DELETE
-- Path: `/api/...`
+### 1. Endpoint name
+- Method:
+- Path:
 - Description:
 
 #### Request Parameters
@@ -44,5 +45,5 @@ To be defined
 |---|---|
 |  |  |
 
-## Reserved APIs for Later Versions
+## Reserved for Next Iterations
 - 

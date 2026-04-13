@@ -1,8 +1,8 @@
 # Architecture Notes
 
 ## Document Info
-- Current version: v0.1.0
-- Last updated: YYYY-MM-DD
+- Current version:
+- Last updated:
 
 ## System Goal
 - 

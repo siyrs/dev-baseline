@@ -1,8 +1,8 @@
 # Configuration Guide
 
 ## Document Info
-- Current version: v0.1.0
-- Last updated: YYYY-MM-DD
+- Current version:
+- Last updated:
 
 ## Environment Variables
 | Variable | Required | Default | Description |

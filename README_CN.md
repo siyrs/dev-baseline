@@ -4,7 +4,7 @@
 
 [English README](./README.md) · [许可证](./LICENSE)
 
-Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于帮助你在新项目启动、旧项目迭代、需求变更和长期维护过程中，建立统一的文档体系、开发节奏与交付纪律。
+Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于帮助你接管现有项目、建立项目记忆、查看剩余任务、审查项目优化方向、规划新需求，并且只在用户明确确认后才进入真正实现。
 
 它的目标不是让模型“多记一点”，而是把项目的关键上下文从对话中抽离出来，沉淀为结构化文件，让项目在长周期迭代、多人协作、上下文压缩之后，依然可以稳定推进。
 
@@ -20,70 +20,62 @@ Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于
 - 部署方式已经调整，却没人记录
 - 对话一长，前置约束和背景信息开始丢失
 - 后来接手的人很难快速理解项目现状
+- 项目优化建议没有被结构化地转入下一轮开发计划
 
 Dev Baseline 的目标，就是把这些高频问题工程化地解决掉。
 
 ---
 
-## 这个仓库提供了什么
+## 它解决什么问题
 
-- 一份**平台无关的核心基线**：`core/BASELINE.md`
-- 一套 **Claude Code 适配层**：`claude/`
-- 一套推荐的 **项目覆盖配置**：`project-overlay/.claude/`
-- 一组可直接复用的**项目模板**
+Dev Baseline 主要帮助 Claude Code：
+
+- 干净地接管一个项目
+- 建立或修复文档基线
+- 从 `PLAN.md` 读取当前剩余工作
+- 对项目做结构化优化审查
+- 把确认的新需求或优化项转化为开发计划
+- 避免“还没规划就开始写代码”
+- 保持文档与代码同步演进
 
 ---
 
-## 仓库结构
+## 核心工作流
+
+Dev Baseline 围绕五种工作模式展开：
+
+1. `init`：扫描项目并建立文档基线
+2. `backlog review`：查看 `PLAN.md` 中未完成任务和后续规划
+3. `optimization review`：从结构、代码质量、文档、测试、部署等维度给出优化建议
+4. `planning`：把确认的新需求转化为具体任务计划
+5. `execution`：只有在用户确认后才开始实现
+
+---
+
+## 主要命令
 
 ```text
-dev-baseline/
-├─ README.md
-├─ README_CN.md
-├─ LICENSE
-├─ .gitignore
-├─ core/
-│  └─ BASELINE.md
-├─ claude/
-│  ├─ SKILL.md
-│  └─ templates/
-│     ├─ README.md
-│     └─ docs/
-│        ├─ PLAN.md
-│        ├─ API.md
-│        ├─ DEPLOY.md
-│        ├─ CHANGELOG.md
-│        ├─ CONFIG.md
-│        ├─ ARCHITECTURE.md
-│        └─ TESTING.md
-├─ project-overlay/
-│  └─ .claude/
-│     ├─ CLAUDE.md
-│     └─ settings.json
-└─ examples/
-   └─ demo-project-structure.md
+/dev-baseline init
+/dev-baseline 看看还有什么开发任务
+/dev-baseline 帮我优化下项目
+/dev-baseline 新增用户登录
+开始工作
+```
+
+也支持英文：
+
+```text
+/dev-baseline what remains
+/dev-baseline review this project for improvements
+/dev-baseline add payment module
+start
 ```
 
 ---
 
-## 核心理念
+## 作为 Claude Code Skill 安装
 
-### 先文档，后开发
-不要一上来就开始写代码。应该先明确项目结构、当前迭代范围、接口约束、配置说明、部署方式和版本记录。
-
-### 把项目记忆外置
-重要信息不应该只存在于聊天上下文中，而应该稳定地存在于 `README.md` 和 `docs/` 中。
-
-### 范围必须显式管理
-本次要做什么、本次不做什么、后续什么时候做，必须明确写出来，避免范围失控。
-
-### 文档是交付物的一部分
-文档不是“做完再补”的附属品，而是工程交付过程中的一等产物。
-
-### 任何人都应该能快速接手
-一个好的项目仓库，应该让后来者在几分钟内理解项目当前状态、边界和下一步方向。
-
----
+Claude Code 支持把自定义 skill 放到个人目录或项目目录中。
 
 ### 快捷安装方式
 
@@ -95,9 +87,7 @@ dev-baseline/
 请把 https://github.com/siyrs/dev-baseline 里的 Claude skill 安装到我的个人 Claude skills 目录，名称使用 dev-baseline，并检查 /dev-baseline 是否可用。
 ```
 
-## 作为 Claude Code Skill 安装
-
-Claude Code 支持把自定义 skill 放到个人目录或项目目录中。
+这种方式在 Claude 能访问仓库和本地文件系统时通常更省事。稳定兜底方式仍然是下面的手动安装。
 
 ### 个人安装
 
@@ -144,42 +134,85 @@ project-root/.claude/
 
 ---
 
-## 如何使用
+## 它是怎么工作的
 
-### 1. 查看还有哪些开发任务
+### Mode 0：Init 模式
 
-当你想让 Claude 检查 `docs/PLAN.md` 中还剩哪些任务、阻塞项、待确认事项和下版本规划时，使用：
+使用：
+
+```text
+/dev-baseline init
+```
+
+这个模式应当：
+
+- 扫描项目结构和技术栈
+- 尽量识别包管理器、启动方式、测试路径、配置文件和部署线索
+- 生成或补全 `CLAUDE.md`
+- 创建缺失的 docs 基础骨架
+- 按需更新 `README.md` 的项目概览与索引
+- 输出项目摘要和建议下一步
+
+这个模式 **不会直接开始实现**，也 **不会默认写详细任务拆解**。
+
+### Mode A：待办审查模式
+
+使用：
 
 ```text
 /dev-baseline 看看还有什么开发任务
 ```
 
-也可以这样说：
+这个模式应当：
+
+- 读取 `docs/PLAN.md`
+- 展示未完成任务
+- 展示进行中与阻塞项
+- 展示待确认事项
+- 展示下一迭代候选项与未来版本规划
+- 推荐最适合优先推进的下一项
+
+这个模式用于“看现状”，不是“开始实现”。
+
+### Mode B：优化审查模式
+
+使用：
 
 ```text
-/dev-baseline 还有什么开发需求
-/dev-baseline 看看待办
+/dev-baseline 帮我优化下项目
 ```
 
-### 2. 规划一个新需求
+这个模式会从以下维度给出改进建议：
 
-当新需求到来时，使用：
+- 项目结构
+- 功能组织
+- 代码质量
+- 文档基线
+- 测试与验证
+- 部署与可运维性
+
+它会先输出优化候选项，再等你决定哪些应进入下一轮开发。
+
+### Mode C：规划模式
+
+使用：
 
 ```text
-/dev-baseline 新增用户登录和角色权限控制
+/dev-baseline 新增支付模块
 ```
 
-这个 skill 应该：
+这个模式应当：
 
-1. 检查仓库中的 README 和 docs 覆盖情况
-2. 如果缺少文档，按模板创建
-3. 只更新规划相关文档，不直接开始实现
-4. 输出编号任务清单
-5. 询问你是否开始工作
+- 检查 docs 覆盖情况
+- 缺失则补齐
+- 更新规划相关文档
+- 判断该需求属于当前迭代、下一轮迭代还是待确认事项
+- 输出编号任务清单
+- 询问是否开始实现
 
-### 3. 开始真正实现
+### Mode D：执行模式
 
-只有在计划展示完之后，再明确回复：
+只有在计划已展示之后，再明确回复：
 
 ```text
 开始工作
@@ -191,74 +224,123 @@ project-root/.claude/
 请完成
 ```
 
-然后 Claude 才按任务顺序开始实现，并保持文档与代码同步更新。
+这样 Claude 才会：
 
----
-
-## Skill 的工作模式
-
-这个 Claude skill 支持三种模式：
-
-### 模式 A：待办审查模式
-用于“还有什么没做”“看看剩余任务”这类问题。
-
-它应当：
-
-- 读取 `docs/PLAN.md`
-- 罗列未完成任务（`todo`、`doing`、`blocked`）
-- 罗列待确认事项
-- 罗列后续版本任务
-- 推荐最适合先做的下一项
-- 询问是否将其中某项转入当前执行
-
-### 模式 B：规划模式
-用于新需求进入时。
-
-它应当：
-
-- 检查 `README.md` 和 docs 覆盖情况
-- 缺失则按模板创建
-- 已存在则增量更新，不破坏原有历史
-- 判断该需求属于当前版本、下个版本还是待确认事项
-- 输出编号执行计划
-- 在开始实现前征求确认
-
-### 模式 C：执行模式
-只有在用户明确确认后才进入。
-
-它应当：
-
-- 按编号任务执行
+- 按任务顺序开始实现
 - 保持文档与代码同步
+- 将完成项移入 `PLAN.md` 的已完成区
+- 写入完成时间
 - 汇报已完成内容、文档更新情况和剩余任务
 
 ---
 
-## 默认文档基线
+## 仓库结构
 
-默认情况下，这套基线会要求项目具备以下文档：
-
-- `PLAN.md`：记录当前版本目标、任务拆解、优先级、风险与待确认事项
-- `API.md`：记录当前与后续版本接口设计
-- `DEPLOY.md`：记录环境要求、构建、启动、发布、回滚步骤
-- `CHANGELOG.md`：记录版本历史与用户可感知的变更
-- `CONFIG.md`：记录环境变量、运行配置、日志和缓存目录
-- `ARCHITECTURE.md`：记录系统边界、模块划分与关键设计决策
-- `TESTING.md`：记录测试范围、自测清单与发布前检查项
+```text
+dev-baseline/
+├─ README.md
+├─ README_CN.md
+├─ LICENSE
+├─ .gitignore
+├─ core/
+│  └─ BASELINE.md
+├─ claude/
+│  ├─ SKILL.md
+│  └─ templates/
+│     ├─ README.md
+│     └─ docs/
+│        ├─ PLAN.md
+│        ├─ API.md
+│        ├─ DEPLOY.md
+│        ├─ CHANGELOG.md
+│        ├─ CONFIG.md
+│        ├─ ARCHITECTURE.md
+│        └─ TESTING.md
+├─ project-overlay/
+│  └─ .claude/
+│     ├─ CLAUDE.md
+│     └─ settings.json
+└─ examples/
+   └─ demo-project-structure.md
+```
 
 ---
 
-## 推荐工作流
+## 文档职责
 
-1. 初始化文档基线
-2. 明确当前版本目标
-3. 划清本次范围与非本次范围
-4. 记录风险、依赖与待确认事项
-5. 审查或更新 `PLAN.md`
-6. 在真正实现前先确认
-7. 代码变更时同步更新文档
-8. 发布前完成验证
-9. 更新变更记录与当前状态
+### `README.md`
+项目入口页。说明它是什么、如何安装、如何使用、工作流怎么跑。
+
+### `claude/SKILL.md`
+工作流调度器。决定进入哪种模式，以及 Claude 在每种模式下该做什么。
+
+### `project-overlay/.claude/CLAUDE.md`
+项目级长期规则。告诉 Claude 在这个仓库里长期应该怎么工作。
+
+### `docs/PLAN.md`
+迭代驾驶舱。负责当前活跃工作、已完成事项、待确认项、下一迭代候选项和未来版本规划。
+
+### `docs/CHANGELOG.md`
+面向发布的版本变更历史。说明每个版本改了什么，有没有运维影响。
+
+### `docs/DEPLOY.md`
+运行手册。说明如何构建、配置、启动、验证、排障和回滚。
+
+### `docs/API.md`
+接口事实来源。
+
+### `docs/CONFIG.md`
+配置与环境事实来源。
+
+### `docs/ARCHITECTURE.md`
+系统边界与关键设计决策来源。
+
+### `docs/TESTING.md`
+验证、自测与发布前检查来源。
+
+---
+
+## 推荐使用流
+
+### 场景 1：接手一个旧项目
+
+```text
+/dev-baseline init
+/dev-baseline 帮我优化下项目
+```
+
+### 场景 2：查看当前还剩什么
+
+```text
+/dev-baseline 看看还有什么开发任务
+```
+
+### 场景 3：开始一个新需求
+
+```text
+/dev-baseline 新增支付模块
+开始工作
+```
+
+### 场景 4：把已确认的优化项转入下一迭代
+
+```text
+/dev-baseline 帮我优化下项目
+把第 1、3、5 项加入下一轮开发
+开始工作
+```
+
+---
+
+## 最佳实践
+
+- 第一次进入仓库先跑 `init`
+- 想知道下一步做什么，先看 backlog review
+- 做大清理、大重构前先跑 optimize review
+- 让 `PLAN.md` 成为当前和下一轮工作的事实源
+- 在计划可见且已确认之前，不直接开始实现
+- 把面向交付的变化写进 `CHANGELOG.md`
+- 把运行与部署事实写进 `DEPLOY.md`
 
 ---
 

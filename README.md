@@ -4,84 +4,73 @@
 
 [中文文档](./README_CN.md) · [License](./LICENSE)
 
-Dev Baseline is an open-source baseline repository for Claude Code workflows. It helps you start new projects and iterate on existing ones with a stable documentation structure, explicit scope management, and a repeatable planning-first process.
+Dev Baseline is an open-source workflow baseline for Claude Code. It helps you take over existing repositories, establish project memory, review backlog, propose structural improvements, plan new requirements, and implement work only after explicit confirmation.
 
-Its purpose is not to make the model “remember more.” Its purpose is to move critical project context out of chat history and into structured files, so work stays understandable, traceable, and maintainable over time.
+Its goal is not to make the model “remember more.” Its goal is to move critical project context out of chat history and into structured files, so work remains understandable, reviewable, and maintainable over time.
 
 ---
 
-## Why Dev Baseline exists
+## Why this exists
 
-In many AI coding workflows, the main problem is not code generation itself. The real problems are usually:
+In many AI-assisted coding workflows, the main problem is not code generation itself. The real problems are usually:
 
-- Requirements are not decomposed before implementation
-- Current scope and future scope get mixed together
+- requirements are not decomposed before implementation
+- current scope and future scope get mixed together
 - APIs change but docs do not
-- Deployment steps change but nobody records them
-- Important project context gets lost as conversations grow
-- New contributors cannot quickly understand the repository
+- deployment steps change but nobody records them
+- important project context gets lost as conversations grow
+- new contributors cannot quickly understand the repository
+- improvement ideas never get turned into a clean next iteration plan
 
-Dev Baseline solves these problems by making documentation, planning, and update discipline part of the delivery workflow.
-
----
-
-## What this repository provides
-
-- A **platform-neutral baseline** in `core/BASELINE.md`
-- A **Claude Code adaptation layer** in `claude/`
-- A recommended **project overlay** in `project-overlay/.claude/`
-- Ready-to-use **project templates** for documentation-first development
+Dev Baseline solves these problems by making documentation, planning, review, and confirmation part of the delivery workflow.
 
 ---
 
-## Repository structure
+## What it solves
+
+Dev Baseline is designed to help Claude Code:
+
+- take over a project cleanly
+- build or repair the documentation baseline
+- inspect remaining tasks from `PLAN.md`
+- review a project and suggest improvements
+- convert confirmed work into an iteration plan
+- avoid coding before planning
+- keep docs and code synchronized during implementation
+
+---
+
+## Core workflow
+
+Dev Baseline is built around five operating modes:
+
+1. `init` — inspect the repository and establish the documentation baseline
+2. `backlog review` — show unfinished tasks and future work from `PLAN.md`
+3. `optimization review` — suggest improvements across structure, code quality, docs, testing, and deployment
+4. `planning` — convert confirmed requirements into a concrete task plan
+5. `execution` — implement work only after user confirmation
+
+---
+
+## Main commands
 
 ```text
-dev-baseline/
-├─ README.md
-├─ README_CN.md
-├─ LICENSE
-├─ .gitignore
-├─ core/
-│  └─ BASELINE.md
-├─ claude/
-│  ├─ SKILL.md
-│  └─ templates/
-│     ├─ README.md
-│     └─ docs/
-│        ├─ PLAN.md
-│        ├─ API.md
-│        ├─ DEPLOY.md
-│        ├─ CHANGELOG.md
-│        ├─ CONFIG.md
-│        ├─ ARCHITECTURE.md
-│        └─ TESTING.md
-├─ project-overlay/
-│  └─ .claude/
-│     ├─ CLAUDE.md
-│     └─ settings.json
-└─ examples/
-   └─ demo-project-structure.md
+/dev-baseline init
+/dev-baseline what remains
+/dev-baseline show pending tasks
+/dev-baseline review this project for improvements
+/dev-baseline add user login
+start
 ```
 
----
+Natural language Chinese prompts also work well, for example:
 
-## Core philosophy
-
-### Documentation first
-Do not start with code alone. Start with project structure, iteration scope, interface contracts, configuration rules, deployment notes, and version history.
-
-### Project memory should live in files
-Important context should not depend on chat history. It should live in `README.md` and `docs/`.
-
-### Scope must stay explicit
-Current work, deferred work, and future plans must remain clearly separated.
-
-### Docs are part of delivery
-Documentation is not an afterthought. It is a first-class project artifact.
-
-### Handoff should be easy
-Anyone should be able to read the repo and understand the current state within minutes.
+```text
+/dev-baseline 看看还有什么开发任务
+/dev-baseline 帮我优化下项目
+/dev-baseline 新增支付模块
+开始工作
+```
 
 ---
 
@@ -91,13 +80,15 @@ Claude Code supports custom skills placed in either the personal skill directory
 
 ### Quick install with Claude
 
-If Claude Code has access to your repository and can write to your local Claude skill directory, you can often ask Claude to install this skill for you directly from the repository.
+If Claude Code can access this repository and your local Claude skill directory, you can often ask Claude to install this skill for you directly.
 
 Example:
 
 ```text
 Please install the Claude skill from https://github.com/siyrs/dev-baseline into my personal Claude skills directory as dev-baseline, and verify that /dev-baseline is available.
 ```
+
+This is a convenient workflow when Claude can access the repo and your local filesystem. The documented fallback remains the manual install method below.
 
 ### Personal install
 
@@ -144,42 +135,85 @@ This adds:
 
 ---
 
-## How to use
+## How it works
 
-### 1. Review remaining work
+### Mode 0: Init mode
 
-Use this when you want Claude to inspect `docs/PLAN.md` and summarize unfinished tasks, blockers, open questions, and next-version items.
+Use:
+
+```text
+/dev-baseline init
+```
+
+This mode should:
+
+- inspect the repository structure and stack
+- detect runtime clues, package manager, startup and test paths when possible
+- generate or enrich `CLAUDE.md`
+- create missing baseline docs
+- update `README.md` with project entry information when needed
+- summarize the project and recommend the next step
+
+This mode should **not** start implementation and should **not** create detailed iteration tasks by default.
+
+### Mode A: Backlog review mode
+
+Use:
 
 ```text
 /dev-baseline what remains
 ```
 
-You can also ask in natural language:
+This mode should:
+
+- read `docs/PLAN.md`
+- show unfinished tasks
+- show in-progress and blocked tasks
+- show open questions
+- show next iteration candidates and future version items
+- recommend the most sensible next task
+
+This mode is for visibility, not implementation.
+
+### Mode B: Optimization review mode
+
+Use:
 
 ```text
-/dev-baseline show pending tasks
-/dev-baseline what future requirements are planned
+/dev-baseline review this project for improvements
 ```
 
-### 2. Plan a new requirement
+This mode should review the project across:
 
-Use this when a new feature or iteration request arrives.
+- project structure
+- feature organization
+- code quality
+- documentation baseline
+- testing and validation
+- deployment and operability
+
+It should produce improvement candidates first, then wait for the user to decide which ones should enter the next iteration.
+
+### Mode C: Planning mode
+
+Use:
 
 ```text
-/dev-baseline add user login and role-based access control
+/dev-baseline add user login
 ```
 
-The skill should:
+This mode should:
 
-1. Inspect repo docs coverage
-2. Create missing baseline docs if needed
-3. Update planning docs only
-4. Produce a numbered task breakdown
-5. Ask whether implementation should start
+- inspect doc coverage
+- create missing files if needed
+- update planning-related docs
+- classify the requirement into current iteration, next iteration, or open questions
+- produce a numbered task plan
+- ask whether implementation should begin
 
-### 3. Start implementation
+### Mode D: Execution mode
 
-Only after the plan is shown, confirm with something like:
+Use only after confirmation such as:
 
 ```text
 start
@@ -197,84 +231,133 @@ or
 开始工作
 ```
 
-Then Claude should implement tasks in the planned order and keep docs and code in sync.
+This mode should:
 
----
-
-## Skill behavior
-
-The Claude skill supports three modes:
-
-### Mode A: Backlog review mode
-Used for requests like “what remains” or “show pending work”.
-
-It should:
-
-- read `docs/PLAN.md`
-- list unfinished tasks (`todo`, `doing`, `blocked`)
-- list open questions
-- list deferred or next-version items
-- recommend the best next task
-- ask whether one item should move into active execution
-
-### Mode B: Planning mode
-Used for new requirements.
-
-It should:
-
-- inspect `README.md` and docs coverage
-- create missing docs from templates
-- update existing planning docs without destructive overwrite
-- classify the requirement into current iteration, next version, or open question
-- produce a numbered implementation plan
-- ask for confirmation before implementation
-
-### Mode C: Execution mode
-Used only after explicit confirmation.
-
-It should:
-
-- implement the numbered plan
-- keep docs and code synchronized
+- execute the approved plan
+- keep docs and code in sync
+- move completed work into the completed section in `PLAN.md`
+- record completion timestamps
 - report completed work, doc updates, and remaining tasks
 
 ---
 
-## Included baseline docs
+## Repository structure
 
-The default project baseline includes:
-
-- `PLAN.md` for scope, tasks, priorities, risks, and open questions
-- `API.md` for current and planned interfaces
-- `DEPLOY.md` for environment, build, startup, release, and rollback steps
-- `CHANGELOG.md` for version history and visible changes
-- `CONFIG.md` for environment variables, runtime configuration, logs, and caches
-- `ARCHITECTURE.md` for system boundaries and design decisions
-- `TESTING.md` for validation, self-checks, and release checks
+```text
+dev-baseline/
+├─ README.md
+├─ README_CN.md
+├─ LICENSE
+├─ .gitignore
+├─ core/
+│  └─ BASELINE.md
+├─ claude/
+│  ├─ SKILL.md
+│  └─ templates/
+│     ├─ README.md
+│     └─ docs/
+│        ├─ PLAN.md
+│        ├─ API.md
+│        ├─ DEPLOY.md
+│        ├─ CHANGELOG.md
+│        ├─ CONFIG.md
+│        ├─ ARCHITECTURE.md
+│        └─ TESTING.md
+├─ project-overlay/
+│  └─ .claude/
+│     ├─ CLAUDE.md
+│     └─ settings.json
+└─ examples/
+   └─ demo-project-structure.md
+```
 
 ---
 
-## Recommended workflow
+## Documents
 
-1. Initialize documentation baseline
-2. Define the current version goal
-3. Split in-scope and out-of-scope work
-4. Record open questions and risks
-5. Review or update `PLAN.md`
-6. Confirm before implementation
-7. Update docs together with code
-8. Validate before release
-9. Update changelog and current status
+### `README.md`
+The repository entry point. It explains what the project is, how to install it, how to use it, and how the workflow is structured.
+
+### `claude/SKILL.md`
+The workflow orchestrator. It decides which mode to use and what Claude should do in each mode.
+
+### `project-overlay/.claude/CLAUDE.md`
+Persistent project-level rules. It tells Claude how to behave in the repository over time.
+
+### `docs/PLAN.md`
+The iteration control panel. It tracks active work, completed work, open questions, next iteration candidates, and future versions.
+
+### `docs/CHANGELOG.md`
+The release-facing change history. It explains what changed in each version and any operational impact.
+
+### `docs/DEPLOY.md`
+The runbook. It explains how to build, configure, run, verify, troubleshoot, and roll back the project.
+
+### `docs/API.md`
+The interface contract record.
+
+### `docs/CONFIG.md`
+The configuration and environment record.
+
+### `docs/ARCHITECTURE.md`
+The system boundary and design decision record.
+
+### `docs/TESTING.md`
+The validation, self-check, and release checklist record.
+
+---
+
+## Recommended usage flow
+
+### Scenario 1: Taking over an existing project
+
+```text
+/dev-baseline init
+/dev-baseline review this project for improvements
+```
+
+### Scenario 2: Checking what is left
+
+```text
+/dev-baseline what remains
+```
+
+### Scenario 3: Starting a new requirement
+
+```text
+/dev-baseline add payment module
+start
+```
+
+### Scenario 4: Turning approved improvements into iteration work
+
+```text
+/dev-baseline review this project for improvements
+Please add items 1, 3, and 5 to the next iteration
+start
+```
+
+---
+
+## Best practices
+
+- Use `init` when first entering a repository
+- Use backlog review before asking “what should we do next”
+- Use optimization review before large cleanup or refactor work
+- Keep `PLAN.md` as the source of truth for active and upcoming work
+- Only start implementation after the plan is visible and confirmed
+- Keep release-facing changes in `CHANGELOG.md`
+- Keep operational truth in `DEPLOY.md`
 
 ---
 
 ## Best for
 
 - Claude Code users
-- Solo developers
-- Small engineering teams
-- Long-running AI-assisted development
-- Repositories where scope drift and context loss are common
+- solo developers
+- small engineering teams
+- long-running AI-assisted development
+- repositories where scope drift and context loss are common
 
 ---
 
