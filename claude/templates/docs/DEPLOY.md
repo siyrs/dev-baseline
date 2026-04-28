@@ -8,6 +8,11 @@
 ## Deployment Overview
 - 
 
+## Runtime Topology
+```text
+Client -> Reverse Proxy -> Frontend -> Backend -> Database
+```
+
 ## Environment Matrix
 
 ### Local
@@ -43,6 +48,12 @@ See [`./CONFIG.md`](./CONFIG.md)
 ### Production
 ```bash
 # production start command
+```
+
+## Health Check Commands
+```bash
+# Replace host and port with the real service address
+curl -f http://localhost:<port>/health
 ```
 
 ## Verification Checklist
