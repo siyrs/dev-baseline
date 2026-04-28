@@ -19,6 +19,20 @@ $ARGUMENTS
 
 Select exactly one mode before doing any work.
 
+If the request looks like a continuation command but there is no approved numbered plan in the current conversation or in `docs/PLAN.md`, do not enter execution mode. Fall back to planning mode or backlog review mode and explain that execution requires an approved plan.
+
+## Mode file boundary matrix
+
+Use this matrix to keep every mode inside a clear read/write boundary.
+
+| Mode | Must read | May write | Must not write |
+|---|---|---|---|
+| Mode 0: Init | repository tree, README, package/config/startup/test/deploy clues | `CLAUDE.md`, missing baseline docs from templates, minimal README entry updates | source code, detailed implementation tasks by default |
+| Mode A: Backlog review | `docs/PLAN.md` | nothing by default | source code, docs unless explicitly asked to reprioritize or rewrite the plan |
+| Mode B: Optimization review | repository tree, current docs, relevant source structure | nothing by default | `docs/PLAN.md` unless the user confirms selected improvement items |
+| Mode C: Planning | README, existing docs, relevant source/config clues | planning-related docs, including `docs/PLAN.md`, `docs/API.md`, `docs/CONFIG.md`, and README when scope changes | production code, refactors, implementation files |
+| Mode D: Execution | approved numbered plan, `docs/PLAN.md`, relevant docs and source files | source files and synchronized docs required by the approved plan | unrelated files, unapproved scope, speculative future work |
+
 ### Mode 0: Init mode
 
 Use this mode if the user asks to initialize, inspect, take over, or bootstrap the current project.
@@ -146,7 +160,7 @@ You must:
 
 ### Mode D: Execution mode
 
-Only use this mode after explicit user confirmation.
+Only use this mode after explicit user confirmation and after an approved numbered plan already exists in the current conversation or in `docs/PLAN.md`.
 
 Trigger examples:
 - `开始工作`
@@ -156,6 +170,14 @@ Trigger examples:
 - `start`
 - `proceed`
 - `go ahead`
+
+Before entering this mode, verify that:
+
+1. A numbered plan exists
+2. The plan has been shown to the user or recorded in `docs/PLAN.md`
+3. The user has explicitly approved implementation
+
+If any of these checks fail, do not execute. Return to planning or backlog review and ask for confirmation.
 
 In this mode:
 
@@ -181,6 +203,7 @@ Always follow these rules:
 3. Keep current scope and future scope separate.
 4. Do not silently overwrite existing planning content.
 5. Treat docs as first-class deliverables.
+6. Do not enter execution mode without an approved numbered plan.
 
 ## Additional guardrails
 
@@ -191,6 +214,7 @@ Always follow these rules:
   2. task breakdown is shown
   3. the user explicitly confirms
 - In init mode, do not default to writing detailed task breakdown into `docs/PLAN.md`.
+- When a continuation command is ambiguous, prefer safe planning or backlog review over execution.
 
 ## Init output format
 
