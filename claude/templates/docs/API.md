@@ -45,5 +45,11 @@ To be defined
 |---|---|
 |  |  |
 
+## API Change Log
+
+| Date | Endpoint | Change | Compatible | Notes |
+|---|---|---|---|---|
+|  |  |  |  |  |
+
 ## Reserved for Next Iterations
 - 
