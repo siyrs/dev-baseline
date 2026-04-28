@@ -48,7 +48,27 @@ Dev Baseline 围绕五种工作模式展开：
 2. `backlog review`：查看 `PLAN.md` 中未完成任务和后续规划
 3. `optimization review`：从结构、代码质量、文档、测试、部署等维度给出优化建议
 4. `planning`：把确认的新需求转化为具体任务计划
-5. `execution`：只有在用户确认后才开始实现
+5. `execution`：只有在用户确认且存在已批准的编号计划后才开始实现
+
+---
+
+## v0.1.1 质量增强
+
+这个版本不改变 skill 的核心定位，主要增强执行边界、模板质量和发布前自检能力。
+
+- 执行模式增加更强的安全规则：如果当前没有已批准的编号计划，`start`、`go ahead`、`继续` 等继续类命令必须回退到规划或待办审查。
+- `SKILL.md` 增加 Mode 文件边界矩阵，明确每种模式必须读取、可以写入、禁止写入的内容。
+- `PLAN.md` 增加 `Iteration Decision Log`，用于记录范围、优先级和迭代决策。
+- `CHANGELOG.md` 增加迁移说明和发布验证清单。
+- `DEPLOY.md` 增加运行拓扑和健康检查命令占位。
+- `API.md` 增加接口变更记录表。
+- `scripts/validate-skill.sh` 用于检查 skill 入口和必需模板是否齐全。
+
+在仓库根目录运行自检：
+
+```bash
+bash scripts/validate-skill.sh
+```
 
 ---
 
@@ -226,6 +246,7 @@ project-root/.claude/
 
 这样 Claude 才会：
 
+- 确认存在已批准的编号计划
 - 按任务顺序开始实现
 - 保持文档与代码同步
 - 将完成项移入 `PLAN.md` 的已完成区
@@ -260,6 +281,8 @@ dev-baseline/
 │  └─ .claude/
 │     ├─ CLAUDE.md
 │     └─ settings.json
+├─ scripts/
+│  └─ validate-skill.sh
 └─ examples/
    └─ demo-project-structure.md
 ```
@@ -278,16 +301,16 @@ dev-baseline/
 项目级长期规则。告诉 Claude 在这个仓库里长期应该怎么工作。
 
 ### `docs/PLAN.md`
-迭代驾驶舱。负责当前活跃工作、已完成事项、待确认项、下一迭代候选项和未来版本规划。
+迭代驾驶舱。负责当前活跃工作、已完成事项、待确认项、下一迭代候选项、未来版本规划和迭代决策记录。
 
 ### `docs/CHANGELOG.md`
-面向发布的版本变更历史。说明每个版本改了什么，有没有运维影响。
+面向发布的版本变更历史。说明每个版本改了什么、迁移说明、验证状态以及有没有运维影响。
 
 ### `docs/DEPLOY.md`
-运行手册。说明如何构建、配置、启动、验证、排障和回滚。
+运行手册。说明如何构建、配置、启动、验证、排障、回滚和健康检查。
 
 ### `docs/API.md`
-接口事实来源。
+接口事实来源和接口变更记录。
 
 ### `docs/CONFIG.md`
 配置与环境事实来源。
@@ -329,6 +352,18 @@ dev-baseline/
 把第 1、3、5 项加入下一轮开发
 开始工作
 ```
+
+---
+
+## 包自检
+
+发布或复制 skill 前，建议运行：
+
+```bash
+bash scripts/validate-skill.sh
+```
+
+这个脚本会检查 Claude skill 入口文件、所有必需模板是否存在，并检查 skill frontmatter 是否包含必需字段。
 
 ---
 
