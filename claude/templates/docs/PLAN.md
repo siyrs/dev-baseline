@@ -46,6 +46,13 @@
 ## Risks and Dependencies
 - 
 
+## Iteration Decision Log
+
+### YYYY-MM-DD HH:mm
+- Decision:
+- Reason:
+- Impact:
+
 ## Completed Work
 
 ### YYYY-MM-DD
