@@ -48,7 +48,27 @@ Dev Baseline is built around five operating modes:
 2. `backlog review` — show unfinished tasks and future work from `PLAN.md`
 3. `optimization review` — suggest improvements across structure, code quality, docs, testing, and deployment
 4. `planning` — convert confirmed requirements into a concrete task plan
-5. `execution` — implement work only after user confirmation
+5. `execution` — implement work only after user confirmation and after an approved numbered plan exists
+
+---
+
+## v0.1.1 quality enhancements
+
+This version strengthens the workflow guardrails and template quality without changing the core positioning of the skill.
+
+- Execution mode now has a stronger safety rule: if no approved numbered plan exists, continuation commands such as `start`, `go ahead`, or `继续` must fall back to planning or backlog review.
+- `SKILL.md` now includes a mode file-boundary matrix that defines what each mode must read, may write, and must not write.
+- `PLAN.md` includes an `Iteration Decision Log` section for recording scope and priority decisions.
+- `CHANGELOG.md` includes migration notes and a release validation checklist.
+- `DEPLOY.md` includes runtime topology and health check command placeholders.
+- `API.md` includes an API change log table.
+- `scripts/validate-skill.sh` checks that the skill entry and required templates exist.
+
+Run the package check from the repository root:
+
+```bash
+bash scripts/validate-skill.sh
+```
 
 ---
 
@@ -233,6 +253,7 @@ or
 
 This mode should:
 
+- verify that an approved numbered plan exists
 - execute the approved plan
 - keep docs and code in sync
 - move completed work into the completed section in `PLAN.md`
@@ -267,6 +288,8 @@ dev-baseline/
 │  └─ .claude/
 │     ├─ CLAUDE.md
 │     └─ settings.json
+├─ scripts/
+│  └─ validate-skill.sh
 └─ examples/
    └─ demo-project-structure.md
 ```
@@ -285,16 +308,16 @@ The workflow orchestrator. It decides which mode to use and what Claude should d
 Persistent project-level rules. It tells Claude how to behave in the repository over time.
 
 ### `docs/PLAN.md`
-The iteration control panel. It tracks active work, completed work, open questions, next iteration candidates, and future versions.
+The iteration control panel. It tracks active work, completed work, open questions, next iteration candidates, future versions, and iteration decisions.
 
 ### `docs/CHANGELOG.md`
-The release-facing change history. It explains what changed in each version and any operational impact.
+The release-facing change history. It explains what changed in each version, migration notes, validation status, and any operational impact.
 
 ### `docs/DEPLOY.md`
-The runbook. It explains how to build, configure, run, verify, troubleshoot, and roll back the project.
+The runbook. It explains how to build, configure, run, verify, troubleshoot, roll back, and health-check the project.
 
 ### `docs/API.md`
-The interface contract record.
+The interface contract record and API change history.
 
 ### `docs/CONFIG.md`
 The configuration and environment record.
@@ -336,6 +359,18 @@ start
 Please add items 1, 3, and 5 to the next iteration
 start
 ```
+
+---
+
+## Package validation
+
+Before publishing or copying the skill, run:
+
+```bash
+bash scripts/validate-skill.sh
+```
+
+The script checks whether the Claude skill entry file and all required templates exist, and whether the skill frontmatter contains the required fields.
 
 ---
 
