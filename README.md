@@ -4,7 +4,7 @@
 
 [中文文档](./README_CN.md) · [License](./LICENSE)
 
-Dev Baseline is an open-source workflow baseline for Claude Code. It helps you take over existing repositories, establish project memory, review backlog, propose structural improvements, plan new requirements, and implement work only after explicit confirmation.
+Dev Baseline is an open-source workflow baseline for Claude Code. It helps you take over existing repositories, establish project memory, review backlog, propose structural improvements, plan new requirements, implement work only after explicit confirmation, and publish completed repository changes only when explicitly requested.
 
 Its goal is not to make the model “remember more.” Its goal is to move critical project context out of chat history and into structured files, so work remains understandable, reviewable, and maintainable over time.
 
@@ -21,8 +21,9 @@ In many AI-assisted coding workflows, the main problem is not code generation it
 - important project context gets lost as conversations grow
 - new contributors cannot quickly understand the repository
 - improvement ideas never get turned into a clean next iteration plan
+- completed changes are not consistently committed and pushed with clear messages
 
-Dev Baseline solves these problems by making documentation, planning, review, and confirmation part of the delivery workflow.
+Dev Baseline solves these problems by making documentation, planning, review, confirmation, and explicit Git publishing part of the delivery workflow.
 
 ---
 
@@ -37,18 +38,20 @@ Dev Baseline is designed to help Claude Code:
 - convert confirmed work into an iteration plan
 - avoid coding before planning
 - keep docs and code synchronized during implementation
+- commit and push completed changes only after an explicit Git publish request
 
 ---
 
 ## Core workflow
 
-Dev Baseline is built around five operating modes:
+Dev Baseline is built around six operating modes:
 
 1. `init` — inspect the repository and establish the documentation baseline
 2. `backlog review` — show unfinished tasks and future work from `PLAN.md`
 3. `optimization review` — suggest improvements across structure, code quality, docs, testing, and deployment
 4. `planning` — convert confirmed requirements into a concrete task plan
 5. `execution` — implement work only after user confirmation and after an approved numbered plan exists
+6. `git publish` — run `git add`, generate a commit message, commit, and push only when explicitly requested
 
 ---
 
@@ -72,6 +75,34 @@ bash scripts/validate-skill.sh
 
 ---
 
+## Git publish mode
+
+Git publish mode is separate from normal implementation. Dev Baseline will not commit or push as a side effect of `init`, review, planning, or execution.
+
+Use it only when you want Claude Code to publish the current repository changes:
+
+```text
+/dev-baseline commit and push
+/dev-baseline git commit and push
+/dev-baseline publish changes
+/dev-baseline 提交并推送
+/dev-baseline 帮我提交代码并 push
+```
+
+When triggered, the skill should:
+
+- inspect `git status`, diff summary, current branch, and upstream state
+- stop if there are no changes
+- stop before staging if suspicious secret or local-only files are present
+- run `git add -A` only after safety checks pass
+- generate a concise commit message from the actual diff
+- run `git commit -m "..."`
+- push to the configured upstream, or safely set upstream to `origin/<current-branch>` when needed
+
+It must never force push, create tags, or create releases unless the user explicitly asks for that separate operation.
+
+---
+
 ## Main commands
 
 ```text
@@ -81,6 +112,7 @@ bash scripts/validate-skill.sh
 /dev-baseline review this project for improvements
 /dev-baseline add user login
 start
+/dev-baseline commit and push
 ```
 
 Natural language Chinese prompts also work well, for example:
@@ -90,6 +122,7 @@ Natural language Chinese prompts also work well, for example:
 /dev-baseline 帮我优化下项目
 /dev-baseline 新增支付模块
 开始工作
+/dev-baseline 提交并推送
 ```
 
 ---
@@ -165,16 +198,7 @@ Use:
 /dev-baseline init
 ```
 
-This mode should:
-
-- inspect the repository structure and stack
-- detect runtime clues, package manager, startup and test paths when possible
-- generate or enrich `CLAUDE.md`
-- create missing baseline docs
-- update `README.md` with project entry information when needed
-- summarize the project and recommend the next step
-
-This mode should **not** start implementation and should **not** create detailed iteration tasks by default.
+This mode should inspect the repository, detect stack/runtime clues, generate or enrich `CLAUDE.md`, create missing baseline docs, and summarize the project. It should not start implementation, create detailed iteration tasks by default, commit, or push.
 
 ### Mode A: Backlog review mode
 
@@ -184,16 +208,7 @@ Use:
 /dev-baseline what remains
 ```
 
-This mode should:
-
-- read `docs/PLAN.md`
-- show unfinished tasks
-- show in-progress and blocked tasks
-- show open questions
-- show next iteration candidates and future version items
-- recommend the most sensible next task
-
-This mode is for visibility, not implementation.
+This mode should read `docs/PLAN.md`, show unfinished tasks, in-progress work, blockers, open questions, next iteration candidates, and future version items. It is for visibility, not implementation.
 
 ### Mode B: Optimization review mode
 
@@ -203,16 +218,7 @@ Use:
 /dev-baseline review this project for improvements
 ```
 
-This mode should review the project across:
-
-- project structure
-- feature organization
-- code quality
-- documentation baseline
-- testing and validation
-- deployment and operability
-
-It should produce improvement candidates first, then wait for the user to decide which ones should enter the next iteration.
+This mode reviews project structure, feature organization, code quality, docs, testing, deployment, and operability. It produces improvement candidates first and waits for the user to decide what enters planning.
 
 ### Mode C: Planning mode
 
@@ -222,14 +228,7 @@ Use:
 /dev-baseline add user login
 ```
 
-This mode should:
-
-- inspect doc coverage
-- create missing files if needed
-- update planning-related docs
-- classify the requirement into current iteration, next iteration, or open questions
-- produce a numbered task plan
-- ask whether implementation should begin
+This mode checks docs coverage, creates missing baseline files if needed, updates planning-related docs, classifies the requirement, produces a numbered task plan, and asks whether implementation should begin.
 
 ### Mode D: Execution mode
 
@@ -242,23 +241,21 @@ start
 or
 
 ```text
-go ahead
-```
-
-or
-
-```text
 开始工作
 ```
 
-This mode should:
+This mode verifies that an approved numbered plan exists, executes the approved plan, keeps docs and code in sync, moves completed work into `PLAN.md`, and records completion timestamps. It does not commit or push unless Git publish mode is separately triggered.
 
-- verify that an approved numbered plan exists
-- execute the approved plan
-- keep docs and code in sync
-- move completed work into the completed section in `PLAN.md`
-- record completion timestamps
-- report completed work, doc updates, and remaining tasks
+### Mode E: Git publish mode
+
+Use only after an explicit Git publishing request such as:
+
+```text
+/dev-baseline commit and push
+/dev-baseline 提交并推送
+```
+
+This mode checks repository changes, stages safe files, generates a commit message, commits, and pushes. It refuses empty commits, suspicious secret files, force pushes, tags, and releases by default.
 
 ---
 
@@ -360,6 +357,12 @@ Please add items 1, 3, and 5 to the next iteration
 start
 ```
 
+### Scenario 5: Publishing completed work
+
+```text
+/dev-baseline commit and push
+```
+
 ---
 
 ## Package validation
@@ -381,6 +384,7 @@ The script checks whether the Claude skill entry file and all required templates
 - Use optimization review before large cleanup or refactor work
 - Keep `PLAN.md` as the source of truth for active and upcoming work
 - Only start implementation after the plan is visible and confirmed
+- Trigger Git publish mode explicitly when you want changes committed and pushed
 - Keep release-facing changes in `CHANGELOG.md`
 - Keep operational truth in `DEPLOY.md`
 
