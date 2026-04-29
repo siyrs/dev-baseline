@@ -4,7 +4,7 @@
 
 [English README](./README.md) · [许可证](./LICENSE)
 
-Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于帮助你接管现有项目、建立项目记忆、查看剩余任务、审查项目优化方向、规划新需求，并且只在用户明确确认后才进入真正实现。
+Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于帮助你接管现有项目、建立项目记忆、查看剩余任务、审查项目优化方向、规划新需求，并且只在用户明确确认后才进入真正实现；当用户明确要求时，也可以提交并推送已经完成的仓库变更。
 
 它的目标不是让模型“多记一点”，而是把项目的关键上下文从对话中抽离出来，沉淀为结构化文件，让项目在长周期迭代、多人协作、上下文压缩之后，依然可以稳定推进。
 
@@ -21,6 +21,7 @@ Dev Baseline 是一套面向 Claude Code 工作流的开源开发基线，用于
 - 对话一长，前置约束和背景信息开始丢失
 - 后来接手的人很难快速理解项目现状
 - 项目优化建议没有被结构化地转入下一轮开发计划
+- 已完成的变更没有被稳定地提交、推送并配上清晰的提交说明
 
 Dev Baseline 的目标，就是把这些高频问题工程化地解决掉。
 
@@ -37,18 +38,20 @@ Dev Baseline 主要帮助 Claude Code：
 - 把确认的新需求或优化项转化为开发计划
 - 避免“还没规划就开始写代码”
 - 保持文档与代码同步演进
+- 仅在明确触发 Git 发布时提交并推送已完成变更
 
 ---
 
 ## 核心工作流
 
-Dev Baseline 围绕五种工作模式展开：
+Dev Baseline 围绕六种工作模式展开：
 
 1. `init`：扫描项目并建立文档基线
 2. `backlog review`：查看 `PLAN.md` 中未完成任务和后续规划
 3. `optimization review`：从结构、代码质量、文档、测试、部署等维度给出优化建议
 4. `planning`：把确认的新需求转化为具体任务计划
 5. `execution`：只有在用户确认且存在已批准的编号计划后才开始实现
+6. `git publish`：只有在用户明确触发时，才执行 `git add`、生成提交说明、commit 和 push
 
 ---
 
@@ -72,6 +75,34 @@ bash scripts/validate-skill.sh
 
 ---
 
+## Git 发布模式
+
+Git 发布模式和普通实现模式是分开的。Dev Baseline 不会在 `init`、审查、规划或执行过程中顺手 commit/push。
+
+只有当你明确要求发布当前仓库变更时才会触发，例如：
+
+```text
+/dev-baseline commit and push
+/dev-baseline git commit and push
+/dev-baseline publish changes
+/dev-baseline 提交并推送
+/dev-baseline 帮我提交代码并 push
+```
+
+触发后，skill 应当：
+
+- 检查 `git status`、diff 摘要、当前分支和 upstream 状态
+- 没有变更时停止
+- 发现疑似密钥、本地环境文件或本地私有文件时，在 stage 前停止
+- 安全检查通过后执行 `git add -A`
+- 根据真实 diff 生成简洁 commit message
+- 执行 `git commit -m "..."`
+- 推送到已配置 upstream；没有 upstream 但存在 `origin` 时，安全设置到 `origin/<current-branch>`
+
+除非用户单独明确要求，否则不得 force push、打 tag 或创建 release。
+
+---
+
 ## 主要命令
 
 ```text
@@ -80,6 +111,7 @@ bash scripts/validate-skill.sh
 /dev-baseline 帮我优化下项目
 /dev-baseline 新增用户登录
 开始工作
+/dev-baseline 提交并推送
 ```
 
 也支持英文：
@@ -89,6 +121,7 @@ bash scripts/validate-skill.sh
 /dev-baseline review this project for improvements
 /dev-baseline add payment module
 start
+/dev-baseline commit and push
 ```
 
 ---
@@ -164,16 +197,7 @@ project-root/.claude/
 /dev-baseline init
 ```
 
-这个模式应当：
-
-- 扫描项目结构和技术栈
-- 尽量识别包管理器、启动方式、测试路径、配置文件和部署线索
-- 生成或补全 `CLAUDE.md`
-- 创建缺失的 docs 基础骨架
-- 按需更新 `README.md` 的项目概览与索引
-- 输出项目摘要和建议下一步
-
-这个模式 **不会直接开始实现**，也 **不会默认写详细任务拆解**。
+这个模式应当扫描项目、识别技术栈和运行线索、生成或补全 `CLAUDE.md`、创建缺失的 docs 基础骨架，并输出项目摘要和建议下一步。它不会直接开始实现，不会默认写详细任务拆解，也不会提交或推送。
 
 ### Mode A：待办审查模式
 
@@ -183,16 +207,7 @@ project-root/.claude/
 /dev-baseline 看看还有什么开发任务
 ```
 
-这个模式应当：
-
-- 读取 `docs/PLAN.md`
-- 展示未完成任务
-- 展示进行中与阻塞项
-- 展示待确认事项
-- 展示下一迭代候选项与未来版本规划
-- 推荐最适合优先推进的下一项
-
-这个模式用于“看现状”，不是“开始实现”。
+这个模式应当读取 `docs/PLAN.md`，展示未完成任务、进行中与阻塞项、待确认事项、下一迭代候选项与未来版本规划。这个模式用于“看现状”，不是“开始实现”。
 
 ### Mode B：优化审查模式
 
@@ -202,16 +217,7 @@ project-root/.claude/
 /dev-baseline 帮我优化下项目
 ```
 
-这个模式会从以下维度给出改进建议：
-
-- 项目结构
-- 功能组织
-- 代码质量
-- 文档基线
-- 测试与验证
-- 部署与可运维性
-
-它会先输出优化候选项，再等你决定哪些应进入下一轮开发。
+这个模式会从项目结构、功能组织、代码质量、文档基线、测试与验证、部署与可运维性等维度给出改进建议。它会先输出优化候选项，再等你决定哪些应进入下一轮开发。
 
 ### Mode C：规划模式
 
@@ -221,14 +227,7 @@ project-root/.claude/
 /dev-baseline 新增支付模块
 ```
 
-这个模式应当：
-
-- 检查 docs 覆盖情况
-- 缺失则补齐
-- 更新规划相关文档
-- 判断该需求属于当前迭代、下一轮迭代还是待确认事项
-- 输出编号任务清单
-- 询问是否开始实现
+这个模式应当检查 docs 覆盖情况，缺失则补齐，更新规划相关文档，判断该需求属于当前迭代、下一轮迭代还是待确认事项，输出编号任务清单，并询问是否开始实现。
 
 ### Mode D：执行模式
 
@@ -244,14 +243,18 @@ project-root/.claude/
 请完成
 ```
 
-这样 Claude 才会：
+这样 Claude 才会确认存在已批准的编号计划、按任务顺序开始实现、保持文档与代码同步、将完成项移入 `PLAN.md` 的已完成区并写入完成时间。它不会自动 commit/push，除非你单独触发 Git 发布模式。
 
-- 确认存在已批准的编号计划
-- 按任务顺序开始实现
-- 保持文档与代码同步
-- 将完成项移入 `PLAN.md` 的已完成区
-- 写入完成时间
-- 汇报已完成内容、文档更新情况和剩余任务
+### Mode E：Git 发布模式
+
+只有在明确 Git 发布请求后触发，例如：
+
+```text
+/dev-baseline 提交并推送
+/dev-baseline commit and push
+```
+
+这个模式会检查仓库变更、stage 安全文件、生成提交说明、commit 并 push。默认拒绝空提交、疑似密钥文件、force push、tag 和 release。
 
 ---
 
@@ -353,6 +356,12 @@ dev-baseline/
 开始工作
 ```
 
+### 场景 5：发布已完成变更
+
+```text
+/dev-baseline 提交并推送
+```
+
 ---
 
 ## 包自检
@@ -374,6 +383,7 @@ bash scripts/validate-skill.sh
 - 做大清理、大重构前先跑 optimize review
 - 让 `PLAN.md` 成为当前和下一轮工作的事实源
 - 在计划可见且已确认之前，不直接开始实现
+- 想提交并推送时，明确触发 Git 发布模式
 - 把面向交付的变化写进 `CHANGELOG.md`
 - 把运行与部署事实写进 `DEPLOY.md`
 
