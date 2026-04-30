@@ -3,6 +3,7 @@ set -euo pipefail
 
 required_files=(
   "claude/SKILL.md"
+  "codex/AGENTS.md"
   "claude/templates/README.md"
   "claude/templates/docs/PLAN.md"
   "claude/templates/docs/API.md"
@@ -35,4 +36,14 @@ if ! grep -q "^disable-model-invocation:" claude/SKILL.md; then
   exit 1
 fi
 
-echo "dev-baseline skill package looks good."
+if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
+  echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+if ! grep -q "Git publish mode" codex/AGENTS.md; then
+  echo "Missing Git publish mode rules in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+echo "dev-baseline Claude and Codex package looks good."
