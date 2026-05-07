@@ -3,7 +3,6 @@ set -euo pipefail
 
 required_files=(
   "claude/SKILL.md"
-  "codex/AGENTS.md"
   "claude/templates/README.md"
   "claude/templates/docs/PLAN.md"
   "claude/templates/docs/API.md"
@@ -12,6 +11,15 @@ required_files=(
   "claude/templates/docs/CONFIG.md"
   "claude/templates/docs/ARCHITECTURE.md"
   "claude/templates/docs/TESTING.md"
+  "codex/AGENTS.md"
+  "codex/templates/README.md"
+  "codex/templates/docs/PLAN.md"
+  "codex/templates/docs/API.md"
+  "codex/templates/docs/DEPLOY.md"
+  "codex/templates/docs/CHANGELOG.md"
+  "codex/templates/docs/CONFIG.md"
+  "codex/templates/docs/ARCHITECTURE.md"
+  "codex/templates/docs/TESTING.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -44,6 +52,10 @@ fi
 if ! grep -q "Git publish mode" codex/AGENTS.md; then
   echo "Missing Git publish mode rules in codex/AGENTS.md" >&2
   exit 1
+fi
+
+if ! diff -q claude/templates/docs/PLAN.md codex/templates/docs/PLAN.md >/dev/null; then
+  echo "Warning: Claude and Codex PLAN templates differ." >&2
 fi
 
 echo "dev-baseline Claude and Codex package looks good."
