@@ -1,0 +1,19 @@
+name: Codex Doc Sync Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  doc-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run doc sync check
+        run: |
+          chmod +x shared/scripts/check-doc-sync.sh
+          bash shared/scripts/check-doc-sync.sh
