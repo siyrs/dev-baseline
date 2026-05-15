@@ -11,6 +11,14 @@ required_files=(
   "claude/templates/docs/CONFIG.md"
   "claude/templates/docs/ARCHITECTURE.md"
   "claude/templates/docs/TESTING.md"
+  "claude/skills/dev-baseline-init/SKILL.md"
+  "claude/skills/dev-baseline-plan/SKILL.md"
+  "claude/skills/dev-baseline-publish/SKILL.md"
+  "claude/skills/dev-baseline-report/SKILL.md"
+  "claude/agents/docs-auditor.md"
+  "claude/agents/security-guard.md"
+  "claude/agents/report-writer.md"
+  "claude/hooks/settings.example.json"
   "codex/AGENTS.md"
   "codex/templates/README.md"
   "codex/templates/docs/PLAN.md"
@@ -20,6 +28,20 @@ required_files=(
   "codex/templates/docs/CONFIG.md"
   "codex/templates/docs/ARCHITECTURE.md"
   "codex/templates/docs/TESTING.md"
+  "codex/.agents/skills/dev-baseline/SKILL.md"
+  "codex/.agents/skills/dev-baseline/references/report-mode.md"
+  "codex/.codex/hooks.json"
+  "codex/.codex/agents/release-manager.md"
+  "codex/.codex/agents/report-writer.md"
+  "shared/scripts/check-secrets.sh"
+  "shared/scripts/check-doc-sync.sh"
+  "shared/scripts/summarize-diff.sh"
+  "shared/scripts/generate-html-report.sh"
+  "shared/references/git-publish.md"
+  "shared/references/report-mode.md"
+  "github-actions/codex-doc-sync-check.yml"
+  "scripts/install-dev-baseline.sh"
+  "docs/REPORT_MODE.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -51,6 +73,16 @@ fi
 
 if ! grep -q "Git publish mode" codex/AGENTS.md; then
   echo "Missing Git publish mode rules in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+if ! grep -q "Report Mode" shared/references/report-mode.md; then
+  echo "Missing report mode reference." >&2
+  exit 1
+fi
+
+if ! grep -q "generate-html-report" shared/scripts/generate-html-report.sh; then
+  echo "Missing HTML report generator." >&2
   exit 1
 fi
 
