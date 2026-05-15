@@ -1,72 +1,76 @@
 ---
 name: dev-baseline-task
-description: Create and manage a team delivery task workspace using PM, developer, QA, bugfix, acceptance, and delivery documents. Use when starting a development task, creating a task workspace, 团队开发流程, 标准开发流程, or 产品/研发/测试协作.
+description: Create and manage a team delivery task workspace with PM, Developer, QA, readiness gates, feature status tracking, testing, bugfix, acceptance, and delivery records.
 disable-model-invocation: true
 ---
 
 # Dev Baseline Task Skill
 
-Use this skill when a new development task or requirement should follow the standard team delivery flow.
+Use this skill when a new development task should follow the standard team delivery flow.
 
-## Trigger examples
+## Triggers
 
-- `/dev-baseline-task create v0.3.2 team delivery flow`
+- `/dev-baseline-task create v0.3.2 用户登录功能`
 - `/dev-baseline-task 新建开发任务`
-- `/dev-baseline 开始开发任务`
 - `标准开发流程`
 - `产品研发测试流程`
 
-## Default workspace
+## Workspace
 
-Create one task workspace per requirement:
+Create one workspace per requirement:
 
 ```text
 docs/tasks/YYYYMMDD-vX.Y.Z-task-slug/
 ```
 
-## Required documents
-
-- `00-index.md`
-- `01-product-requirement.md`
-- `02-development-plan.md`
-- `03-implementation-notes.md`
-- `04-test-plan.md`
-- `05-test-report.md`
-- `06-bugfix-log.md`
-- `07-acceptance-report.md`
-- `08-delivery-summary.md`
-
-## Recommended command
+Recommended command:
 
 ```bash
 bash shared/scripts/create-task-workspace.sh <version> <task-name>
 ```
 
-## Role flow
+## Required preparation before implementation
 
-1. Product Manager writes product requirement and acceptance criteria.
-2. Developer writes detailed development plan and execution order.
-3. Developer implements and records implementation notes.
-4. Developer self-tests and records evidence.
-5. QA writes test plan and test report.
-6. Developer fixes QA bugs and records bugfix log.
-7. QA retests until passed.
-8. Product Manager performs acceptance.
-9. Delivery summary is recorded.
+Implementation must not start immediately after the user gives a feature idea.
+
+Before implementation, complete:
+
+1. PM drafts the requirement in `01-product-requirement.md`.
+2. Developer reviews feasibility, risk, difficulty, and rough effort in `02-development-plan.md` and `11-readiness-gates.md`.
+3. PM and Developer resolve unclear function points. Questions that cannot be answered must go back to the user.
+4. QA and PM define test scope, test cases, data, environment, and pass/fail rules in `04-test-plan.md` and `11-readiness-gates.md`.
+5. The assistant summarizes scope, feasibility, plan, tests, open questions, and risks, then asks the user to confirm starting implementation.
+
+## Feature status tracking
+
+Track every function point in `09-feature-status-board.md`.
+
+Allowed status flow:
+
+```text
+not-started -> in-progress -> implemented -> self-tested -> qa-testing -> qa-passed -> accepted
+```
+
+Rejected items move to `bugfixing` before returning to test.
+
+## Collaboration log
+
+Record PM, Developer, QA, and user communication in `10-collaboration-log.md`.
+
+## Stage report
+
+After readiness, implementation, QA, bugfix, acceptance, or delivery stages, update `12-stage-user-report.md` and summarize progress to the user.
 
 ## PLAN.md role
 
-`docs/PLAN.md` is only a dashboard and index. Detailed task documents belong in the task workspace.
-
-## Safety
-
-Do not implement source code before the product requirement and development plan are ready and approved.
-Do not commit or push unless Git mode is explicitly triggered.
+`docs/PLAN.md` is only a dashboard and index. Detailed records belong in the task workspace.
 
 ## Output format
 
 - Task workspace:
-- Documents created:
-- Current stage:
-- Current owner role:
+- Current phase:
+- PM readiness:
+- Developer feasibility:
+- QA readiness:
+- User confirmation required:
 - Next action:
