@@ -18,11 +18,15 @@ required_files=(
   "claude/skills/dev-baseline-report/SKILL.md"
   "claude/skills/dev-baseline-release/SKILL.md"
   "claude/skills/dev-baseline-quality/SKILL.md"
+  "claude/skills/dev-baseline-task/SKILL.md"
   "claude/agents/docs-auditor.md"
   "claude/agents/security-guard.md"
   "claude/agents/report-writer.md"
   "claude/agents/code-reviewer.md"
   "claude/agents/release-manager.md"
+  "claude/agents/product-manager.md"
+  "claude/agents/developer.md"
+  "claude/agents/qa-tester.md"
   "claude/hooks/settings.example.json"
   "codex/AGENTS.md"
   "codex/templates/README.md"
@@ -38,6 +42,7 @@ required_files=(
   "codex/.agents/skills/dev-baseline/references/git-mode.md"
   "codex/.agents/skills/dev-baseline/references/release-mode.md"
   "codex/.agents/skills/dev-baseline/references/quality-mode.md"
+  "codex/.agents/skills/dev-baseline/references/team-delivery-flow.md"
   "codex/.codex/hooks.json"
   "codex/.codex/agents/release-manager.md"
   "codex/.codex/agents/report-writer.md"
@@ -46,6 +51,9 @@ required_files=(
   "codex/.codex/agents/security-guard.md"
   "codex/.codex/agents/code-reviewer.md"
   "codex/.codex/agents/quality-auditor.md"
+  "codex/.codex/agents/product-manager.md"
+  "codex/.codex/agents/developer.md"
+  "codex/.codex/agents/qa-tester.md"
   "shared/scripts/check-secrets.sh"
   "shared/scripts/check-doc-sync.sh"
   "shared/scripts/summarize-diff.sh"
@@ -54,11 +62,23 @@ required_files=(
   "shared/scripts/validate-baseline-docs.sh"
   "shared/scripts/detect-stack.sh"
   "shared/scripts/quality-gate.sh"
+  "shared/scripts/create-task-workspace.sh"
   "shared/references/git-publish.md"
   "shared/references/report-mode.md"
+  "shared/references/team-delivery-flow.md"
+  "shared/templates/tasks/00-index.md"
+  "shared/templates/tasks/01-product-requirement.md"
+  "shared/templates/tasks/02-development-plan.md"
+  "shared/templates/tasks/03-implementation-notes.md"
+  "shared/templates/tasks/04-test-plan.md"
+  "shared/templates/tasks/05-test-report.md"
+  "shared/templates/tasks/06-bugfix-log.md"
+  "shared/templates/tasks/07-acceptance-report.md"
+  "shared/templates/tasks/08-delivery-summary.md"
   "docs/REPORT_MODE.md"
   "docs/WORKFLOW_STATE.md"
   "docs/QUALITY_GATE.md"
+  "docs/TEAM_DELIVERY_FLOW.md"
   "github-actions/codex-doc-sync-check.yml"
   "scripts/install-dev-baseline.sh"
 )
@@ -85,43 +105,30 @@ if ! grep -q "^disable-model-invocation:" claude/SKILL.md; then
   exit 1
 fi
 
-if ! grep -q "name: dev-baseline-git" claude/skills/dev-baseline-git/SKILL.md; then
-  echo "Missing dev-baseline-git Claude skill." >&2
-  exit 1
-fi
-
-if ! grep -q "name: dev-baseline-release" claude/skills/dev-baseline-release/SKILL.md; then
-  echo "Missing dev-baseline-release Claude skill." >&2
-  exit 1
-fi
-
-if ! grep -q "name: dev-baseline-quality" claude/skills/dev-baseline-quality/SKILL.md; then
-  echo "Missing dev-baseline-quality Claude skill." >&2
-  exit 1
-fi
+for skill in dev-baseline-git dev-baseline-release dev-baseline-quality dev-baseline-task dev-baseline-report; do
+  if ! grep -q "name: ${skill}" "claude/skills/${skill}/SKILL.md"; then
+    echo "Missing Claude skill: ${skill}" >&2
+    exit 1
+  fi
+done
 
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
   exit 1
 fi
 
-if ! grep -q "Git publish mode" codex/AGENTS.md; then
-  echo "Missing Git publish mode rules in codex/AGENTS.md" >&2
+if ! grep -q "# Team Delivery Flow" shared/references/team-delivery-flow.md; then
+  echo "Missing team delivery flow reference." >&2
   exit 1
 fi
 
-if ! grep -q "# Git Mode" codex/.agents/skills/dev-baseline/references/git-mode.md; then
-  echo "Missing Codex git mode reference." >&2
+if ! grep -q "create-task-workspace" shared/scripts/create-task-workspace.sh; then
+  echo "Missing task workspace creation script." >&2
   exit 1
 fi
 
-if ! grep -q "# Release Mode" codex/.agents/skills/dev-baseline/references/release-mode.md; then
-  echo "Missing Codex release mode reference." >&2
-  exit 1
-fi
-
-if ! grep -q "# Quality Mode" codex/.agents/skills/dev-baseline/references/quality-mode.md; then
-  echo "Missing Codex quality mode reference." >&2
+if ! grep -q "# Team Delivery Flow" codex/.agents/skills/dev-baseline/references/team-delivery-flow.md; then
+  echo "Missing Codex team delivery flow reference." >&2
   exit 1
 fi
 
