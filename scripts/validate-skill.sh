@@ -19,6 +19,7 @@ required_files=(
   "claude/skills/dev-baseline-release/SKILL.md"
   "claude/skills/dev-baseline-quality/SKILL.md"
   "claude/skills/dev-baseline-task/SKILL.md"
+  "claude/skills/dev-baseline-task-status/SKILL.md"
   "claude/agents/docs-auditor.md"
   "claude/agents/security-guard.md"
   "claude/agents/report-writer.md"
@@ -43,6 +44,7 @@ required_files=(
   "codex/.agents/skills/dev-baseline/references/release-mode.md"
   "codex/.agents/skills/dev-baseline/references/quality-mode.md"
   "codex/.agents/skills/dev-baseline/references/team-delivery-flow.md"
+  "codex/.agents/skills/dev-baseline/references/task-status-mode.md"
   "codex/.codex/hooks.json"
   "codex/.codex/agents/release-manager.md"
   "codex/.codex/agents/report-writer.md"
@@ -64,6 +66,9 @@ required_files=(
   "shared/scripts/quality-gate.sh"
   "shared/scripts/create-task-workspace.sh"
   "shared/scripts/task-note.sh"
+  "shared/scripts/validate-task-readiness.sh"
+  "shared/scripts/advance-task-status.sh"
+  "shared/scripts/generate-task-report.sh"
   "shared/references/git-publish.md"
   "shared/references/report-mode.md"
   "shared/references/team-delivery-flow.md"
@@ -80,6 +85,10 @@ required_files=(
   "shared/templates/tasks/10-collaboration-log.md"
   "shared/templates/tasks/11-readiness-gates.md"
   "shared/templates/tasks/12-stage-user-report.md"
+  "shared/templates/tasks/13-traceability-matrix.md"
+  "shared/templates/tasks/14-change-request-log.md"
+  "shared/templates/tasks/15-risk-register.md"
+  "shared/templates/tasks/16-retrospective.md"
   "docs/REPORT_MODE.md"
   "docs/WORKFLOW_STATE.md"
   "docs/QUALITY_GATE.md"
@@ -110,7 +119,7 @@ if ! grep -q "^disable-model-invocation:" claude/SKILL.md; then
   exit 1
 fi
 
-for skill in dev-baseline-git dev-baseline-release dev-baseline-quality dev-baseline-task dev-baseline-report; do
+for skill in dev-baseline-git dev-baseline-release dev-baseline-quality dev-baseline-task dev-baseline-report dev-baseline-task-status; do
   if ! grep -q "name: ${skill}" "claude/skills/${skill}/SKILL.md"; then
     echo "Missing Claude skill: ${skill}" >&2
     exit 1
@@ -134,6 +143,41 @@ fi
 
 if ! grep -q "# Team Delivery Flow" codex/.agents/skills/dev-baseline/references/team-delivery-flow.md; then
   echo "Missing Codex team delivery flow reference." >&2
+  exit 1
+fi
+
+if ! grep -q "Task Status Mode" codex/.agents/skills/dev-baseline/references/task-status-mode.md; then
+  echo "Missing Codex task status mode reference." >&2
+  exit 1
+fi
+
+if ! grep -q "Traceability Matrix" shared/templates/tasks/13-traceability-matrix.md; then
+  echo "Missing traceability matrix template." >&2
+  exit 1
+fi
+
+if ! grep -q "Change Request Log" shared/templates/tasks/14-change-request-log.md; then
+  echo "Missing change request log template." >&2
+  exit 1
+fi
+
+if ! grep -q "Risk Register" shared/templates/tasks/15-risk-register.md; then
+  echo "Missing risk register template." >&2
+  exit 1
+fi
+
+if ! grep -q "Retrospective" shared/templates/tasks/16-retrospective.md; then
+  echo "Missing retrospective template." >&2
+  exit 1
+fi
+
+if ! grep -q "validate-task-readiness" shared/scripts/validate-task-readiness.sh; then
+  echo "Missing task readiness script." >&2
+  exit 1
+fi
+
+if ! grep -q "generate-task-report" shared/scripts/generate-task-report.sh; then
+  echo "Missing task report script." >&2
   exit 1
 fi
 
