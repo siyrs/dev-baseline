@@ -17,9 +17,12 @@ required_files=(
   "claude/skills/dev-baseline-git/SKILL.md"
   "claude/skills/dev-baseline-report/SKILL.md"
   "claude/skills/dev-baseline-release/SKILL.md"
+  "claude/skills/dev-baseline-quality/SKILL.md"
   "claude/agents/docs-auditor.md"
   "claude/agents/security-guard.md"
   "claude/agents/report-writer.md"
+  "claude/agents/code-reviewer.md"
+  "claude/agents/release-manager.md"
   "claude/hooks/settings.example.json"
   "codex/AGENTS.md"
   "codex/templates/README.md"
@@ -34,16 +37,23 @@ required_files=(
   "codex/.agents/skills/dev-baseline/references/report-mode.md"
   "codex/.agents/skills/dev-baseline/references/git-mode.md"
   "codex/.agents/skills/dev-baseline/references/release-mode.md"
+  "codex/.agents/skills/dev-baseline/references/quality-mode.md"
   "codex/.codex/hooks.json"
   "codex/.codex/agents/release-manager.md"
   "codex/.codex/agents/report-writer.md"
   "codex/.codex/agents/git-manager.md"
+  "codex/.codex/agents/docs-auditor.md"
+  "codex/.codex/agents/security-guard.md"
+  "codex/.codex/agents/code-reviewer.md"
+  "codex/.codex/agents/quality-auditor.md"
   "shared/scripts/check-secrets.sh"
   "shared/scripts/check-doc-sync.sh"
   "shared/scripts/summarize-diff.sh"
   "shared/scripts/generate-html-report.sh"
   "shared/scripts/block-dangerous-git.sh"
   "shared/scripts/validate-baseline-docs.sh"
+  "shared/scripts/detect-stack.sh"
+  "shared/scripts/quality-gate.sh"
   "shared/references/git-publish.md"
   "shared/references/report-mode.md"
   "docs/REPORT_MODE.md"
@@ -85,6 +95,11 @@ if ! grep -q "name: dev-baseline-release" claude/skills/dev-baseline-release/SKI
   exit 1
 fi
 
+if ! grep -q "name: dev-baseline-quality" claude/skills/dev-baseline-quality/SKILL.md; then
+  echo "Missing dev-baseline-quality Claude skill." >&2
+  exit 1
+fi
+
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
   exit 1
@@ -105,6 +120,11 @@ if ! grep -q "# Release Mode" codex/.agents/skills/dev-baseline/references/relea
   exit 1
 fi
 
+if ! grep -q "# Quality Mode" codex/.agents/skills/dev-baseline/references/quality-mode.md; then
+  echo "Missing Codex quality mode reference." >&2
+  exit 1
+fi
+
 if ! grep -q "Report Mode" shared/references/report-mode.md; then
   echo "Missing report mode reference." >&2
   exit 1
@@ -117,6 +137,11 @@ fi
 
 if ! grep -q "Blocked dangerous Git command" shared/scripts/block-dangerous-git.sh; then
   echo "Missing dangerous git guard." >&2
+  exit 1
+fi
+
+if ! grep -q "Quality gate" shared/scripts/quality-gate.sh; then
+  echo "Missing quality gate script." >&2
   exit 1
 fi
 
