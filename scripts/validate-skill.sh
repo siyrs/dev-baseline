@@ -14,6 +14,7 @@ required_files=(
   "claude/skills/dev-baseline-init/SKILL.md"
   "claude/skills/dev-baseline-plan/SKILL.md"
   "claude/skills/dev-baseline-publish/SKILL.md"
+  "claude/skills/dev-baseline-git/SKILL.md"
   "claude/skills/dev-baseline-report/SKILL.md"
   "claude/agents/docs-auditor.md"
   "claude/agents/security-guard.md"
@@ -30,9 +31,11 @@ required_files=(
   "codex/templates/docs/TESTING.md"
   "codex/.agents/skills/dev-baseline/SKILL.md"
   "codex/.agents/skills/dev-baseline/references/report-mode.md"
+  "codex/.agents/skills/dev-baseline/references/git-mode.md"
   "codex/.codex/hooks.json"
   "codex/.codex/agents/release-manager.md"
   "codex/.codex/agents/report-writer.md"
+  "codex/.codex/agents/git-manager.md"
   "shared/scripts/check-secrets.sh"
   "shared/scripts/check-doc-sync.sh"
   "shared/scripts/summarize-diff.sh"
@@ -66,6 +69,11 @@ if ! grep -q "^disable-model-invocation:" claude/SKILL.md; then
   exit 1
 fi
 
+if ! grep -q "name: dev-baseline-git" claude/skills/dev-baseline-git/SKILL.md; then
+  echo "Missing dev-baseline-git Claude skill." >&2
+  exit 1
+fi
+
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
   exit 1
@@ -73,6 +81,11 @@ fi
 
 if ! grep -q "Git publish mode" codex/AGENTS.md; then
   echo "Missing Git publish mode rules in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+if ! grep -q "# Git Mode" codex/.agents/skills/dev-baseline/references/git-mode.md; then
+  echo "Missing Codex git mode reference." >&2
   exit 1
 fi
 
