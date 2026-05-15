@@ -1,279 +1,163 @@
 # Dev Baseline
 
-> A Claude Code and Codex development baseline for documentation-first project delivery.
+> An agent-native development workflow baseline for Claude Code and Codex.
 
-[中文文档](./README_CN.md) · [License](./LICENSE)
+[中文文档](./README_CN.md) · [Command Map](./docs/COMMAND_MAP.md) · [Scenario Guide](./docs/SCENARIO_GUIDE.md) · [License](./LICENSE)
 
-Dev Baseline is an open-source workflow baseline for Claude Code and Codex. It helps you take over existing repositories, establish project memory, review backlog, propose structural improvements, plan new requirements, implement work only after explicit confirmation, and publish completed repository changes only when explicitly requested.
+Dev Baseline turns AI-assisted coding into a documented team delivery workflow. It supports project takeover, product planning, developer implementation, QA testing, bugfix loops, product acceptance, project reports, quality gates, release readiness, and safe Git publishing.
 
-Its goal is not to make the model “remember more.” Its goal is to move critical project context out of chat history and into structured files, so work remains understandable, reviewable, and maintainable over time.
-
----
-
-## Supported assistants
-
-Dev Baseline now provides two equivalent workflow packages:
-
-- `claude/` — Claude Code skill package, centered on `claude/SKILL.md`.
-- `codex/` — Codex instruction package, centered on `codex/AGENTS.md`.
-
-Both versions follow the same operating modes, document templates, safety guardrails, and Git publish rules.
+Its goal is not to make the model “remember more.” Its goal is to move project context out of chat history and into structured files, so work remains understandable, reviewable, and maintainable.
 
 ---
 
-## Core workflow
+## Main Entry Points
 
-Dev Baseline is built around six operating modes:
+| Entry | Use it for |
+|---|---|
+| `/dev-baseline init` | Project takeover and baseline docs |
+| `/dev-baseline-task create <version> <task>` | Start a real team delivery task |
+| `/dev-baseline-task-status <workspace>` | Check readiness, feature status, and task reports |
+| `/dev-baseline-quality` | Run quality gate checks |
+| `/dev-baseline-report` | Generate project-level HTML report |
+| `/dev-baseline-git` | Safe Git status, commit, and push |
+| `/dev-baseline-release` | Release readiness and release notes |
 
-1. `init` — inspect the repository and establish the documentation baseline
-2. `backlog review` — show unfinished tasks and future work from `PLAN.md`
-3. `optimization review` — suggest improvements across structure, code quality, docs, testing, and deployment
-4. `planning` — convert confirmed requirements into a concrete task plan
-5. `execution` — implement work only after user confirmation and after an approved numbered plan exists
-6. `git publish` — run `git add`, generate a commit message, commit, and push only when explicitly requested
-
----
-
-## What it solves
-
-Dev Baseline is designed to help AI coding assistants:
-
-- take over a project cleanly
-- build or repair the documentation baseline
-- inspect remaining tasks from `PLAN.md`
-- review a project and suggest improvements
-- convert confirmed work into an iteration plan
-- avoid coding before planning
-- keep docs and code synchronized during implementation
-- commit and push completed changes only after an explicit Git publish request
+See [Command Map](./docs/COMMAND_MAP.md) for full usage.
 
 ---
 
-## Install for Claude Code
+## Team Delivery Flow
 
-### Personal install
-
-Copy the contents of `claude/` into:
+For real feature development, start with:
 
 ```text
-~/.claude/skills/dev-baseline/
+/dev-baseline-task create v0.3.2 用户登录功能
 ```
 
-Expected result:
+This creates a task workspace:
 
 ```text
-~/.claude/skills/dev-baseline/
-├─ SKILL.md
-└─ templates/
+docs/tasks/YYYYMMDD-vX.Y.Z-task-slug/
 ```
 
-On Windows, this is typically:
+The workflow then follows:
 
-```text
-C:\Users\<your-user>\.claude\skills\dev-baseline\
-```
+1. Product Manager drafts the requirement.
+2. Developer reviews feasibility, difficulty, effort, and risks.
+3. PM asks the user if PM/Developer cannot resolve unclear points.
+4. QA and PM define test strategy and pass/fail rules.
+5. The assistant asks the user to confirm implementation.
+6. Developer implements after confirmation.
+7. Developer self-tests.
+8. QA tests and reports.
+9. Developer fixes bugs.
+10. QA retests.
+11. PM accepts or rejects.
+12. Delivery summary and task report are generated.
 
-### Project install
-
-Alternatively, copy the same files into:
-
-```text
-project-root/.claude/skills/dev-baseline/
-```
-
-### Recommended Claude project configuration
-
-Copy the contents of `project-overlay/.claude/` into:
-
-```text
-project-root/.claude/
-```
-
-This adds:
-
-- `CLAUDE.md` for persistent project workflow rules
-- `settings.json` for plan-first behavior
+`docs/PLAN.md` acts only as a dashboard and index. Detailed work lives under `docs/tasks/<task-folder>/`.
 
 ---
 
-## Install for Codex
+## Reports
 
-Codex uses repository instructions instead of Claude skill frontmatter.
-
-### Project install
-
-Copy `codex/AGENTS.md` into the target project root:
+Project-level report:
 
 ```text
-project-root/AGENTS.md
+/dev-baseline-report
 ```
 
-Then copy the Codex templates if you want Codex to initialize or repair the documentation baseline from local files:
+or:
 
-```text
-project-root/.codex/dev-baseline/templates/
+```bash
+bash shared/scripts/generate-html-report.sh
 ```
 
-Expected result:
+Task-level report:
 
-```text
-project-root/
-├─ AGENTS.md
-└─ .codex/
-   └─ dev-baseline/
-      └─ templates/
-         ├─ README.md
-         └─ docs/
+```bash
+bash shared/scripts/generate-task-report.sh docs/tasks/<task-folder>
 ```
 
-A minimal install can use only `AGENTS.md`; a full install should include `codex/templates/` as the template source.
+Reports are HTML by default for better navigation, tabs, cards, and readability.
 
 ---
 
-## Main commands
-
-Claude-style commands:
+## Quality Gate
 
 ```text
-/dev-baseline init
-/dev-baseline what remains
-/dev-baseline show pending tasks
-/dev-baseline review this project for improvements
-/dev-baseline add user login
-start
-/dev-baseline commit and push
+/dev-baseline-quality
 ```
 
-Codex-style prompts:
+or:
 
-```text
-dev-baseline init
-dev-baseline what remains
-review this project for improvements
-add user login
-start
-commit and push
+```bash
+bash shared/scripts/quality-gate.sh
 ```
 
-Chinese prompts also work well:
-
-```text
-/dev-baseline 看看还有什么开发任务
-/dev-baseline 帮我优化下项目
-/dev-baseline 新增支付模块
-开始工作
-/dev-baseline 提交并推送
-```
+Checks include stack detection, baseline docs, doc sync hints, and secret scanning.
 
 ---
 
-## Git publish mode
-
-Git publish mode is separate from normal implementation. Dev Baseline will not commit or push as a side effect of `init`, review, planning, or execution.
-
-Use it only when you want the assistant to publish the current repository changes:
+## Safe Git
 
 ```text
-/dev-baseline commit and push
-/dev-baseline git commit and push
-/dev-baseline publish changes
-/dev-baseline 提交并推送
-commit and push
+/dev-baseline-git commit and push
 ```
 
-When triggered, the workflow should:
-
-- inspect `git status`, diff summary, current branch, and upstream state
-- stop if there are no changes
-- stop before staging if suspicious secret or local-only files are present
-- run `git add -A` only after safety checks pass
-- generate a concise commit message from the actual diff
-- run `git commit -m "..."`
-- push to the configured upstream, or safely set upstream to `origin/<current-branch>` when needed
-
-It must never force push, create tags, or create releases unless the user explicitly asks for that separate operation.
+Git mode runs status/diff checks, secret scanning, and blocks dangerous operations such as force push by default.
 
 ---
 
-## Repository structure
+## Install
 
-```text
-dev-baseline/
-├─ README.md
-├─ README_CN.md
-├─ LICENSE
-├─ .gitignore
-├─ core/
-│  └─ BASELINE.md
-├─ claude/
-│  ├─ SKILL.md
-│  └─ templates/
-│     ├─ README.md
-│     └─ docs/
-│        ├─ PLAN.md
-│        ├─ API.md
-│        ├─ DEPLOY.md
-│        ├─ CHANGELOG.md
-│        ├─ CONFIG.md
-│        ├─ ARCHITECTURE.md
-│        └─ TESTING.md
-├─ codex/
-│  ├─ AGENTS.md
-│  └─ templates/
-│     ├─ README.md
-│     └─ docs/
-│        ├─ PLAN.md
-│        ├─ API.md
-│        ├─ DEPLOY.md
-│        ├─ CHANGELOG.md
-│        ├─ CONFIG.md
-│        ├─ ARCHITECTURE.md
-│        └─ TESTING.md
-├─ project-overlay/
-│  └─ .claude/
-│     ├─ CLAUDE.md
-│     └─ settings.json
-├─ scripts/
-│  └─ validate-skill.sh
-└─ examples/
-   └─ demo-project-structure.md
+Install Claude package:
+
+```bash
+bash scripts/install-dev-baseline.sh claude ~/.claude/skills/dev-baseline
 ```
 
----
+Install Codex package into a project:
 
-## Package validation
+```bash
+bash scripts/install-dev-baseline.sh codex /path/to/project
+```
 
-Before publishing or copying the packages, run:
+Install both into a project:
+
+```bash
+bash scripts/install-dev-baseline.sh both /path/to/project
+```
+
+Validate package:
 
 ```bash
 bash scripts/validate-skill.sh
 ```
 
-The script checks both Claude and Codex packages, including the Claude skill entry, Codex `AGENTS.md`, and all required templates.
+---
+
+## Repository Structure
+
+```text
+claude/                 Claude skills, agents, hooks, templates
+codex/                  Codex AGENTS, skills, agents, hooks, templates
+shared/                 shared scripts, references, task templates
+docs/                   command map, team flow docs, report docs
+github-actions/         optional workflow examples
+scripts/                installer and package validation
+```
 
 ---
 
-## Best practices
-
-- Use `init` when first entering a repository
-- Use backlog review before asking “what should we do next”
-- Use optimization review before large cleanup or refactor work
-- Keep `PLAN.md` as the source of truth for active and upcoming work
-- Only start implementation after the plan is visible and confirmed
-- Trigger Git publish mode explicitly when you want changes committed and pushed
-- Keep release-facing changes in `CHANGELOG.md`
-- Keep operational truth in `DEPLOY.md`
-
----
-
-## Best for
+## Best For
 
 - Claude Code users
 - Codex users
-- solo developers
-- small engineering teams
-- long-running AI-assisted development
-- repositories where scope drift and context loss are common
+- AI-assisted product development
+- solo developers who want structured workflows
+- small teams that need PM/Developer/QA style delivery records
+- long-running projects where context loss and scope drift are common
 
 ---
 
