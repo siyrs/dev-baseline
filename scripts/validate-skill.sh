@@ -93,6 +93,9 @@ required_files=(
   "docs/WORKFLOW_STATE.md"
   "docs/QUALITY_GATE.md"
   "docs/TEAM_DELIVERY_FLOW.md"
+  "docs/COMMAND_MAP.md"
+  "docs/COMMAND_MAP_CN.md"
+  "docs/SCENARIO_GUIDE.md"
   "github-actions/codex-doc-sync-check.yml"
   "scripts/install-dev-baseline.sh"
 )
@@ -128,6 +131,21 @@ done
 
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+if ! grep -q "# Command Map" docs/COMMAND_MAP.md; then
+  echo "Missing command map." >&2
+  exit 1
+fi
+
+if ! grep -q "# 命令地图" docs/COMMAND_MAP_CN.md; then
+  echo "Missing Chinese command map." >&2
+  exit 1
+fi
+
+if ! grep -q "# Scenario Guide" docs/SCENARIO_GUIDE.md; then
+  echo "Missing scenario guide." >&2
   exit 1
 fi
 
