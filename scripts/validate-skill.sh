@@ -16,6 +16,7 @@ required_files=(
   "claude/skills/dev-baseline-publish/SKILL.md"
   "claude/skills/dev-baseline-git/SKILL.md"
   "claude/skills/dev-baseline-report/SKILL.md"
+  "claude/skills/dev-baseline-release/SKILL.md"
   "claude/agents/docs-auditor.md"
   "claude/agents/security-guard.md"
   "claude/agents/report-writer.md"
@@ -32,6 +33,7 @@ required_files=(
   "codex/.agents/skills/dev-baseline/SKILL.md"
   "codex/.agents/skills/dev-baseline/references/report-mode.md"
   "codex/.agents/skills/dev-baseline/references/git-mode.md"
+  "codex/.agents/skills/dev-baseline/references/release-mode.md"
   "codex/.codex/hooks.json"
   "codex/.codex/agents/release-manager.md"
   "codex/.codex/agents/report-writer.md"
@@ -40,11 +42,15 @@ required_files=(
   "shared/scripts/check-doc-sync.sh"
   "shared/scripts/summarize-diff.sh"
   "shared/scripts/generate-html-report.sh"
+  "shared/scripts/block-dangerous-git.sh"
+  "shared/scripts/validate-baseline-docs.sh"
   "shared/references/git-publish.md"
   "shared/references/report-mode.md"
+  "docs/REPORT_MODE.md"
+  "docs/WORKFLOW_STATE.md"
+  "docs/QUALITY_GATE.md"
   "github-actions/codex-doc-sync-check.yml"
   "scripts/install-dev-baseline.sh"
-  "docs/REPORT_MODE.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -74,6 +80,11 @@ if ! grep -q "name: dev-baseline-git" claude/skills/dev-baseline-git/SKILL.md; t
   exit 1
 fi
 
+if ! grep -q "name: dev-baseline-release" claude/skills/dev-baseline-release/SKILL.md; then
+  echo "Missing dev-baseline-release Claude skill." >&2
+  exit 1
+fi
+
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
   exit 1
@@ -89,6 +100,11 @@ if ! grep -q "# Git Mode" codex/.agents/skills/dev-baseline/references/git-mode.
   exit 1
 fi
 
+if ! grep -q "# Release Mode" codex/.agents/skills/dev-baseline/references/release-mode.md; then
+  echo "Missing Codex release mode reference." >&2
+  exit 1
+fi
+
 if ! grep -q "Report Mode" shared/references/report-mode.md; then
   echo "Missing report mode reference." >&2
   exit 1
@@ -96,6 +112,11 @@ fi
 
 if ! grep -q "generate-html-report" shared/scripts/generate-html-report.sh; then
   echo "Missing HTML report generator." >&2
+  exit 1
+fi
+
+if ! grep -q "Blocked dangerous Git command" shared/scripts/block-dangerous-git.sh; then
+  echo "Missing dangerous git guard." >&2
   exit 1
 fi
 
