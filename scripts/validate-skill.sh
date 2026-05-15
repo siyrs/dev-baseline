@@ -63,6 +63,7 @@ required_files=(
   "shared/scripts/detect-stack.sh"
   "shared/scripts/quality-gate.sh"
   "shared/scripts/create-task-workspace.sh"
+  "shared/scripts/task-note.sh"
   "shared/references/git-publish.md"
   "shared/references/report-mode.md"
   "shared/references/team-delivery-flow.md"
@@ -75,6 +76,10 @@ required_files=(
   "shared/templates/tasks/06-bugfix-log.md"
   "shared/templates/tasks/07-acceptance-report.md"
   "shared/templates/tasks/08-delivery-summary.md"
+  "shared/templates/tasks/09-feature-status-board.md"
+  "shared/templates/tasks/10-collaboration-log.md"
+  "shared/templates/tasks/11-readiness-gates.md"
+  "shared/templates/tasks/12-stage-user-report.md"
   "docs/REPORT_MODE.md"
   "docs/WORKFLOW_STATE.md"
   "docs/QUALITY_GATE.md"
@@ -129,6 +134,21 @@ fi
 
 if ! grep -q "# Team Delivery Flow" codex/.agents/skills/dev-baseline/references/team-delivery-flow.md; then
   echo "Missing Codex team delivery flow reference." >&2
+  exit 1
+fi
+
+if ! grep -q "Feature Status Board" shared/templates/tasks/09-feature-status-board.md; then
+  echo "Missing feature status board template." >&2
+  exit 1
+fi
+
+if ! grep -q "Readiness Gates" shared/templates/tasks/11-readiness-gates.md; then
+  echo "Missing readiness gates template." >&2
+  exit 1
+fi
+
+if ! grep -q "Stage User Report" shared/templates/tasks/12-stage-user-report.md; then
+  echo "Missing stage user report template." >&2
   exit 1
 fi
 
