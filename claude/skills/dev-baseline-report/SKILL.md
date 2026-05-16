@@ -1,6 +1,6 @@
 ---
 name: dev-baseline-report
-description: Generate a project report for the current repository. Use when the user asks to 输出项目报告, generate project report, or summarize the whole project into docs/report. Default to an HTML report with tabs under docs/report/<timestamp>.html.
+description: Generate a project report for the current repository. Use for /dev-baseline-report, 输出项目报告, generate project report, or summarize the whole project into docs/report. Default to a timestamped HTML report with tabs under docs/report.
 disable-model-invocation: true
 ---
 

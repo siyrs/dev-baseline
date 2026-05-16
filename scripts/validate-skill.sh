@@ -122,6 +122,17 @@ if ! grep -q "^disable-model-invocation:" claude/SKILL.md; then
   exit 1
 fi
 
+for skill in claude/skills/dev-baseline-*; do
+  if [[ ! -d "$skill" ]]; then
+    continue
+  fi
+  skill_name=$(basename "$skill")
+  if ! grep -q "name: ${skill_name}" "$skill/SKILL.md"; then
+    echo "Missing Claude skill: ${skill_name}" >&2
+    exit 1
+  fi
+done
+
 for skill in dev-baseline-git dev-baseline-release dev-baseline-quality dev-baseline-task dev-baseline-report dev-baseline-task-status; do
   if ! grep -q "name: ${skill}" "claude/skills/${skill}/SKILL.md"; then
     echo "Missing Claude skill: ${skill}" >&2
@@ -131,6 +142,16 @@ done
 
 if ! grep -q "# Dev Baseline for Codex" codex/AGENTS.md; then
   echo "Missing Codex AGENTS heading in codex/AGENTS.md" >&2
+  exit 1
+fi
+
+if ! grep -q "^name: dev-baseline" codex/.agents/skills/dev-baseline/SKILL.md; then
+  echo "Missing or invalid skill name in codex/.agents/skills/dev-baseline/SKILL.md" >&2
+  exit 1
+fi
+
+if ! grep -q "^description:" codex/.agents/skills/dev-baseline/SKILL.md; then
+  echo "Missing skill description in codex/.agents/skills/dev-baseline/SKILL.md" >&2
   exit 1
 fi
 
@@ -219,7 +240,7 @@ if ! grep -q "Report Mode" shared/references/report-mode.md; then
   exit 1
 fi
 
-if ! grep -q "generate-html-report" shared/scripts/generate-html-report.sh; then
+if ! grep -q "Report generated:" shared/scripts/generate-html-report.sh; then
   echo "Missing HTML report generator." >&2
   exit 1
 fi
