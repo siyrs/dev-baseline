@@ -1,0 +1,23 @@
+name: Task Dashboard
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate task dashboard
+        run: |
+          chmod +x shared/scripts/generate-task-dashboard.sh
+          bash shared/scripts/generate-task-dashboard.sh
+
+      - name: Upload dashboard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-dashboard
+          path: docs/tasks/dashboard.html
