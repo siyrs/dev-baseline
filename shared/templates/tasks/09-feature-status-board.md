@@ -1,6 +1,6 @@
 # Feature Status Board
 
-Track each function point across PM, Developer, QA, and Acceptance.
+Track each function point across PM, Architect, Developer, QA, and Acceptance.
 
 ## Status Values
 
@@ -8,13 +8,13 @@ Track each function point across PM, Developer, QA, and Acceptance.
 not-started -> in-progress -> implemented -> self-tested -> qa-testing -> qa-passed -> accepted
 ```
 
-Rejected items move to `bugfixing` before returning to test.
+Rejected items move to `bugfixing` before returning to self-test and QA test.
 
 ## Feature Status
 
-| Function Point | PM | Developer | QA | Acceptance | Owner | Updated At | Notes |
-|---|---|---|---|---|---|---|---|
-| FP-001 | confirmed | not-started | not-started | not-started | Developer |  |  |
+| Function Point | PM | Architect | Developer | QA | Acceptance | Owner | Updated At | Notes |
+|---|---|---|---|---|---|---|---|---|
+| FP-001 | confirmed | reviewed | not-started | not-started | not-started | Developer |  |  |
 
 ## Stage Events
 

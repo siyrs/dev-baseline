@@ -20,5 +20,8 @@
 
 ## Product Decision
 - Accepted: yes/no
+- PM readiness review passed before implementation: yes/no
+- QA passed before acceptance: yes/no
+- Open P0/P1 bugs at acceptance: yes/no
 - Need further development: yes/no
 - Notes:

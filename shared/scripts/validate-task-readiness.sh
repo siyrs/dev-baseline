@@ -33,6 +33,27 @@ fi
 
 echo "Task readiness files are present: $workspace"
 
+required_markers=(
+  "Architect role active"
+  "Architecture Review"
+  "Concrete implementation plan"
+  "Concrete test cases"
+  "PM Readiness Review"
+)
+
+missing_markers=()
+for marker in "${required_markers[@]}"; do
+  if ! grep -q "$marker" "$workspace/11-readiness-gates.md"; then
+    missing_markers+=("$marker")
+  fi
+done
+
+if [[ ${#missing_markers[@]} -gt 0 ]]; then
+  echo "Readiness gates are missing required Agent Mode markers:" >&2
+  printf ' - %s\n' "${missing_markers[@]}" >&2
+  exit 1
+fi
+
 if grep -qi "Implementation may start: yes" "$workspace/11-readiness-gates.md"; then
   echo "Implementation gate appears approved."
 else

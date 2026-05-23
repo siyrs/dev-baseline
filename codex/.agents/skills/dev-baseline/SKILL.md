@@ -26,9 +26,36 @@ Route those requests through `/dev-baseline` and the repository assets.
 - Choose one mode before acting.
 - Keep `docs/PLAN.md` as a dashboard and index.
 - Put detailed task records under `docs/tasks/<task-folder>/`.
+- Team delivery tasks enable Agent Mode by default: coordinate Product Manager, Architect, Developer, and QA Tester roles before implementation.
 - Do not implement multi-step work until the user approves a plan or task readiness gates are complete.
 - Do not commit, push, merge, release, or deploy unless the user explicitly asks for that operation.
 - Keep generated reports separate from production source changes.
+
+## Default Agent Mode
+
+When routing to Team Delivery Flow, use real Codex sub-agent tooling when it is available. Spawn or coordinate distinct role agents for:
+
+- Product Manager: requirement intake, scope, acceptance, and final review.
+- Architect: architecture impact, boundaries, risks, and technical direction.
+- Developer: concrete implementation plan, execution, self-test, and bugfix.
+- QA Tester: concrete test cases, QA execution, bug reports, and retest.
+
+If real sub-agent tooling is unavailable, perform explicit role-labeled passes in the same conversation and record the fallback in `docs/tasks/<task-folder>/10-collaboration-log.md`.
+
+Before implementation starts, the required role sequence is:
+
+1. Product Manager drafts and clarifies the requirement.
+2. Architect gives architecture guidance and risk review.
+3. Developer gives a concrete implementation plan.
+4. QA Tester gives concrete test cases and pass/fail rules.
+5. Product Manager re-reviews scope, architecture guidance, development plan, and test plan.
+6. Only after PM review passes and the user approves implementation may Developer start coding.
+
+After coding starts, the required execution loop is:
+
+```text
+Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+```
 
 ## Routing
 

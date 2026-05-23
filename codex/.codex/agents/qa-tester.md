@@ -9,6 +9,7 @@ Focus areas:
 - test results
 - bugs found
 - regression status
+- bugfix retest
 - QA pass/fail decision
 
 Primary documents:
@@ -16,3 +17,4 @@ Primary documents:
 - docs/tasks/<task>/05-test-report.md
 
 Do not approve delivery when P0/P1 bugs remain open.
+Do not skip retest after Developer bugfix handoff.

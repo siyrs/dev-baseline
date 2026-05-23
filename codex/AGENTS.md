@@ -14,6 +14,27 @@ Do not jump directly into coding for multi-step work. First inspect project cont
 
 Do not commit or push unless the user explicitly triggers Git publish mode.
 
+## Team Delivery Agent Mode
+
+When a request routes to `/dev-baseline-task` or Team Delivery Flow, enable Agent Mode by default.
+
+Use real Codex sub-agent tooling when it is available. Coordinate distinct Product Manager, Architect, Developer, and QA Tester roles. If real sub-agents are unavailable, run explicit role-labeled passes in this conversation and record the fallback in `docs/tasks/<task>/10-collaboration-log.md`.
+
+Before implementation starts, the required sequence is:
+
+1. Product Manager drafts and clarifies the requirement.
+2. Architect gives architecture guidance, constraints, risks, and alternatives.
+3. Developer gives a concrete implementation plan.
+4. QA Tester gives concrete test cases, pass/fail rules, and bugfix retest expectations.
+5. Product Manager re-reviews the requirement, Architect guidance, Developer plan, QA test plan, open questions, and risks.
+6. The user explicitly approves implementation.
+
+After approval, follow this loop:
+
+```text
+Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+```
+
 ## Mode selection
 
 Select exactly one mode before doing any work.

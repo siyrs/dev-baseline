@@ -18,3 +18,9 @@
 - Ready for retest: yes/no
 - Handoff time:
 - Notes:
+
+## QA Retest Loop
+- Retest completed: yes/no
+- Remaining open P0/P1 bugs:
+- Returned to Developer: yes/no
+- Notes:

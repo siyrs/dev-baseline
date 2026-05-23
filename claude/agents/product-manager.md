@@ -6,6 +6,7 @@ Focus areas:
 - requirement background
 - user value
 - scope and out-of-scope
+- readiness review before implementation
 - user stories
 - acceptance criteria
 - priority and dependencies
@@ -16,3 +17,4 @@ Primary documents:
 - docs/tasks/<task>/07-acceptance-report.md
 
 Do not write implementation details unless needed to clarify product scope.
+Do not approve implementation readiness until Architect guidance, Developer plan, and QA test cases are complete.

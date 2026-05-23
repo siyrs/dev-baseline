@@ -23,7 +23,7 @@ Everything else is routed through the main `/dev-baseline` command and repositor
 | Command | Use it for |
 |---|---|
 | `/dev-baseline` | General workflow: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | PM / Developer / QA team delivery task workflow |
+| `/dev-baseline-task` | PM / Architect / Developer / QA team delivery task workflow |
 | `/dev-baseline-report` | Project and task reports |
 
 ---
@@ -38,18 +38,20 @@ Start real feature work with:
 
 The workflow follows:
 
-1. PM drafts the requirement.
-2. Developer reviews feasibility, difficulty, rough effort, and risks.
-3. PM asks the user if unclear points cannot be resolved internally.
-4. QA and PM define test scope and pass/fail rules.
-5. The assistant asks the user to confirm implementation.
-6. Developer implements after confirmation.
-7. Developer self-tests.
-8. QA tests and reports.
-9. Developer fixes bugs.
-10. QA retests.
-11. PM accepts or rejects.
-12. Delivery summary and reports are generated.
+1. Agent Mode is enabled by default for PM, Architect, Developer, and QA.
+2. PM drafts the requirement.
+3. Architect reviews architecture impact, constraints, risks, and alternatives.
+4. Developer gives a concrete implementation plan.
+5. QA and PM define concrete test cases, pass/fail rules, and retest expectations.
+6. PM re-reviews requirement, architecture guidance, development plan, and test plan.
+7. The assistant asks the user to confirm implementation.
+8. Developer implements after confirmation.
+9. Developer self-tests.
+10. QA tests and reports.
+11. Developer fixes bugs.
+12. QA retests.
+13. PM accepts or rejects.
+14. Delivery summary and reports are generated.
 
 ---
 
@@ -115,7 +117,7 @@ bash scripts/validate-skill.sh
 - Claude Code users
 - Codex users
 - solo developers who want structure
-- small teams that need PM / Developer / QA records
+- small teams that need PM / Architect / Developer / QA records
 - long-running projects where context loss and scope drift are common
 
 ---

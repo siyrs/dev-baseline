@@ -7,6 +7,11 @@ required_files=(
   "claude/skills/dev-baseline-report/SKILL.md"
   "codex/AGENTS.md"
   "codex/.agents/skills/dev-baseline/SKILL.md"
+  "codex/.codex/agents/architect.md"
+  "codex/.codex/agents/developer.md"
+  "codex/.codex/agents/product-manager.md"
+  "codex/.codex/agents/qa-tester.md"
+  "claude/agents/architect.md"
   "docs/SKILL_ENTRYPOINT_POLICY.md"
   "docs/COMMAND_MAP.md"
   "docs/COMMAND_MAP_CN.md"
@@ -51,6 +56,21 @@ fi
 
 if ! grep -q "^name: dev-baseline" codex/.agents/skills/dev-baseline/SKILL.md; then
   echo "Missing Codex dev-baseline skill." >&2
+  exit 1
+fi
+
+if ! grep -q "Team delivery tasks enable Agent Mode by default" codex/.agents/skills/dev-baseline/SKILL.md; then
+  echo "Codex dev-baseline skill does not enable team delivery Agent Mode by default." >&2
+  exit 1
+fi
+
+if ! grep -q "Architect" shared/references/team-delivery-flow.md; then
+  echo "Team delivery flow is missing Architect role guidance." >&2
+  exit 1
+fi
+
+if ! grep -q "PM readiness review" shared/references/team-delivery-flow.md; then
+  echo "Team delivery flow is missing PM readiness review." >&2
   exit 1
 fi
 

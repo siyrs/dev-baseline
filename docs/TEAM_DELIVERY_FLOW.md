@@ -2,22 +2,50 @@
 
 Team Delivery Flow is the default Dev Baseline workflow for real product development.
 
-It models a normal software delivery process with role-based preparation, execution, testing, bugfixing, acceptance, and delivery.
+It models a normal software delivery process with role-based preparation, architecture review, execution, testing, bugfixing, acceptance, and delivery.
+
+## Default Agent Mode
+
+Team Delivery Flow enables Agent Mode by default.
+
+When the runtime provides real agent or sub-agent tooling, the assistant must coordinate distinct role agents for:
+
+- Product Manager
+- Architect
+- Developer
+- QA Tester
+
+If real agent tooling is unavailable, the assistant must run explicit role-labeled passes in the same conversation and record the fallback in `10-collaboration-log.md`.
 
 ## Core rule
 
 Implementation must not start immediately after a user gives a feature idea.
 
-Before development starts, the workflow must complete two preparation loops:
+Before development starts, the workflow must complete three preparation loops plus PM review:
 
-1. PM ↔ Developer requirement feasibility loop
-2. PM ↔ QA test strategy loop
+1. PM ↔ Architect architecture review loop
+2. PM ↔ Developer requirement feasibility and implementation planning loop
+3. PM ↔ QA test strategy loop
+4. PM readiness review loop
 
-Only after both loops are ready may the assistant ask the user to confirm implementation.
+Only after these loops are ready may the assistant ask the user to confirm implementation.
+
+## Preparation loop 0: PM ↔ Architect
+
+The Product Manager first drafts the rough requirement, then the Architect reviews:
+
+- system boundaries and ownership impact
+- data flow, API, config, deploy, migration, and compatibility impact
+- technical constraints the Developer must follow
+- architecture risks and mitigation options
+- implementation alternatives if the original approach is risky
+
+If the Architect cannot determine an architecture impact, the Architect must feed questions back to the PM.
+If the PM cannot answer, the PM must ask the user before the architecture guidance is finalized.
 
 ## Preparation loop 1: PM ↔ Developer
 
-The Product Manager first drafts the rough requirement, then the Developer reviews:
+After Architect guidance exists, the Developer reviews:
 
 - whether the feature is technically feasible
 - expected implementation difficulty
@@ -25,6 +53,7 @@ The Product Manager first drafts the rough requirement, then the Developer revie
 - risky or unclear function points
 - required interfaces, data, config, permissions, or external services
 - implementation alternatives if the original idea is risky
+- concrete implementation order and file/module impact
 
 If the Developer cannot determine a function point, the Developer must feed questions back to the PM.
 If the PM cannot answer, the PM must ask the user before the development plan is finalized.
@@ -46,11 +75,24 @@ QA should clarify:
 If QA cannot define a pass/fail rule, QA must feed questions back to PM.
 If PM cannot answer, PM must ask the user.
 
+## Preparation loop 3: PM readiness review
+
+Before asking the user to approve implementation, the Product Manager must re-review:
+
+- requirement scope and acceptance criteria
+- Architect guidance and unresolved architecture risks
+- Developer implementation plan and self-test plan
+- QA test cases, pass/fail rules, and regression scope
+- open questions, blockers, and user-confirmation needs
+
+If this PM review fails, the task must return to the relevant preparation loop.
+
 ## User confirmation gate
 
-After PM, Developer, and QA are ready, the assistant must summarize:
+After PM, Architect, Developer, and QA are ready, the assistant must summarize:
 
 - requirement scope
+- architecture guidance
 - feasibility and rough effort
 - development plan
 - test strategy
@@ -60,6 +102,16 @@ After PM, Developer, and QA are ready, the assistant must summarize:
 Then ask the user to confirm implementation.
 
 Do not implement source code before explicit user confirmation.
+
+## Standard execution loop
+
+After readiness and user confirmation, Team Delivery Flow proceeds as:
+
+```text
+Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+```
+
+QA must retest after every bugfix. PM acceptance must not start while P0/P1 QA bugs remain open.
 
 ## Task workspace
 
@@ -104,10 +156,21 @@ Owns:
 - requirement clarification
 - user value
 - scope and out-of-scope
+- PM ↔ Architect question handling
 - PM ↔ Developer question handling
 - PM ↔ QA test criteria alignment
+- readiness re-review before implementation
 - acceptance criteria
 - final acceptance decision
+
+### Architect
+
+Owns:
+- architecture review
+- technical direction and constraints
+- system boundary and ownership checks
+- API, data, config, deploy, migration, and compatibility impact
+- architecture risk and mitigation notes
 
 ### Developer
 
@@ -115,6 +178,7 @@ Owns:
 - feasibility review
 - difficulty and effort estimate
 - technical decomposition
+- concrete implementation plan
 - implementation order
 - code changes
 - feature status updates
@@ -173,7 +237,7 @@ Detailed plans, implementation notes, test reports, feature status, bugfix logs,
 Recommended task-level status values:
 
 ```text
-intake -> feasibility-review -> test-strategy -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
+intake -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
 ```
 
 If rejected by QA or PM, move back to:

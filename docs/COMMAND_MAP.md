@@ -7,7 +7,7 @@ Dev Baseline keeps the visible command surface intentionally small.
 | Command | Purpose |
 |---|---|
 | `/dev-baseline` | General workflow entrypoint: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | Standard team delivery task workflow: PM, Developer, QA, readiness gates, bugfix, acceptance, delivery |
+| `/dev-baseline-task` | Standard team delivery task workflow: PM, Architect, Developer, QA, readiness gates, bugfix, acceptance, delivery |
 | `/dev-baseline-report` | Project or task reports, especially HTML reports |
 
 ## Recommended Usage

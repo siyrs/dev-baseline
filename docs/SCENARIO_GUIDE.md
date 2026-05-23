@@ -24,9 +24,12 @@ Expected result:
 
 Expected result:
 - task workspace created under `docs/tasks/`
+- Agent Mode enabled for PM, Architect, Developer, and QA
 - PM requirement draft created
-- Developer feasibility review requested
-- QA test strategy requested
+- Architect architecture review requested
+- Developer concrete implementation plan requested
+- QA concrete test cases requested
+- PM readiness review prepared
 - user confirmation gate prepared
 
 ## Scenario 3: Check if development can start
@@ -37,7 +40,7 @@ Expected result:
 
 Expected result:
 - readiness gates inspected
-- missing PM/Developer/QA preparation identified
+- missing PM/Architect/Developer/QA preparation identified
 - next action recommended
 
 ## Scenario 4: Implement after confirmation

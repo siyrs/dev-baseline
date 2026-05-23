@@ -30,6 +30,11 @@
 |---|---|---|---|---|---|---|
 | TC-001 | FP-001 |  |  |  | P0 | not-started |
 
+## Bugfix Retest Cases
+| Bug ID | Retest Case ID | Steps | Expected Result | Status |
+|---|---|---|---|---|
+| BUG-001 | RTC-001 |  |  | not-started |
+
 ## Regression Scope
 - 
 
@@ -44,6 +49,7 @@
 - [ ] Regression scope completed
 
 ## QA Readiness Decision
-- Test plan ready before implementation: yes/no
+- Concrete test cases ready before implementation: yes/no
+- Retest expectations defined: yes/no
 - Ready at:
 - Notes:

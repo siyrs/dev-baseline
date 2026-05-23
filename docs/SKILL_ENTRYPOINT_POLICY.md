@@ -42,7 +42,7 @@ Use `/dev-baseline` for:
 Use `/dev-baseline-task` for:
 
 - standard team delivery task creation
-- PM / Developer / QA collaboration
+- PM / Architect / Developer / QA collaboration
 - readiness gates
 - task lifecycle and task workspace management
 

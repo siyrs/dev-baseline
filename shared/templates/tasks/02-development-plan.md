@@ -3,6 +3,20 @@
 ## Requirement Summary
 - 
 
+## Architect Review
+| Item | Decision / Guidance | Notes |
+|---|---|---|
+| System boundaries |  |  |
+| Data/API/config/deploy impact |  |  |
+| Compatibility or migration impact |  |  |
+| Technical constraints for Developer |  |  |
+| Architecture risks |  |  |
+
+## Architect Questions Back to PM
+| Question | Reason | PM Answer | Need User Confirmation | Status |
+|---|---|---|---|---|
+|  |  |  | yes/no | open |
+
 ## Feasibility Assessment
 | Item | Result | Notes |
 |---|---|---|
@@ -17,8 +31,11 @@
 |---|---|---|---|---|
 |  |  |  | yes/no | open |
 
+## Developer Concrete Proposal
+- TBD
+
 ## Technical Approach
-- 
+- TBD
 
 ## Implementation Order
 1. 
@@ -51,7 +68,9 @@
 - 
 
 ## Developer Confirmation
+- Architect guidance reviewed: yes/no
 - Feasibility reviewed: yes/no
+- Concrete implementation plan ready: yes/no
 - Ready to implement after user confirmation: yes/no
 - Confirmed at:
 - Notes:

@@ -17,10 +17,16 @@
 |---|---|---|---|---|
 | BUG-001 | P0/P1/P2 |  |  | open |
 
+## Retest Results
+| Bug ID | Retest Case ID | Result | Evidence | Notes |
+|---|---|---|---|---|
+| BUG-001 | RTC-001 | pass/fail/blocked |  |  |
+
 ## Regression Result
 - 
 
 ## QA Decision
 - Passed QA: yes/no
 - Needs bugfix: yes/no
+- Retest required after bugfix: yes/no
 - Notes:

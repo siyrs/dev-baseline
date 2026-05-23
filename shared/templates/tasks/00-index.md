@@ -11,7 +11,7 @@
 
 ## Task Status Flow
 ```text
-intake -> feasibility-review -> test-strategy -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
+intake -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
 ```
 
 ## Feature Status Values
@@ -43,17 +43,22 @@ bugfixing
 | Gate | Owner | Required Result | Status | Notes |
 |---|---|---|---|---|
 | Requirement draft | Product Manager | Scope and acceptance criteria drafted | todo |  |
-| Feasibility review | Developer | Feasible / risky / blocked + rough effort | todo |  |
+| Agent mode | PM + Architect + Developer + QA | Real agents used, or role-labeled fallback recorded | todo |  |
+| Architecture review | Architect | Architecture guidance, constraints, and risks documented | todo |  |
+| Feasibility review | Developer | Feasible / risky / blocked + rough effort + concrete plan | todo |  |
 | Requirement clarification | Product Manager + User | Open questions answered | todo |  |
-| Test strategy | QA + Product Manager | Test scope and pass/fail criteria agreed | todo |  |
+| Test strategy | QA + Product Manager | Concrete test cases and pass/fail criteria agreed | todo |  |
+| PM readiness review | Product Manager | Requirement, architecture, development plan, and test plan approved | todo |  |
 | User implementation confirmation | User | Explicit approval to start development | todo |  |
 
 ## Progress Summary
 | Stage | Owner | Status | Updated at | Notes |
 |---|---|---|---|---|
 | Product requirement | PM | todo |  |  |
+| Architecture review | Architect | todo |  |  |
 | Feasibility review | Developer | todo |  |  |
 | Test strategy | QA | todo |  |  |
+| PM readiness review | PM | todo |  |  |
 | Development plan | Developer | todo |  |  |
 | Implementation | Developer | todo |  |  |
 | Self-test | Developer | todo |  |  |
