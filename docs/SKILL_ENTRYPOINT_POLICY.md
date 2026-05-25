@@ -1,6 +1,6 @@
 # Skill Entrypoint Policy
 
-Dev Baseline intentionally keeps the visible skill command surface small.
+Dev Baseline intentionally keeps the visible skill command surface focused.
 
 ## Visible entrypoints
 
@@ -10,11 +10,14 @@ Only these skill entrypoints should be exposed:
 /dev-baseline
 /dev-baseline-task
 /dev-baseline-report
+/dev-baseline-git-sync
 ```
 
 ## Why
 
 Most operations do not need their own visible skill command. A large list such as `/dev-baseline-git`, `/dev-baseline-github`, `/dev-baseline-quality`, `/dev-baseline-sprint`, and `/dev-baseline-metrics` creates command noise.
+
+`/dev-baseline-git-sync` is the one explicit Git shortcut because it represents a repeatable full synchronization operation: add, commit, fetch, merge, and push.
 
 Claude Code and Codex can understand those intents through the main `/dev-baseline` skill. Detailed behavior should live in:
 
@@ -51,6 +54,13 @@ Use `/dev-baseline-report` for:
 - project reports
 - task reports
 - HTML report generation
+
+Use `/dev-baseline-git-sync` for:
+
+- safely staging local changes
+- committing local changes when present
+- fetching and merging the configured remote branch
+- pushing the synchronized branch
 
 ## Implementation rule
 

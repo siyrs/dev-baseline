@@ -5,8 +5,10 @@ required_files=(
   "claude/SKILL.md"
   "claude/skills/dev-baseline-task/SKILL.md"
   "claude/skills/dev-baseline-report/SKILL.md"
+  "claude/skills/dev-baseline-git-sync/SKILL.md"
   "codex/AGENTS.md"
   "codex/.agents/skills/dev-baseline/SKILL.md"
+  "codex/.agents/skills/dev-baseline-git-sync/SKILL.md"
   "codex/.codex/agents/architect.md"
   "codex/.codex/agents/developer.md"
   "codex/.codex/agents/product-manager.md"
@@ -20,7 +22,9 @@ required_files=(
   "docs/REPORT_MODE.md"
   "shared/references/team-delivery-flow.md"
   "shared/references/report-mode.md"
+  "shared/references/git-sync.md"
   "shared/scripts/create-task-workspace.sh"
+  "shared/scripts/git-sync.sh"
   "shared/scripts/generate-html-report.sh"
   "shared/scripts/generate-task-report.sh"
   "shared/scripts/quality-gate.sh"
@@ -54,8 +58,18 @@ if ! grep -q "^name: dev-baseline-report" claude/skills/dev-baseline-report/SKIL
   exit 1
 fi
 
+if ! grep -q "^name: dev-baseline-git-sync" claude/skills/dev-baseline-git-sync/SKILL.md; then
+  echo "Missing dev-baseline-git-sync skill." >&2
+  exit 1
+fi
+
 if ! grep -q "^name: dev-baseline" codex/.agents/skills/dev-baseline/SKILL.md; then
   echo "Missing Codex dev-baseline skill." >&2
+  exit 1
+fi
+
+if ! grep -q "^name: dev-baseline-git-sync" codex/.agents/skills/dev-baseline-git-sync/SKILL.md; then
+  echo "Missing Codex dev-baseline-git-sync skill." >&2
   exit 1
 fi
 
@@ -77,6 +91,7 @@ fi
 allowed=(
   "dev-baseline-task"
   "dev-baseline-report"
+  "dev-baseline-git-sync"
 )
 
 for skill_dir in claude/skills/dev-baseline-*; do
@@ -91,7 +106,7 @@ for skill_dir in claude/skills/dev-baseline-*; do
   done
   if ! $ok; then
     echo "Redundant visible skill entrypoint remains: $skill_dir" >&2
-    echo "Only dev-baseline-task and dev-baseline-report should remain under claude/skills/." >&2
+    echo "Only dev-baseline-task, dev-baseline-report, and dev-baseline-git-sync should remain under claude/skills/." >&2
     exit 1
   fi
 done

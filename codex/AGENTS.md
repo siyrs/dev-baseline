@@ -12,7 +12,7 @@ Documentation first, implementation second.
 
 Do not jump directly into coding for multi-step work. First inspect project context, update or create the relevant planning docs, produce a task plan, and wait for explicit implementation confirmation.
 
-Do not commit or push unless the user explicitly triggers Git publish mode.
+Do not commit or push unless the user explicitly triggers Git publish mode or invokes `/dev-baseline-git-sync`.
 
 ## Team Delivery Agent Mode
 
@@ -41,7 +41,7 @@ Select exactly one mode before doing any work.
 
 If the request looks like a continuation command but there is no approved numbered plan in the current conversation or in `docs/PLAN.md`, do not enter execution mode. Fall back to planning mode or backlog review mode and explain that execution requires an approved plan.
 
-Git publishing is separate from implementation. Do not commit or push as a side effect of init, review, planning, or execution. Only use Git publish mode when the user explicitly asks to commit and/or push repository changes.
+Git publishing is separate from implementation. Do not commit or push as a side effect of init, review, planning, or execution. Only use Git publish mode when the user explicitly asks to commit and/or push repository changes, or when the user invokes `/dev-baseline-git-sync`.
 
 ## Mode file boundary matrix
 
@@ -229,6 +229,7 @@ Use this mode only when the user explicitly asks to commit and/or push repositor
 Trigger examples:
 - `dev-baseline commit and push`
 - `/dev-baseline git commit and push`
+- `/dev-baseline-git-sync`
 - `publish changes`
 - `提交并推送`
 - `帮我提交代码并 push`
@@ -236,6 +237,14 @@ Trigger examples:
 - `commit and push`
 
 This trigger is considered explicit approval to run git add, git commit, and git push, but only after the safety checks below pass.
+
+When the trigger is `/dev-baseline-git-sync`, prefer running:
+
+```bash
+bash shared/scripts/git-sync.sh [commit message]
+```
+
+This performs the full safe sync sequence: stage, commit if needed, fetch remote, merge upstream, and push. Stop if the script reports suspicious files, unfinished merge/rebase state, or merge conflicts.
 
 In this mode:
 
@@ -362,6 +371,7 @@ Always follow these rules:
 - Files committed:
 - Commit message:
 - Commit hash:
+- Remote merged:
 - Pushed to:
 - Skipped or suspicious files:
 - Notes:

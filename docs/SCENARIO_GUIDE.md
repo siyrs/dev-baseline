@@ -94,14 +94,15 @@ Task report:
 bash shared/scripts/generate-task-report.sh docs/tasks/<task-folder>
 ```
 
-## Scenario 8: Publish completed work
+## Scenario 8: Sync Git local and remote
 
 ```text
-/dev-baseline-git commit and push
+/dev-baseline-git-sync
 ```
 
 Expected result:
 - secret scan runs
 - diff is summarized
-- commit message is generated
-- push is performed only when safe
+- local changes are staged and committed when present
+- remote branch is fetched and merged
+- synchronized branch is pushed only when safe

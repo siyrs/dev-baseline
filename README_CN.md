@@ -6,12 +6,13 @@
 
 Dev Baseline 把 AI 辅助开发变成一套可记录、可审查、可验收的团队交付流程。
 
-现在可见 skill 命令刻意精简为：
+现在可见 skill 命令保持聚焦：
 
 ```text
 /dev-baseline
 /dev-baseline-task
 /dev-baseline-report
+/dev-baseline-git-sync
 ```
 
 其他能力都通过 `/dev-baseline` 主入口和仓库里的脚本/规则文档来路由，不再额外暴露一堆 `/dev-baseline-xxx`。
@@ -25,6 +26,7 @@ Dev Baseline 把 AI 辅助开发变成一套可记录、可审查、可验收的
 | `/dev-baseline` | 通用流程：初始化、评审、规划、质量检查、Git、GitHub/GitLab、迭代、发版、指标、仪表盘 |
 | `/dev-baseline-task` | PM / 架构师 / 研发 / QA 标准团队开发任务 |
 | `/dev-baseline-report` | 项目和任务报告 |
+| `/dev-baseline-git-sync` | 安全的一键 Git 同步：add、commit、fetch、merge、push |
 
 ---
 
@@ -69,7 +71,25 @@ Dev Baseline 把 AI 辅助开发变成一套可记录、可审查、可验收的
 /dev-baseline 运行质量门禁
 ```
 
-这些能力不需要单独暴露 skill 命令。
+这些能力不需要单独暴露 skill 命令；Git 一键同步使用下面的专用入口。
+
+---
+
+## Git 一键同步
+
+当你想把本地分支和远程分支一次性同步时使用：
+
+```text
+/dev-baseline-git-sync
+```
+
+它执行安全流程：
+
+```text
+git add -A -> git commit -> git fetch/pull remote -> git merge upstream -> git push
+```
+
+遇到疑似密钥文件、未完成 merge/rebase 或 merge 冲突时会停止，不会 force push。
 
 ---
 

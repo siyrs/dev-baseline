@@ -15,11 +15,13 @@ Dev Baseline intentionally exposes only a small command surface:
 /dev-baseline
 /dev-baseline-task
 /dev-baseline-report
+/dev-baseline-git-sync
 ```
 
 Do not require separate commands such as `/dev-baseline-git`, `/dev-baseline-github`, `/dev-baseline-quality`, `/dev-baseline-sprint`, or `/dev-baseline-metrics`.
 
 Route those requests through `/dev-baseline` and the repository assets.
+Use `/dev-baseline-git-sync` only for the safe add/commit/fetch/merge/push shortcut.
 
 ## Core Rules
 
@@ -28,7 +30,7 @@ Route those requests through `/dev-baseline` and the repository assets.
 - Put detailed task records under `docs/tasks/<task-folder>/`.
 - Team delivery tasks enable Agent Mode by default: coordinate Product Manager, Architect, Developer, and QA Tester roles before implementation.
 - Do not implement multi-step work until the user approves a plan or task readiness gates are complete.
-- Do not commit, push, merge, release, or deploy unless the user explicitly asks for that operation.
+- Do not commit, push, merge, release, or deploy unless the user explicitly asks for that operation or invokes `/dev-baseline-git-sync`.
 - Keep generated reports separate from production source changes.
 
 ## Default Agent Mode
@@ -64,6 +66,7 @@ Developer implements -> Developer self-tests -> QA Tester tests -> Developer fix
 - Reports: read `references/report-mode.md`.
 - Quality gate: read `references/quality-mode.md`.
 - Git/GitHub/GitLab/provider requests: use shared scripts and provider references.
+- Git sync shortcut: use `/dev-baseline-git-sync` and run `shared/scripts/git-sync.sh`.
 - Sprint/release/metrics/dashboard requests: use shared scripts and docs.
 - Git publish: follow `references/git-mode.md` and never force-push by default.
 
@@ -74,6 +77,7 @@ Prefer repository-provided scripts and templates when they exist:
 - `shared/scripts/create-task-workspace.sh`
 - `shared/scripts/validate-task-readiness.sh`
 - `shared/scripts/advance-task-status.sh`
+- `shared/scripts/git-sync.sh`
 - `shared/scripts/generate-task-report.sh`
 - `shared/scripts/generate-html-report.sh`
 - `shared/scripts/generate-task-dashboard.sh`

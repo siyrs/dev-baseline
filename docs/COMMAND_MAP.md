@@ -1,6 +1,6 @@
 # Command Map
 
-Dev Baseline keeps the visible command surface intentionally small.
+Dev Baseline keeps the visible command surface focused.
 
 ## Primary Commands
 
@@ -9,6 +9,7 @@ Dev Baseline keeps the visible command surface intentionally small.
 | `/dev-baseline` | General workflow entrypoint: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
 | `/dev-baseline-task` | Standard team delivery task workflow: PM, Architect, Developer, QA, readiness gates, bugfix, acceptance, delivery |
 | `/dev-baseline-report` | Project or task reports, especially HTML reports |
+| `/dev-baseline-git-sync` | Safe one-step Git sync: add, commit, fetch, merge, push |
 
 ## Recommended Usage
 
@@ -39,6 +40,12 @@ Dev Baseline keeps the visible command surface intentionally small.
 /dev-baseline-report docs/tasks/<task-folder>
 ```
 
+### Sync Git local and remote
+
+```text
+/dev-baseline-git-sync
+```
+
 ### Git, GitHub, GitLab, sprint, release, metrics, dashboard
 
 Use the main command with natural language:
@@ -53,13 +60,14 @@ Use the main command with natural language:
 /dev-baseline 运行质量门禁
 ```
 
-These do not need separate visible skill commands.
+These do not need separate visible skill commands. Use `/dev-baseline-git-sync` only for the full add/commit/fetch/merge/push shortcut.
 
 ## Useful Scripts
 
 | Script | Purpose |
 |---|---|
 | `shared/scripts/create-task-workspace.sh` | Create a task workspace from templates |
+| `shared/scripts/git-sync.sh` | Safely add, commit, fetch, merge, and push |
 | `shared/scripts/validate-task-readiness.sh` | Check whether a task can start implementation |
 | `shared/scripts/advance-task-status.sh` | Append feature status events |
 | `shared/scripts/generate-task-report.sh` | Generate an HTML report for one task |
