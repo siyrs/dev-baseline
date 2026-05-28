@@ -114,6 +114,11 @@ Dev Baseline 现在使用 `skill/` 作为同一套标准 skill 包。Codex 和 C
 
 Codex 项目级 overlay 会先使用通用 `skill/agents`，再叠加很小的 `skill/codex-agent-overrides`。
 
+官方安装器目前是 Bash 脚本。如果目标环境不能直接运行 `.sh`，可以让负责安装的 AI 先阅读
+`scripts/install-dev-baseline.sh`，再按同样的文件操作逻辑使用本地 shell 执行，或自主生成该平台的等价脚本。
+这个脚本刻意保持简单：把 `skill/` 复制到目标 skills 目录，把旧 `dev-baseline` 备份移出可见 skills 根目录，
+并从同一份标准包生成项目级 overlay。
+
 也可以直接让助手安装：
 
 ```text

@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Block dangerous Git commands. Intended for hooks or manual preflight checks.
 # Usage:
-#   bash shared/scripts/block-dangerous-git.sh "git push --force"
+#   bash shared/scripts/git-block-dangerous.sh "git push --force"
 
 cmd="${*:-}"
 

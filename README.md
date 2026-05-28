@@ -114,6 +114,14 @@ The `codex/` and `claude/` directories are thin adapter notes only. Shared skill
 
 Codex project overlays are generated from common `skill/agents` plus the small `skill/codex-agent-overrides` directory.
 
+The official installer is a Bash script. If the target environment cannot run
+`.sh` files, ask the installing AI agent to read
+`scripts/install-dev-baseline.sh` and perform the same filesystem operations in
+the local shell or generate an equivalent script for that platform. The script
+is intentionally plain: copy `skill/` to the target skills directory, archive
+old `dev-baseline` backups outside the visible skills root, and generate project
+overlays from the same canonical package.
+
 Codex personal skill:
 
 ```bash

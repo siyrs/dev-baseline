@@ -85,7 +85,7 @@ Prefer repository-provided scripts and templates when they exist:
 - `shared/scripts/generate-task-dashboard.sh`
 - `shared/scripts/task-github-summary.sh`
 - `shared/scripts/task-dashboard-summary.sh`
-- `shared/scripts/summarize-diff.sh`
+- `shared/scripts/git-summarize-diff.sh`
 - `shared/scripts/create-sprint-workspace.sh`
 - `shared/scripts/create-release-workspace.sh`
 - `shared/scripts/generate-metrics-report.sh`
@@ -93,7 +93,7 @@ Prefer repository-provided scripts and templates when they exist:
 - `shared/scripts/check-secrets.sh`
 - `shared/scripts/check-doc-sync.sh`
 - `shared/scripts/validate-baseline-docs.sh`
-- `shared/scripts/block-dangerous-git.sh`
+- `shared/scripts/git-block-dangerous.sh`
 
 If a script is unavailable or cannot run, explain the blocker and perform the equivalent safe inspection or document update manually.
 
