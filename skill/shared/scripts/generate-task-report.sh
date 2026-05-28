@@ -63,7 +63,7 @@ pre{white-space:pre-wrap;word-break:break-word;background:#020617;border:1px sol
 <div>
 <section id="index" class="active"><h2>Index</h2><pre>$(read_file 00-index.md)</pre></section>
 <section id="ready"><h2>Readiness</h2><pre>$(read_file 11-readiness-gates.md)</pre></section>
-<section id="features"><h2>Feature Status</h2><pre>$(read_file 09-feature-status-board.md)</pre><h2>Traceability</h2><pre>$(read_file 13-traceability-matrix.md)</pre></section>
+<section id="features"><h2>Feature Status</h2><pre>$(read_file 09-feature-status-board.md)</pre></section>
 <section id="test"><h2>Test Plan</h2><pre>$(read_file 04-test-plan.md)</pre><h2>Test Report</h2><pre>$(read_file 05-test-report.md)</pre></section>
 <section id="bugs"><h2>Bugfix Log</h2><pre>$(read_file 06-bugfix-log.md)</pre></section>
 <section id="accept"><h2>Acceptance</h2><pre>$(read_file 07-acceptance-report.md)</pre></section>
@@ -80,3 +80,4 @@ buttons.forEach(btn=>btn.onclick=()=>{buttons.forEach(b=>b.classList.remove('act
 EOF
 
 echo "Task report generated: $out"
+

@@ -3,7 +3,6 @@ set -euo pipefail
 
 required=(
   "docs/GITHUB_INTEGRATION.md"
-  "shared/templates/tasks/21-github-integration.md"
   "shared/scripts/task-github-summary.sh"
   "skill/references/github-mode.md"
   "docs/SPRINT_MODE.md"
@@ -28,3 +27,4 @@ for file in "${required[@]}"; do
 done
 
 echo "v0.3.8+ assets look good."
+

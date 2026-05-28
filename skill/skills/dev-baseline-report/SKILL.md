@@ -27,7 +27,12 @@ Only generate Markdown when the user explicitly asks for Markdown.
 
 ## Required behavior
 
-1. Inspect project docs:
+1. Inspect project facts:
+   - project name
+   - detected stack/package signals
+   - top-level directory structure
+   - basic architecture snapshot from docs or repository structure
+2. Inspect existing project docs only when present:
    - README.md
    - docs/PLAN.md
    - docs/API.md
@@ -36,13 +41,14 @@ Only generate Markdown when the user explicitly asks for Markdown.
    - docs/CHANGELOG.md
    - docs/ARCHITECTURE.md
    - docs/TESTING.md
-2. Inspect git state:
+3. Inspect git state:
    - current branch
    - git status summary
    - diff stat
-3. Generate a self-contained HTML report with tabs or clear sections.
-4. Do not modify source code.
-5. Do not commit or push unless Git publish mode is separately triggered.
+4. Generate a self-contained HTML report with tabs or clear sections.
+5. Do not render placeholder sections for missing Markdown files.
+6. Do not modify source code.
+7. Do not commit or push unless Git publish mode is separately triggered.
 
 ## Recommended command
 

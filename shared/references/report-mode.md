@@ -26,16 +26,15 @@ HTML can present large project reports with tabs, cards, visual grouping, and co
 ## Required sections
 
 - project overview
-- current iteration and backlog
-- architecture
-- API
-- config
-- deployment
-- testing
-- changelog
+- basic project information
+- basic architecture snapshot
 - git state
 - file structure
 - risks and next actions
+
+Only include Markdown-backed sections when the corresponding file exists. For
+example, do not render empty tabs for `docs/PLAN.md`, `docs/ARCHITECTURE.md`,
+or next-plan/current-plan content when those files do not exist.
 
 ## Safety
 

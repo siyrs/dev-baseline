@@ -3,7 +3,7 @@
 ## v0.3.8 GitHub Integration
 
 - GitHub issue / branch / PR / CI linkage
-- `21-github-integration.md`
+- on-demand `21-github-integration.md`
 - `/dev-baseline-github`
 
 ## v0.3.9 Sprint Mode

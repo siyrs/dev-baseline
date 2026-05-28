@@ -16,11 +16,15 @@ A task workspace should connect planning and delivery documents with engineering
 
 ## Task document
 
-Each task may include:
+Each task may include an optional file generated on demand by the GitHub summary
+script:
 
 ```text
 21-github-integration.md
 ```
+
+This file is not part of the default task template set, keeping new task
+workspaces focused on the core delivery flow.
 
 ## Trigger examples
 

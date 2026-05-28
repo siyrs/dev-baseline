@@ -14,7 +14,23 @@ if [[ ! -d "$workspace" ]]; then
 fi
 
 file="$workspace/21-github-integration.md"
-[[ -f "$file" ]] || cp shared/templates/tasks/21-github-integration.md "$file"
+if [[ ! -f "$file" ]]; then
+  cat > "$file" <<'EOF'
+# GitHub Integration
+
+## Links
+- Issue:
+- Branch:
+- Pull request:
+- CI run:
+- Release/deploy reference:
+
+## Status
+- Review status:
+- Merge status:
+- Notes:
+EOF
+fi
 
 echo "# GitHub Task Summary"
 echo

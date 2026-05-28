@@ -13,19 +13,115 @@ html_escape() {
   sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'
 }
 
+escape_text() {
+  printf '%s' "$1" | html_escape
+}
+
 read_doc() {
+  html_escape < "$1"
+}
+
+first_heading() {
   local path="$1"
   if [[ -f "$path" ]]; then
-    html_escape < "$path"
+    sed -n 's/^#\{1,2\}[[:space:]]\+//p' "$path" | head -n 1
+  fi
+}
+
+detect_stack() {
+  local items=()
+  [[ -f package.json ]] && items+=("Node.js / JavaScript")
+  [[ -f pnpm-lock.yaml ]] && items+=("pnpm")
+  [[ -f yarn.lock ]] && items+=("Yarn")
+  [[ -f package-lock.json ]] && items+=("npm")
+  [[ -f pom.xml ]] && items+=("Java / Maven")
+  [[ -f build.gradle || -f build.gradle.kts ]] && items+=("Java/Kotlin / Gradle")
+  [[ -f pyproject.toml || -f setup.py || -f requirements.txt ]] && items+=("Python")
+  [[ -f go.mod ]] && items+=("Go")
+  [[ -f Cargo.toml ]] && items+=("Rust")
+  [[ -f Dockerfile || -f docker-compose.yml || -f compose.yml ]] && items+=("Docker")
+  [[ -f Makefile ]] && items+=("Make")
+  if [[ ${#items[@]} -eq 0 ]]; then
+    printf 'Not detected from root files'
   else
-    printf 'Not found: %s\n' "$path" | html_escape
+    local IFS=', '
+    printf '%s' "${items[*]}"
+  fi
+}
+
+list_top_dirs() {
+  find . -maxdepth 1 -mindepth 1 -type d \
+    ! -name '.git' ! -name 'node_modules' ! -name 'target' ! -name 'dist' ! -name 'build' \
+    -printf '%f\n' 2>/dev/null | sort | html_escape || true
+}
+
+list_entry_files() {
+  find . -maxdepth 1 -type f \
+    \( -name 'package.json' -o -name 'pom.xml' -o -name 'build.gradle' -o -name 'build.gradle.kts' -o -name 'pyproject.toml' -o -name 'requirements.txt' -o -name 'go.mod' -o -name 'Cargo.toml' -o -name 'Dockerfile' -o -name 'README.md' \) \
+    -printf '%f\n' 2>/dev/null | sort | html_escape || true
+}
+
+available_docs() {
+  {
+    for path in README.md docs/PLAN.md docs/ARCHITECTURE.md docs/API.md docs/CONFIG.md docs/DEPLOY.md docs/TESTING.md docs/CHANGELOG.md; do
+      if [[ -f "$path" ]]; then
+        printf '%s\n' "$path"
+      fi
+    done
+    true
+  } | html_escape
+}
+
+architecture_summary() {
+  if [[ -f docs/ARCHITECTURE.md ]]; then
+    sed -n '1,80p' docs/ARCHITECTURE.md | html_escape
+  else
+    printf 'No dedicated architecture document found. The snapshot below is inferred from repository structure and root-level project files.\n' | html_escape
   fi
 }
 
 git_status=$(git status --short 2>/dev/null | html_escape || true)
 git_branch=$(git branch --show-current 2>/dev/null | html_escape || true)
+git_head=$(git rev-parse --short HEAD 2>/dev/null | html_escape || true)
 diff_stat=$(git diff --stat 2>/dev/null | html_escape || true)
 file_tree=$(find . -maxdepth 3 -type f ! -path './.git/*' ! -path './node_modules/*' ! -path './target/*' ! -path './dist/*' ! -path './build/*' | sort | html_escape)
+project_name=$(basename "$(pwd)")
+project_title=$(first_heading README.md)
+project_title=${project_title:-$project_name}
+stack_summary=$(detect_stack | html_escape)
+top_dirs=$(list_top_dirs)
+entry_files=$(list_entry_files)
+doc_inventory=$(available_docs)
+arch_summary=$(architecture_summary)
+file_count=$(find . -type f ! -path './.git/*' ! -path './node_modules/*' ! -path './target/*' ! -path './dist/*' ! -path './build/*' 2>/dev/null | wc -l | tr -d ' ')
+nav_file=$(mktemp)
+sections_file=$(mktemp)
+trap 'rm -f "$nav_file" "$sections_file"' EXIT
+
+add_doc_tab() {
+  local id="$1"
+  local label="$2"
+  local title="$3"
+  local path="$4"
+  if [[ ! -f "$path" ]]; then
+    return 0
+  fi
+  printf '<button data-tab="%s">%s</button>\n' "$id" "$label" >> "$nav_file"
+  {
+    printf '<section id="%s" class="tab"><h2>%s</h2><pre>' "$id" "$title"
+    read_doc "$path"
+    printf '</pre></section>\n'
+  } >> "$sections_file"
+}
+
+add_doc_tab readme "README" "README" README.md
+add_doc_tab plan "开发计划" "开发计划" docs/PLAN.md
+add_doc_tab architecture "架构" "架构说明" docs/ARCHITECTURE.md
+add_doc_tab api "API" "API 文档" docs/API.md
+add_doc_tab config "配置" "配置文档" docs/CONFIG.md
+add_doc_tab deploy "部署" "部署文档" docs/DEPLOY.md
+add_doc_tab testing "测试" "测试文档" docs/TESTING.md
+add_doc_tab changelog "变更记录" "变更记录" docs/CHANGELOG.md
 
 cat > "$out_file" <<EOF
 <!doctype html>
@@ -47,23 +143,19 @@ cat > "$out_file" <<EOF
   </style>
 </head>
 <body>
-  <header><h1>Dev Baseline Project Report</h1><p class="subtitle">Generated at ${timestamp}. Self-contained HTML report with tabs for project status, docs, git state, risks and next actions.</p></header>
+  <header><h1>$(escape_text "$project_title")</h1><p class="subtitle">Dev Baseline Project Report · ${timestamp}</p></header>
   <div class="layout">
     <nav aria-label="Report sections">
-      <button class="active" data-tab="overview">概览</button><button data-tab="plan">开发计划</button><button data-tab="architecture">架构</button><button data-tab="api">API</button><button data-tab="config">配置</button><button data-tab="deploy">部署</button><button data-tab="testing">测试</button><button data-tab="changelog">变更记录</button><button data-tab="git">Git 状态</button><button data-tab="files">文件结构</button><button data-tab="recommendations">建议</button>
+      <button class="active" data-tab="overview">概览</button>
+      $(cat "$nav_file")
+      <button data-tab="git">Git 状态</button><button data-tab="files">文件结构</button><button data-tab="recommendations">建议</button>
     </nav>
     <main>
-      <section id="overview" class="tab active"><h2>项目概览</h2><div class="cards"><div class="card"><strong>当前分支</strong><span>${git_branch:-unknown}</span></div><div class="card"><strong>报告路径</strong><span>${out_file}</span></div><div class="card"><strong>报告格式</strong><span>HTML tabs, self-contained</span></div></div><p class="notice">本报告适合给项目负责人、开发者、评审者快速理解当前项目状态。它不会修改业务代码。</p><h3>README</h3><pre>$(read_doc README.md)</pre></section>
-      <section id="plan" class="tab"><h2>开发计划</h2><pre>$(read_doc docs/PLAN.md)</pre></section>
-      <section id="architecture" class="tab"><h2>架构说明</h2><pre>$(read_doc docs/ARCHITECTURE.md)</pre></section>
-      <section id="api" class="tab"><h2>API 文档</h2><pre>$(read_doc docs/API.md)</pre></section>
-      <section id="config" class="tab"><h2>配置文档</h2><pre>$(read_doc docs/CONFIG.md)</pre></section>
-      <section id="deploy" class="tab"><h2>部署文档</h2><pre>$(read_doc docs/DEPLOY.md)</pre></section>
-      <section id="testing" class="tab"><h2>测试文档</h2><pre>$(read_doc docs/TESTING.md)</pre></section>
-      <section id="changelog" class="tab"><h2>变更记录</h2><pre>$(read_doc docs/CHANGELOG.md)</pre></section>
+      <section id="overview" class="tab active"><h2>项目概览</h2><div class="cards"><div class="card"><strong>项目</strong><span>$(escape_text "$project_name")</span></div><div class="card"><strong>技术栈信号</strong><span>${stack_summary}</span></div><div class="card"><strong>当前分支</strong><span>${git_branch:-unknown}</span></div><div class="card"><strong>HEAD</strong><span>${git_head:-unknown}</span></div><div class="card"><strong>文件数</strong><span>${file_count}</span></div><div class="card"><strong>报告路径</strong><span>${out_file}</span></div></div><p class="notice">首页展示项目基本信息和基础架构快照；只有实际存在的 Markdown 文档才会作为独立章节输出。</p><h3>基础架构快照</h3><pre>${arch_summary}</pre><h3>顶层目录</h3><pre>${top_dirs:-No top-level directories detected}</pre><h3>入口/配置文件</h3><pre>${entry_files:-No common entry files detected}</pre><h3>已纳入报告的文档</h3><pre>${doc_inventory:-No standard Markdown docs detected}</pre></section>
+      $(cat "$sections_file")
       <section id="git" class="tab"><h2>Git 状态</h2><h3>Branch</h3><pre>${git_branch:-unknown}</pre><h3>Status</h3><pre>${git_status:-Clean working tree or unavailable}</pre><h3>Diff stat</h3><pre>${diff_stat:-No unstaged diff or unavailable}</pre></section>
       <section id="files" class="tab"><h2>文件结构</h2><pre>${file_tree}</pre></section>
-      <section id="recommendations" class="tab"><h2>建议与后续动作</h2><div class="cards"><div class="card"><strong>文档同步</strong><span>检查 API、CONFIG、DEPLOY、CHANGELOG 是否与代码变化一致。</span></div><div class="card"><strong>风险检查</strong><span>提交前运行 shared/scripts/check-secrets.sh。</span></div><div class="card"><strong>发布准备</strong><span>发布前确认 CHANGELOG、DEPLOY、TESTING。</span></div><div class="card"><strong>下一步</strong><span>根据 docs/PLAN.md 中的 Todo 和 Blocked 决定下一轮迭代。</span></div></div></section>
+      <section id="recommendations" class="tab"><h2>建议与后续动作</h2><div class="cards"><div class="card"><strong>文档同步</strong><span>只维护当前项目真实存在的文档，避免报告输出空章节。</span></div><div class="card"><strong>风险检查</strong><span>提交前运行 secret scan 或仓库提供的安全检查。</span></div><div class="card"><strong>发布准备</strong><span>发布前确认 README、CHANGELOG、DEPLOY、TESTING 等实际存在文档。</span></div><div class="card"><strong>下一步</strong><span>根据已存在的计划或任务文档决定下一轮动作。</span></div></div></section>
     </main>
   </div>
   <script>const buttons=document.querySelectorAll('nav button[data-tab]');const tabs=document.querySelectorAll('section.tab');buttons.forEach(btn=>{btn.addEventListener('click',()=>{const target=btn.dataset.tab;buttons.forEach(b=>b.classList.remove('active'));tabs.forEach(t=>t.classList.remove('active'));btn.classList.add('active');document.getElementById(target).classList.add('active');});});</script>

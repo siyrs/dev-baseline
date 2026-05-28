@@ -7,8 +7,8 @@ Use Task Dashboard Mode to generate a project-level HTML dashboard for task work
 - `docs/tasks/*/00-index.md`
 - `docs/tasks/*/09-feature-status-board.md`
 - `docs/tasks/*/05-test-report.md`
-- `docs/tasks/*/14-change-request-log.md`
-- `docs/tasks/*/15-risk-register.md`
+- optional `docs/tasks/*/14-change-request-log.md`
+- optional `docs/tasks/*/15-risk-register.md`
 - task stage reports
 
 ## Output

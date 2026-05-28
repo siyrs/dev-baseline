@@ -25,6 +25,13 @@ Markdown may be generated only when explicitly requested.
 bash shared/scripts/generate-html-report.sh
 ```
 
+## Content rule
+
+The report home page should summarize current project facts and a basic
+architecture snapshot. Markdown-backed sections should only be shown when the
+source file exists; do not output placeholder content for missing plan,
+architecture, API, config, deploy, testing, or changelog docs.
+
 ## Safety
 
 Report mode may write report files under `docs/report/`, but must not modify source code and must not commit or push.
