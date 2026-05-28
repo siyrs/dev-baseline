@@ -106,22 +106,50 @@ git add -A -> git commit -> git fetch/pull remote -> git merge upstream -> git p
 
 ## 安装
 
-Claude：
+Dev Baseline 现在使用 `skill/` 作为同一套标准 skill 包。Codex 和 Claude Code 安装的是同一份内容，只是目标目录不同。
 
-```bash
-bash scripts/install-dev-baseline.sh claude ~/.claude/skills/dev-baseline
+个人安装会用全新的标准包替换现有 `dev-baseline` 目录，并备份旧的独立入口目录，例如 `dev-baseline-git-sync`，避免重装后继续出现重复命令。
+
+`codex/` 和 `claude/` 目录现在只保留轻量适配说明。共享的 skills、agents、hooks、references 和 templates 都放在 `skill/`。
+
+Codex 项目级 overlay 会先使用通用 `skill/agents`，再叠加很小的 `skill/codex-agent-overrides`。
+
+也可以直接让助手安装：
+
+```text
+我需要你安装这个 skill https://github.com/siyrs/dev-baseline，并检查 /dev-baseline 是否可用。
+
+请把 https://github.com/siyrs/dev-baseline 里的标准 skill 安装到我的个人 Claude skills 目录，名称使用 dev-baseline，并检查 /dev-baseline 是否可用。
 ```
 
-Codex：
+Codex 个人 skill：
 
 ```bash
-bash scripts/install-dev-baseline.sh codex /path/to/project
+bash scripts/install-dev-baseline.sh codex
 ```
 
-同时安装：
+Claude Code 个人 skill：
 
 ```bash
-bash scripts/install-dev-baseline.sh both /path/to/project
+bash scripts/install-dev-baseline.sh claude
+```
+
+同时安装到两个个人目录：
+
+```bash
+bash scripts/install-dev-baseline.sh both-personal
+```
+
+Codex 项目级 overlay：
+
+```bash
+bash scripts/install-dev-baseline.sh codex-project /path/to/project
+```
+
+Codex + Claude Code 项目级 overlay：
+
+```bash
+bash scripts/install-dev-baseline.sh both-project /path/to/project
 ```
 
 校验：

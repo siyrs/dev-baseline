@@ -106,22 +106,42 @@ Reports are generated as HTML by default for better navigation and readability.
 
 ## Install
 
-Claude:
+Dev Baseline now ships one standard skill package under `skill/`. Codex and Claude Code install the same package; only the destination directory differs.
+
+Personal installs replace the existing `dev-baseline` skill directory with a fresh copy and back up old Dev Baseline standalone entrypoints such as `dev-baseline-git-sync`, so duplicated commands do not remain after reinstall.
+
+The `codex/` and `claude/` directories are thin adapter notes only. Shared skills, agents, hooks, references, and templates live in `skill/`.
+
+Codex project overlays are generated from common `skill/agents` plus the small `skill/codex-agent-overrides` directory.
+
+Codex personal skill:
 
 ```bash
-bash scripts/install-dev-baseline.sh claude ~/.claude/skills/dev-baseline
+bash scripts/install-dev-baseline.sh codex
 ```
 
-Codex:
+Claude Code personal skill:
 
 ```bash
-bash scripts/install-dev-baseline.sh codex /path/to/project
+bash scripts/install-dev-baseline.sh claude
 ```
 
-Both:
+Both personal skill directories:
 
 ```bash
-bash scripts/install-dev-baseline.sh both /path/to/project
+bash scripts/install-dev-baseline.sh both-personal
+```
+
+Project overlay for Codex:
+
+```bash
+bash scripts/install-dev-baseline.sh codex-project /path/to/project
+```
+
+Project overlay for both Codex and Claude Code:
+
+```bash
+bash scripts/install-dev-baseline.sh both-project /path/to/project
 ```
 
 Validate:

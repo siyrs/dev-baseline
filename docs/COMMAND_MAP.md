@@ -2,6 +2,8 @@
 
 Dev Baseline keeps the visible command surface focused.
 
+The same command map is shipped in the standard `skill/` package for both Codex and Claude Code.
+
 ## Primary Commands
 
 | Command | Purpose |

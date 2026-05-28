@@ -2,6 +2,8 @@
 
 Dev Baseline 现在刻意精简可见命令，避免 `/dev-baseline-xxx` 过多造成干扰。
 
+Codex 和 Claude Code 都使用 `skill/` 标准包里的同一套命令地图。
+
 ## 主要命令
 
 | 命令 | 用途 |
