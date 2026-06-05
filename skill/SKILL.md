@@ -110,7 +110,7 @@ Prefer repository-provided scripts and templates when they exist:
 - `shared/scripts/quality-gate.sh`
 - `shared/scripts/check-secrets.sh`
 - `shared/scripts/check-doc-sync.sh`
-- `shared/scripts/validate-baseline-docs.sh`
+- shared/scripts/validate-baseline-docs.sh`n- scripts/validate-script-preambles.sh: validates script shebangs, Bash syntax, and resolver integrity before packaging.
 - `shared/scripts/git-block-dangerous.sh`
 
 If a script is unavailable or cannot run, explain the blocker and perform the equivalent safe inspection or document update manually.

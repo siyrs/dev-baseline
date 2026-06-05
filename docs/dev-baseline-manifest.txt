@@ -79,3 +79,4 @@ skill/shared/templates/tasks/15-risk-register.md
 shared/scripts/publish-gate.sh
 
 skill/shared/scripts/publish-gate.sh
+scripts/validate-script-preambles.sh

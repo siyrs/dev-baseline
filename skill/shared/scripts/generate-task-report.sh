@@ -1,22 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
 resolve_project_path() {
-  local path="cd "$REPO_ROOT"
-"
+  local path="${1:-}"
+  if [[ -z "$path" ]]; then
+    printf '\n'
+    return 0
+  fi
+
   case "$path" in
     /*|[A-Za-z]:*) printf '%s\n' "$path" ;;
     *) printf '%s/%s\n' "$REPO_ROOT" "$path" ;;
   esac
 }
 
-#!/usr/bin/env bash
-set -euo pipefail
 
 workspace="${1:-}"
-workspace=$(resolve_project_path "$workspace")
+workspace="$(resolve_project_path "$workspace")"
 
 if [[ -z "$workspace" ]]; then
   echo "Usage: bash shared/scripts/generate-task-report.sh <task-workspace>" >&2
@@ -95,4 +100,3 @@ buttons.forEach(btn=>btn.onclick=()=>{buttons.forEach(b=>b.classList.remove('act
 EOF
 
 echo "Task report generated: $out"
-

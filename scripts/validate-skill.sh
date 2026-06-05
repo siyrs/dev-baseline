@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+VALIDATE_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bash "$VALIDATE_SCRIPT_DIR/validate-script-preambles.sh"
+
 manifest_file="docs/dev-baseline-manifest.txt"
 manifest_required_files=()
 
