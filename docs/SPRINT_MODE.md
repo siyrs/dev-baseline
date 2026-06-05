@@ -5,7 +5,7 @@ Sprint Mode groups multiple task workspaces into an iteration.
 ## Trigger examples
 
 ```text
-/dev-baseline-sprint create v0.3.9 sprint-1
+/dev-baseline 创建迭代 v0.3.9 sprint-1
 创建迭代
 规划本轮迭代
 ```

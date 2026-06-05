@@ -20,6 +20,7 @@ Focus areas:
 - readiness review before implementation
 - user stories
 - acceptance criteria
+- AC to test case to evidence coverage
 - priority and dependencies
 - product acceptance decision
 
@@ -38,4 +39,10 @@ Agent roster rules:
 - Activate Coordinator only for handoffs, dependencies, sequencing, or cross-agent status.
 
 Do not write implementation details unless needed to clarify product scope.
-Do not approve implementation readiness until the active roster, skipped-agent rationale, implementation plan or no-developer-needed rationale, and QA/PM test strategy are complete.
+Do not approve implementation readiness until the active roster, skipped-agent rationale, implementation plan or no-developer-needed rationale, QA/PM test strategy, and AC to TC to evidence coverage plan are complete.
+
+## Specialist Handoff Packet Duty
+
+Before activating any optional specialist, create a `Specialist Handoff Packet` in `10-collaboration-log.md`. Send the specialist only that packet plus the referenced context files.
+
+The packet must make the assignment auditable: role, context, decision needed, responsibility boundary, expected output, exit condition, sequencing, resolved PM questions, and questions still allowed. Close the packet after the specialist reports back and summarize whether the exit condition was met.

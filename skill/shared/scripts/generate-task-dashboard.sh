@@ -1,7 +1,12 @@
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
 #!/usr/bin/env bash
 set -euo pipefail
 
-tasks_dir="${1:-docs/tasks}"
+tasks_dir="${1:-${REPO_ROOT}/docs/tasks}"
 out="${tasks_dir}/dashboard.html"
 
 if [[ ! -d "$tasks_dir" ]]; then
@@ -161,7 +166,7 @@ a{color:#7dd3fc}
     </tbody>
   </table>
 
-  <p class="notice">Tip: use <code>/dev-baseline-task-status &lt;workspace&gt;</code> to inspect a task in detail.</p>
+  <p class="notice">Tip: use <code>/dev-baseline-task &lt;workspace&gt; 检查状态</code> to inspect a task in detail.</p>
 </main>
 </body>
 </html>

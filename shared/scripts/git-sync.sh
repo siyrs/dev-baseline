@@ -1,3 +1,8 @@
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -24,7 +29,7 @@ die() {
 inside_work_tree=$(git rev-parse --is-inside-work-tree 2>/dev/null || true)
 [[ "$inside_work_tree" == "true" ]] || die "not inside a Git work tree"
 
-repo_root=$(git rev-parse --show-toplevel)
+repo_root="$REPO_ROOT"
 cd "$repo_root"
 
 git_dir=$(git rev-parse --git-dir)
@@ -67,10 +72,15 @@ echo
 git diff --stat || true
 echo
 
-if [[ -f "shared/scripts/check-secrets.sh" ]]; then
-  bash shared/scripts/check-secrets.sh
+secret_scan="${SCRIPT_DIR}/check-secrets.sh"
+if [[ ! -f "$secret_scan" ]]; then
+  secret_scan="${REPO_ROOT}/shared/scripts/check-secrets.sh"
+fi
+
+if [[ -f "$secret_scan" ]]; then
+  bash "$secret_scan"
 else
-  echo "Secret scan skipped: shared/scripts/check-secrets.sh not found."
+  echo "Secret scan skipped: check-secrets.sh not found in script or repository shared paths."
 fi
 
 if [[ -n "$(git status --porcelain)" ]]; then

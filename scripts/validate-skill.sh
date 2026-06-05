@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+manifest_file="docs/dev-baseline-manifest.txt"
+manifest_required_files=()
+
+if [[ ! -f "$manifest_file" ]]; then
+  echo "Missing Dev Baseline manifest: $manifest_file" >&2
+  exit 1
+fi
+
+while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
+  manifest_line="${manifest_line%%#*}"
+  manifest_line="${manifest_line#"${manifest_line%%[![:space:]]*}"}"
+  manifest_line="${manifest_line%"${manifest_line##*[![:space:]]}"}"
+  [[ -n "$manifest_line" ]] || continue
+  manifest_required_files+=("$manifest_line")
+done < "$manifest_file"
+
 required_files=(
   "skill/SKILL.md"
   "skill/skills/dev-baseline-task/SKILL.md"
@@ -61,6 +77,8 @@ required_files=(
   "shared/templates/tasks/08-delivery-summary.md"
 )
 
+required_files+=("${manifest_required_files[@]}")
+
 for file in "${required_files[@]}"; do
   if [[ ! -f "$file" ]]; then
     echo "Missing required file: $file" >&2
@@ -115,6 +133,72 @@ if ! grep -q "PM readiness review" skill/shared/references/team-delivery-flow.md
   exit 1
 fi
 
+for status_board in shared/templates/tasks/09-feature-status-board.md skill/shared/templates/tasks/09-feature-status-board.md; do
+  if ! grep -q "^## Status Event Log" "$status_board"; then
+    echo "Feature status board is missing Status Event Log section: $status_board" >&2
+    exit 1
+  fi
+
+  if ! grep -q "| Time | Function Point | From | To | Owner | Note |" "$status_board"; then
+    echo "Feature status board is missing Status Event Log table header: $status_board" >&2
+    exit 1
+  fi
+done
+
+for test_plan in shared/templates/tasks/04-test-plan.md skill/shared/templates/tasks/04-test-plan.md; do
+  if ! grep -F -q "| ID | Function Point | Related AC | Scenario | Steps | Expected Result | Priority | Status |" "$test_plan"; then
+    echo "Test plan template is missing Related AC traceability column: $test_plan" >&2
+    exit 1
+  fi
+done
+
+for test_report in shared/templates/tasks/05-test-report.md skill/shared/templates/tasks/05-test-report.md; do
+  if ! grep -F -q "| Case ID | Related AC | Scenario | Result | Evidence Link | Screenshot | Log | Command | Notes |" "$test_report"; then
+    echo "Test report template is missing AC-to-evidence result columns: $test_report" >&2
+    exit 1
+  fi
+
+  if ! grep -F -q "| Bug ID | Retest Case ID | Related AC | Result | Evidence Link | Screenshot | Log | Command | Notes |" "$test_report"; then
+    echo "Test report template is missing AC-to-evidence retest columns: $test_report" >&2
+    exit 1
+  fi
+done
+
+for acceptance_report in shared/templates/tasks/07-acceptance-report.md skill/shared/templates/tasks/07-acceptance-report.md; do
+  if ! grep -F -q "| AC ID | Criteria | Related Function Point | Covered By TC | Evidence Link | Screenshot | Log | Command | Result | Notes |" "$acceptance_report"; then
+    echo "Acceptance report template is missing AC evidence coverage review columns: $acceptance_report" >&2
+    exit 1
+  fi
+
+  if ! grep -q "^## AC Coverage Summary" "$acceptance_report"; then
+    echo "Acceptance report template is missing AC Coverage Summary section: $acceptance_report" >&2
+    exit 1
+  fi
+done
+
+for task_index in shared/templates/tasks/00-index.md skill/shared/templates/tasks/00-index.md; do
+  for expected_doc in "13-decision-log.md" "14-change-request-log.md" "15-risk-register.md"; do
+    if ! grep -q "$expected_doc" "$task_index"; then
+      echo "Task workspace index is missing standard team-flow document $expected_doc: $task_index" >&2
+      exit 1
+    fi
+  done
+done
+
+for change_log in shared/templates/tasks/14-change-request-log.md skill/shared/templates/tasks/14-change-request-log.md; do
+  if ! grep -q '^| CR-' "$change_log"; then
+    echo "Change request log template is missing CR-prefixed row for dashboard counting: $change_log" >&2
+    exit 1
+  fi
+done
+
+for risk_register in shared/templates/tasks/15-risk-register.md skill/shared/templates/tasks/15-risk-register.md; do
+  if ! grep -q '^| RISK-' "$risk_register"; then
+    echo "Risk register template is missing RISK-prefixed row for dashboard counting: $risk_register" >&2
+    exit 1
+  fi
+done
+
 allowed=(
   "dev-baseline-task"
   "dev-baseline-report"
@@ -134,6 +218,25 @@ for skill_dir in skill/skills/dev-baseline-*; do
   if ! $ok; then
     echo "Redundant visible skill entrypoint remains: $skill_dir" >&2
     echo "Only dev-baseline-task, dev-baseline-report, and dev-baseline-git-sync should remain under skill/skills/." >&2
+    exit 1
+  fi
+done
+
+deprecated_commands=(
+  "/dev-baseline-quality"
+  "/dev-baseline-task-status"
+  "/dev-baseline-github"
+  "/dev-baseline-sprint"
+  "/dev-baseline-release-train"
+  "/dev-baseline-metrics"
+)
+
+for command in "${deprecated_commands[@]}"; do
+  matches=$(grep -R -n -F --exclude="validate-skill.sh" "$command" \
+    README.md README_CN.md docs skill shared scripts .github 2>/dev/null || true)
+  if [[ -n "$matches" ]]; then
+    echo "Deprecated visible command remains: $command" >&2
+    echo "$matches" >&2
     exit 1
   fi
 done

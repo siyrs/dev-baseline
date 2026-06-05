@@ -21,6 +21,34 @@ MODE=${1:-help}
 TARGET=${2:-}
 SOURCE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+check_manifest_assets() {
+  local manifest="$SOURCE_ROOT/docs/dev-baseline-manifest.txt"
+  local missing=()
+  local line
+
+  if [[ ! -f "$manifest" ]]; then
+    echo "Missing Dev Baseline manifest: $manifest" >&2
+    exit 1
+  fi
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line="${line%%#*}"
+    line="${line#"${line%%[![:space:]]*}"}"
+    line="${line%"${line##*[![:space:]]}"}"
+    [[ -n "$line" ]] || continue
+
+    if [[ ! -e "$SOURCE_ROOT/$line" ]]; then
+      missing+=("$line")
+    fi
+  done < "$manifest"
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "Dev Baseline manifest assets are missing:" >&2
+    printf ' - %s\n' "${missing[@]}" >&2
+    exit 1
+  fi
+}
+
 timestamp() {
   date +%Y%m%d-%H%M%S
 }
@@ -305,6 +333,14 @@ install_docs_templates() {
   mkdir -p "$TARGET/.dev-baseline/templates"
   copy_dir "$SOURCE_ROOT/skill/templates" "$TARGET/.dev-baseline/templates"
 }
+
+case "$MODE" in
+  help|-h|--help)
+    ;;
+  *)
+    check_manifest_assets
+    ;;
+esac
 
 case "$MODE" in
   claude)

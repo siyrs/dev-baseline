@@ -1,3 +1,8 @@
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -18,10 +23,10 @@ run_check() {
   echo
 }
 
-run_check "Stack detection" bash shared/scripts/detect-stack.sh
-run_check "Baseline docs" bash shared/scripts/validate-baseline-docs.sh
-run_check "Doc sync" bash shared/scripts/check-doc-sync.sh
-run_check "Secret scan" bash shared/scripts/check-secrets.sh
+run_check "Stack detection" bash "${SCRIPT_DIR}/detect-stack.sh"
+run_check "Baseline docs" bash "${SCRIPT_DIR}/validate-baseline-docs.sh"
+run_check "Doc sync" bash "${SCRIPT_DIR}/check-doc-sync.sh"
+run_check "Secret scan" bash "${SCRIPT_DIR}/check-secrets.sh"
 
 if $failed; then
   echo "Quality gate failed." >&2

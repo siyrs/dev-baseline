@@ -23,7 +23,7 @@ Only these skill entrypoints should be exposed:
 
 ## Why
 
-Most operations do not need their own visible skill command. A large list such as `/dev-baseline-git`, `/dev-baseline-github`, `/dev-baseline-quality`, `/dev-baseline-sprint`, and `/dev-baseline-metrics` creates command noise.
+Most operations do not need their own visible skill command. A large list of standalone Git, GitHub, quality, sprint, release, or metrics commands creates command noise.
 
 `/dev-baseline-git-sync` is the one explicit Git shortcut because it represents a repeatable full synchronization operation: add, commit, fetch, merge, and push.
 

@@ -2,6 +2,15 @@
 
 This file records gates that must pass before implementation starts.
 
+Allowed `Result` values:
+
+- `yes`: gate item passed.
+- `no`: gate item is not passed yet.
+- `not-needed`: gate item is intentionally skipped; `Notes` must include the rationale.
+- `blocked`: gate item is blocked and implementation must not start.
+
+Do not use `unknown`. Resolve all questions before setting `Implementation may start: yes`.
+
 ## Gate 0: PM-led Agent Roster
 
 | Item | Result | Owner | Notes |
@@ -20,7 +29,7 @@ This file records gates that must pass before implementation starts.
 
 | Item | Result | Owner | Notes |
 |---|---|---|---|
-| Analyst needed | unknown | PM | yes/no/not-needed |
+| Analyst needed | no | PM | yes/not-needed |
 | Evidence gathered or skip rationale documented | no | PM or Analyst |  |
 | Analysis questions resolved | no | PM |  |
 
@@ -29,7 +38,7 @@ This file records gates that must pass before implementation starts.
 | Item | Result | Owner | Notes |
 |---|---|---|---|
 | Architecture impact triaged | no | PM |  |
-| Architect needed | unknown | PM | yes/no/not-needed |
+| Architect needed | no | PM | yes/not-needed |
 | Architecture guidance or no-impact rationale documented | no | PM or Architect |  |
 | Technical constraints documented when needed | no | Architect when active |  |
 | Risks and alternatives documented when needed | no | Architect when active |  |
@@ -39,19 +48,19 @@ This file records gates that must pass before implementation starts.
 
 | Item | Result | Owner | Notes |
 |---|---|---|---|
-| Developer needed | unknown | PM | yes/no/not-needed |
-| Can implement | unknown | Developer when active |  |
-| Difficulty | unknown | Developer when active |  |
-| Rough effort | unknown | Developer when active |  |
-| Risks | unknown | Developer when active |  |
+| Developer needed | no | PM | yes/not-needed |
+| Can implement | no | Developer when active |  |
+| Difficulty | no | Developer when active |  |
+| Rough effort | no | Developer when active |  |
+| Risks | no | Developer when active |  |
 | Concrete implementation plan or PM no-developer rationale | no | PM or Developer |  |
-| Need user confirmation | unknown | PM |  |
+| Need user confirmation | no | PM |  |
 
 ## Gate 4: Test Strategy
 
 | Item | Result | Owner | Notes |
 |---|---|---|---|
-| QA Tester needed | unknown | PM | yes/no/not-needed |
+| QA Tester needed | no | PM | yes/not-needed |
 | Test strategy owner assigned | no | PM | QA or PM |
 | Test scope | no | PM or QA |  |
 | Concrete test cases or PM acceptance checklist | no | PM or QA |  |
@@ -65,7 +74,7 @@ This file records gates that must pass before implementation starts.
 
 | Item | Result | Owner | Notes |
 |---|---|---|---|
-| Coordinator needed | unknown | PM | yes/no/not-needed |
+| Coordinator needed | no | PM | yes/not-needed |
 | Handoffs documented or skip rationale recorded | no | PM or Coordinator |  |
 | Cross-agent blockers routed | no | PM or Coordinator |  |
 

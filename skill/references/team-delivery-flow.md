@@ -30,6 +30,8 @@ docs/tasks/YYYYMMDD-vX.Y.Z-task-slug/
 
 Implementation must not start immediately after a feature idea.
 
+`11-readiness-gates.md` is enforceable. Table `Result` values must be `yes`, `no`, `not-needed`, or `blocked`. Implementation is blocked by any `no`, `blocked`, `unknown`, missing `not-needed` rationale, unresolved question, missing QA bugfix retest rule when QA is active, or empty `Confirmed at`.
+
 Before coding starts:
 
 1. PM drafts requirement and acceptance criteria.
@@ -41,9 +43,10 @@ Before coding starts:
 7. PM ensures architecture guidance or no-architecture-impact rationale exists.
 8. PM ensures implementation plan or no-developer-needed rationale exists.
 9. PM ensures test strategy is owned by QA or PM.
-10. PM re-reviews requirement scope, specialist outputs, test plan, open questions, and risks.
-11. The assistant summarizes scope, active agents, skipped agents, readiness, plan, test strategy, open questions, and risks.
-12. The user explicitly confirms implementation.
+10. PM ensures every Acceptance Criteria item has related test cases and evidence fields ready for acceptance coverage review.
+11. PM re-reviews requirement scope, specialist outputs, test plan, open questions, and risks.
+12. The assistant summarizes scope, active agents, skipped agents, readiness, plan, test strategy, open questions, and risks.
+13. The user explicitly confirms implementation.
 
 ## Execution loop
 
@@ -70,6 +73,9 @@ Do not skip QA retest after QA-reported bugfixes. If QA is skipped for a low-ris
 - `10-collaboration-log.md`
 - `11-readiness-gates.md`
 - `12-stage-user-report.md`
+- `13-decision-log.md`
+- `14-change-request-log.md`
+- `15-risk-register.md`
 
 ## Command
 
@@ -92,3 +98,23 @@ Rejected items move to `bugfixing` before returning to `self-tested` and `qa-tes
 ## Safety
 
 Do not implement source code before the readiness gates are complete and the user explicitly confirms implementation.
+
+## Specialist Handoff Packet Protocol
+
+Before activating any optional specialist agent, the Product Manager must record a `Specialist Handoff Packet` in `10-collaboration-log.md`. The packet is the only assignment contract between PM and the specialist.
+
+The packet must include:
+
+- From: Product Manager
+- To: the single specialist role being activated
+- Task workspace
+- Context files
+- Decision needed
+- Responsibility boundary
+- Expected output
+- Exit condition
+- Deadline / sequencing
+- Questions PM already resolved
+- Questions still allowed to ask
+
+Specialists must answer only inside the packet boundary and report back to the Product Manager. If they need scope, architecture, implementation, validation, or acceptance decisions outside the packet, they must return the question to PM instead of deciding independently.

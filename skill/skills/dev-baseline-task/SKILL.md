@@ -53,6 +53,8 @@ Each active agent must have exactly one responsibility, one expected output, and
 
 Implementation must not start immediately after the user gives a feature idea.
 
+`11-readiness-gates.md` is an enforceable gate, not only a checklist. `Result` values must be `yes`, `no`, `not-needed`, or `blocked`. Use `not-needed` only with a rationale in `Notes`. Implementation is blocked by any `no`, `blocked`, `unknown`, missing rationale, unresolved question, missing QA retest rule when QA is active, or empty `Confirmed at`.
+
 Before implementation, complete:
 
 1. PM drafts the requirement in `01-product-requirement.md`.
@@ -63,8 +65,10 @@ Before implementation, complete:
 6. PM ensures architecture guidance or a no-architecture-impact rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
 7. PM ensures an implementation plan or a no-developer-needed rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
 8. PM ensures test strategy is owned by QA or PM in `04-test-plan.md` and `11-readiness-gates.md`.
-9. PM re-reviews requirement scope, specialist outputs, test plan, open questions, and risks.
-10. The assistant summarizes scope, active agents, skipped agents, readiness, plan, tests, open questions, and risks, then asks the user to confirm starting implementation.
+9. PM ensures every Acceptance Criteria item has related test cases and evidence fields ready for acceptance coverage review.
+10. PM records important decisions, scope changes, and risks in `13-decision-log.md`, `14-change-request-log.md`, and `15-risk-register.md`.
+11. PM re-reviews requirement scope, specialist outputs, test plan, open questions, changes, decisions, and risks.
+12. The assistant summarizes scope, active agents, skipped agents, readiness, plan, tests, open questions, changes, decisions, and risks, then asks the user to confirm starting implementation.
 
 ## Required execution loop
 
@@ -111,3 +115,18 @@ After readiness, implementation, QA, bugfix, acceptance, or delivery stages, upd
 - Test readiness:
 - User confirmation required:
 - Next action:
+
+## Specialist Handoff Packet
+
+When the Product Manager activates an optional specialist, PM must first create a `Specialist Handoff Packet` in `docs/tasks/<task-folder>/10-collaboration-log.md`. The main agent does not hand work directly to specialists.
+
+Each packet must define the specialist role, context files, decision needed, responsibility boundary, expected output, exit condition, sequencing, resolved PM questions, and questions the specialist is still allowed to ask. Specialists report only to PM and must stay within the packet boundary.
+## Task Creation Plan Index
+
+When creating a task workspace, keep `docs/PLAN.md` as the project dashboard when the user wants the task visible from the main index:
+
+```bash
+bash shared/scripts/create-task-workspace.sh <version> "<task-name>" --update-plan
+```
+
+The optional `--update-plan` flag appends a task index row with workspace, status, owner, and next action. Do not use the flag when the user explicitly wants a workspace-only draft.

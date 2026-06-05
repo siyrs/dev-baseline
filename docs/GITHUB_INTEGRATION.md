@@ -29,7 +29,7 @@ workspaces focused on the core delivery flow.
 ## Trigger examples
 
 ```text
-/dev-baseline-github docs/tasks/<task-folder>
+/dev-baseline GitHub summary docs/tasks/<task-folder>
 关联 GitHub PR
 同步 GitHub 状态
 检查 PR 和 CI 状态

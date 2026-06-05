@@ -1,3 +1,8 @@
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -5,7 +10,7 @@ set -euo pipefail
 # Output: docs/report/YYYYMMDD-HHMMSS.html
 
 timestamp=$(date +"%Y%m%d-%H%M%S")
-out_dir="docs/report"
+out_dir="${REPO_ROOT}/docs/report"
 out_file="${out_dir}/${timestamp}.html"
 mkdir -p "$out_dir"
 

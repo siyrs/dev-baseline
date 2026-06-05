@@ -1,0 +1,81 @@
+# Dev Baseline standard team-flow minimum asset manifest.
+# Blank lines and comment lines are ignored by scripts.
+
+docs/dev-baseline-manifest.txt
+
+# Canonical skill entrypoints
+skill/SKILL.md
+skill/AGENTS.md
+skill/skills/dev-baseline-task/SKILL.md
+skill/skills/dev-baseline-report/SKILL.md
+skill/skills/dev-baseline-git-sync/SKILL.md
+
+# Role agents
+skill/agents/product-manager.md
+skill/agents/analyst.md
+skill/agents/architect.md
+skill/agents/coordinator.md
+skill/agents/developer.md
+skill/agents/qa-tester.md
+
+# Codex-specific overlay agents
+skill/codex-agent-overrides/git-manager.md
+skill/codex-agent-overrides/quality-auditor.md
+
+# Team-flow references
+shared/references/team-delivery-flow.md
+skill/shared/references/team-delivery-flow.md
+skill/references/team-delivery-flow.md
+
+# Team-flow scripts
+shared/scripts/create-task-workspace.sh
+shared/scripts/validate-task-readiness.sh
+shared/scripts/advance-task-status.sh
+shared/scripts/generate-task-report.sh
+shared/scripts/generate-task-dashboard.sh
+shared/scripts/task-dashboard-summary.sh
+skill/shared/scripts/create-task-workspace.sh
+skill/shared/scripts/validate-task-readiness.sh
+skill/shared/scripts/advance-task-status.sh
+skill/shared/scripts/generate-task-report.sh
+skill/shared/scripts/generate-task-dashboard.sh
+skill/shared/scripts/task-dashboard-summary.sh
+
+# Task workspace templates
+shared/templates/tasks/00-index.md
+shared/templates/tasks/01-product-requirement.md
+shared/templates/tasks/02-development-plan.md
+shared/templates/tasks/03-implementation-notes.md
+shared/templates/tasks/04-test-plan.md
+shared/templates/tasks/05-test-report.md
+shared/templates/tasks/06-bugfix-log.md
+shared/templates/tasks/07-acceptance-report.md
+shared/templates/tasks/08-delivery-summary.md
+shared/templates/tasks/09-feature-status-board.md
+shared/templates/tasks/10-collaboration-log.md
+shared/templates/tasks/11-readiness-gates.md
+shared/templates/tasks/12-stage-user-report.md
+shared/templates/tasks/13-decision-log.md
+shared/templates/tasks/14-change-request-log.md
+shared/templates/tasks/15-risk-register.md
+skill/shared/templates/tasks/00-index.md
+skill/shared/templates/tasks/01-product-requirement.md
+skill/shared/templates/tasks/02-development-plan.md
+skill/shared/templates/tasks/03-implementation-notes.md
+skill/shared/templates/tasks/04-test-plan.md
+skill/shared/templates/tasks/05-test-report.md
+skill/shared/templates/tasks/06-bugfix-log.md
+skill/shared/templates/tasks/07-acceptance-report.md
+skill/shared/templates/tasks/08-delivery-summary.md
+skill/shared/templates/tasks/09-feature-status-board.md
+skill/shared/templates/tasks/10-collaboration-log.md
+skill/shared/templates/tasks/11-readiness-gates.md
+skill/shared/templates/tasks/12-stage-user-report.md
+skill/shared/templates/tasks/13-decision-log.md
+skill/shared/templates/tasks/14-change-request-log.md
+skill/shared/templates/tasks/15-risk-register.md
+
+
+shared/scripts/publish-gate.sh
+
+skill/shared/scripts/publish-gate.sh

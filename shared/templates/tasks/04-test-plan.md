@@ -26,9 +26,9 @@
 - Test data:
 
 ## Test Cases
-| ID | Function Point | Scenario | Steps | Expected Result | Priority | Status |
-|---|---|---|---|---|---|---|
-| TC-001 | FP-001 |  |  |  | P0 | not-started |
+| ID | Function Point | Related AC | Scenario | Steps | Expected Result | Priority | Status |
+|---|---|---|---|---|---|---|---|
+| TC-001 | FP-001 | AC-001 |  |  |  | P0 | not-started |
 
 ## Bugfix Retest Cases
 | Bug ID | Retest Case ID | Steps | Expected Result | Status |

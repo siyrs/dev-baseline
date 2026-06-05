@@ -88,3 +88,5 @@ Detailed task records belong in:
 ```text
 docs/tasks/<task-folder>/
 ```
+
+| `shared/scripts/publish-gate.sh` | Run pre-publish gate checks: secrets, dangerous Git command guard, branch/upstream, and diff scope. |

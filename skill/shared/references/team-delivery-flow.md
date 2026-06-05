@@ -45,8 +45,13 @@ Mandatory preparation outputs:
 - architecture guidance or no-architecture-impact rationale
 - implementation plan or no-developer-needed rationale
 - test strategy owned by QA or PM
+- AC to TC to evidence traceability
+- readiness gate results using only `yes`, `no`, `not-needed`, or `blocked`
+- decision, change request, and risk records
 - PM readiness review
 - explicit user confirmation before implementation
+
+Treat `11-readiness-gates.md` as an enforceable gate. Implementation is blocked by any `no`, `blocked`, `unknown`, missing `not-needed` rationale, unresolved question, missing QA bugfix retest rule when QA is active, or empty `Confirmed at`.
 
 ## Preparation loop 0: PM intake and roster decision
 
@@ -117,6 +122,7 @@ QA should clarify:
 - required environment
 - test cases and edge cases
 - acceptance criteria mapping
+- evidence link, screenshot, log, and command expectations
 - pass/fail rules
 - regression scope
 - bugfix retest rule
@@ -147,6 +153,7 @@ Before asking the user to approve implementation, the Product Manager must re-re
 - specialist outputs and unresolved risks
 - implementation plan or no-developer-needed rationale
 - test strategy or PM-owned acceptance checklist
+- AC coverage by test cases and evidence
 - open questions, blockers, and user-confirmation needs
 
 If this PM review fails, the task must return to the relevant preparation loop.
@@ -213,6 +220,9 @@ Each task workspace should contain:
 10-collaboration-log.md
 11-readiness-gates.md
 12-stage-user-report.md
+13-decision-log.md
+14-change-request-log.md
+15-risk-register.md
 ```
 
 ## Role responsibilities
@@ -225,6 +235,9 @@ Owns:
 - user value
 - scope and out-of-scope
 - agent roster decisions
+- decision log ownership
+- change request ownership
+- risk register ownership
 - skipped-agent rationale
 - specialist question handling
 - readiness re-review before implementation
@@ -316,7 +329,7 @@ accepted? no -> bugfixing -> self-tested -> qa-testing -> acceptance
 - blockers
 - next action
 
-Detailed plans, implementation notes, test reports, feature status, bugfix logs, and acceptance records belong in the task workspace.
+Detailed plans, implementation notes, test reports, feature status, collaboration logs, decision logs, change requests, risk registers, bugfix logs, and acceptance records belong in the task workspace.
 
 ## Overall status flow
 
@@ -343,9 +356,31 @@ After the task reaches readiness, `qa-passed`, `accepted`, or `delivered`, the a
 - test status
 - bugs found and fixed
 - unresolved risks
+- approved/rejected change requests
+- important decisions
 - acceptance result
 - next recommended action
 
 ## Safety
 
 Team Delivery Flow may create and update files under `docs/tasks/`, `docs/PLAN.md`, and related docs. It must not implement source code before the task workspace, product requirement, readiness gates, implementation plan or no-developer-needed rationale, test strategy, PM readiness review, and explicit user approval are complete.
+
+## Specialist Handoff Packet Protocol
+
+Before activating any optional specialist agent, the Product Manager must record a `Specialist Handoff Packet` in `10-collaboration-log.md`. The packet is the only assignment contract between PM and the specialist.
+
+The packet must include:
+
+- From: Product Manager
+- To: the single specialist role being activated
+- Task workspace
+- Context files
+- Decision needed
+- Responsibility boundary
+- Expected output
+- Exit condition
+- Deadline / sequencing
+- Questions PM already resolved
+- Questions still allowed to ask
+
+Specialists must answer only inside the packet boundary and report back to the Product Manager. If they need scope, architecture, implementation, validation, or acceptance decisions outside the packet, they must return the question to PM instead of deciding independently.

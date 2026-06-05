@@ -50,3 +50,33 @@
 | Time | Item | Result | Notes |
 |---|---|---|---|
 |  |  |  |  |
+
+## Specialist Handoff Packets
+
+The Product Manager must create one packet before activating any optional specialist agent. Record the packet here first, then send only that scoped packet to the specialist. Close the packet after the specialist reports back to PM.
+
+### Specialist Handoff Packet
+
+- From: Product Manager
+- To: Analyst | Architect | Developer | QA Tester | Coordinator | Other specialist
+- Task workspace:
+- Context files:
+- Decision needed:
+- Responsibility boundary:
+- Expected output:
+- Exit condition:
+- Deadline / sequencing:
+- Questions PM already resolved:
+- Questions still allowed to ask:
+- Handoff status: drafted | sent | answered | closed
+
+### Specialist Response Summary
+
+- From:
+- To: Product Manager
+- Packet reference:
+- Output delivered:
+- Evidence / files touched:
+- Remaining questions:
+- Boundary risks:
+- Exit condition met: yes | no

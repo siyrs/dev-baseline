@@ -20,7 +20,7 @@ Dev Baseline intentionally exposes only a small command surface:
 /dev-baseline-git-sync
 ```
 
-Do not require separate commands such as `/dev-baseline-git`, `/dev-baseline-github`, `/dev-baseline-quality`, `/dev-baseline-sprint`, or `/dev-baseline-metrics`.
+Do not require separate standalone commands for Git, GitHub, quality, sprint, release, or metrics operations.
 
 Route those requests through `/dev-baseline` and the repository assets.
 Use `/dev-baseline-git-sync` only for the safe add/commit/fetch/merge/push shortcut.
@@ -118,3 +118,5 @@ If a script is unavailable or cannot run, explain the blocker and perform the eq
 ## Important
 
 Most features are capabilities, not standalone visible skills. Use natural language under `/dev-baseline`.
+
+- `shared/scripts/publish-gate.sh`: runs publish-time safety checks before push, upstream, tag, or release actions.

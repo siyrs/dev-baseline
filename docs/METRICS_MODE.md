@@ -5,7 +5,7 @@ Metrics Mode generates an HTML metrics report from task workspaces.
 ## Trigger examples
 
 ```text
-/dev-baseline-metrics
+/dev-baseline 生成项目指标
 生成项目指标
 查看交付指标
 ```

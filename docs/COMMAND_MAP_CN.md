@@ -88,3 +88,5 @@ Codex 和 Claude Code 都使用 `skill/` 标准包里的同一套命令地图。
 ```text
 docs/tasks/<task-folder>/
 ```
+
+| `shared/scripts/publish-gate.sh` | 运行发布前门禁：密钥扫描、危险 Git 命令防护、分支/upstream 和 diff 范围。 |

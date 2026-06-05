@@ -5,7 +5,7 @@ Release Train Mode coordinates multiple accepted tasks into a release candidate.
 ## Trigger examples
 
 ```text
-/dev-baseline-release-train create v0.4.0 rc1
+/dev-baseline 创建发版计划 v0.4.0 rc1
 创建发版计划
 发布列车
 ```

@@ -40,6 +40,9 @@ bugfixing
 - [10 Collaboration Log](./10-collaboration-log.md)
 - [11 Readiness Gates](./11-readiness-gates.md)
 - [12 Stage User Report](./12-stage-user-report.md)
+- [13 Decision Log](./13-decision-log.md)
+- [14 Change Request Log](./14-change-request-log.md)
+- [15 Risk Register](./15-risk-register.md)
 
 ## Preparation Gates
 | Gate | Owner | Required Result | Status | Notes |
@@ -52,6 +55,9 @@ bugfixing
 | Requirement clarification | Product Manager + User | Open questions answered | todo |  |
 | Test strategy | PM or QA Tester | Concrete test cases/pass rules, or PM-owned acceptance checklist | todo |  |
 | Coordination plan | PM or Coordinator | Handoffs/dependencies recorded when needed | todo |  |
+| Decision log | Product Manager | Key decisions and rationale recorded | todo |  |
+| Change request review | Product Manager | Scope changes captured or none declared | todo |  |
+| Risk register | Product Manager + active specialists | Risks tracked with owner and status | todo |  |
 | PM readiness review | Product Manager | Requirement, roster, specialist outputs, plan, and tests reviewed | todo |  |
 | User implementation confirmation | User | Explicit approval to start development | todo |  |
 
@@ -65,6 +71,9 @@ bugfixing
 | Feasibility review | PM or Developer | todo |  |  |
 | Test strategy | PM or QA | todo |  |  |
 | Coordination | PM or Coordinator | todo |  |  |
+| Decision log | PM | todo |  |  |
+| Change requests | PM | todo |  |  |
+| Risk register | PM + specialists | todo |  |  |
 | PM readiness review | PM | todo |  |  |
 | Development plan | Developer when active | todo |  |  |
 | Implementation | Developer when active | todo |  |  |

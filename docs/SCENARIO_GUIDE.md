@@ -6,7 +6,7 @@ This guide describes common Dev Baseline workflows.
 
 ```text
 /dev-baseline init
-/dev-baseline-quality
+/dev-baseline 运行质量门禁
 /dev-baseline-report
 ```
 
@@ -36,7 +36,7 @@ Expected result:
 ## Scenario 3: Check if development can start
 
 ```text
-/dev-baseline-task-status docs/tasks/<task-folder>
+/dev-baseline-task docs/tasks/<task-folder> 检查状态
 ```
 
 Expected result:
@@ -61,7 +61,7 @@ Expected result:
 ## Scenario 5: QA feedback and bugfix loop
 
 ```text
-/dev-baseline-task-status docs/tasks/<task-folder>
+/dev-baseline-task docs/tasks/<task-folder> 检查状态
 ```
 
 Expected result:
@@ -73,7 +73,7 @@ Expected result:
 ## Scenario 6: Product acceptance
 
 ```text
-/dev-baseline-task-status docs/tasks/<task-folder>
+/dev-baseline-task docs/tasks/<task-folder> 检查状态
 ```
 
 Expected result:

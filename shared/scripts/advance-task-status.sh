@@ -1,7 +1,22 @@
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
+
+resolve_project_path() {
+  local path="cd "$REPO_ROOT"
+"
+  case "$path" in
+    /*|[A-Za-z]:*) printf '%s\n' "$path" ;;
+    *) printf '%s/%s\n' "$REPO_ROOT" "$path" ;;
+  esac
+}
+
 #!/usr/bin/env bash
 set -euo pipefail
 
 workspace="${1:-}"
+workspace=$(resolve_project_path "$workspace")
 function_point="${2:-}"
 from_status="${3:-}"
 to_status="${4:-}"
@@ -20,6 +35,35 @@ if [[ ! -f "$board" ]]; then
 fi
 
 now=$(date '+%Y-%m-%d %H:%M:%S')
-printf '| %s | %s | %s | %s | %s | %s |\n' "$now" "$function_point" "$from_status" "$to_status" "$owner" "$note" >> "$board"
+
+if ! grep -q '^## Status Event Log' "$board"; then
+  {
+    printf '\n## Status Event Log\n\n'
+    printf '| Time | Function Point | From | To | Owner | Note |\n'
+    printf '|---|---|---|---|---|---|\n'
+  } >> "$board"
+fi
+
+tmp="${board}.tmp.$$"
+awk -v event="| $now | $function_point | $from_status | $to_status | $owner | $note |" '
+  BEGIN { in_log=0; inserted=0 }
+  /^## Status Event Log[[:space:]]*$/ { in_log=1; print; next }
+  in_log && /^## / {
+    if (!inserted) {
+      print event
+      inserted=1
+    }
+    in_log=0
+    print
+    next
+  }
+  { print }
+  END {
+    if (in_log && !inserted) {
+      print event
+    }
+  }
+' "$board" > "$tmp"
+mv "$tmp" "$board"
 
 echo "Status event appended to $board"
