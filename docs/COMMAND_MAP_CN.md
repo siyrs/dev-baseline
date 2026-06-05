@@ -9,7 +9,7 @@ Codex 和 Claude Code 都使用 `skill/` 标准包里的同一套命令地图。
 | 命令 | 用途 |
 |---|---|
 | `/dev-baseline` | 通用入口：初始化、评审、规划、质量检查、Git、GitHub/GitLab、迭代、发版、指标、仪表盘 |
-| `/dev-baseline-task` | 标准团队开发任务：PM、架构师、研发、QA、准备门禁、Bug 修复、验收、交付 |
+| `/dev-baseline-task` | PM 主导的动态团队流程：最少单一职责 agent、准备门禁、Bug 修复、验收、交付 |
 | `/dev-baseline-report` | 项目或任务报告，尤其是 HTML 报告 |
 | `/dev-baseline-git-sync` | 安全的一键 Git 同步：add、commit、fetch、merge、push |
 

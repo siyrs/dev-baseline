@@ -7,7 +7,9 @@ required_files=(
   "skill/skills/dev-baseline-report/SKILL.md"
   "skill/skills/dev-baseline-git-sync/SKILL.md"
   "skill/AGENTS.md"
+  "skill/agents/analyst.md"
   "skill/agents/architect.md"
+  "skill/agents/coordinator.md"
   "skill/agents/developer.md"
   "skill/agents/product-manager.md"
   "skill/agents/qa-tester.md"
@@ -88,13 +90,23 @@ if ! grep -q "^name: dev-baseline-git-sync" skill/skills/dev-baseline-git-sync/S
   exit 1
 fi
 
-if ! grep -q "Team delivery tasks enable Agent Mode by default" skill/SKILL.md; then
-  echo "Canonical dev-baseline skill does not enable team delivery Agent Mode by default." >&2
+if ! grep -q "Team delivery tasks use PM-led Agent Mode by default" skill/SKILL.md; then
+  echo "Canonical dev-baseline skill does not use PM-led team delivery Agent Mode by default." >&2
+  exit 1
+fi
+
+if ! grep -q "main agent assigns the task to the Product Manager" skill/SKILL.md; then
+  echo "Canonical dev-baseline skill is missing main-agent-to-PM communication boundary." >&2
+  exit 1
+fi
+
+if ! grep -q "Product Manager.*agent roster" skill/shared/references/team-delivery-flow.md; then
+  echo "Team delivery flow is missing PM-led roster guidance." >&2
   exit 1
 fi
 
 if ! grep -q "Architect" skill/shared/references/team-delivery-flow.md; then
-  echo "Team delivery flow is missing Architect role guidance." >&2
+  echo "Team delivery flow is missing optional Architect role guidance." >&2
   exit 1
 fi
 

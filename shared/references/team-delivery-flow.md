@@ -2,65 +2,113 @@
 
 Team Delivery Flow is the default Dev Baseline workflow for real product development.
 
-It models a normal software delivery process with role-based preparation, architecture review, execution, testing, bugfixing, acceptance, and delivery.
+It models a normal software delivery process with PM-led preparation, dynamic role activation, execution, testing, bugfixing, acceptance, and delivery.
 
-## Default Agent Mode
+## PM-led Agent Mode
 
-Team Delivery Flow enables Agent Mode by default.
+Team Delivery Flow enables Agent Mode by default, but it does not spawn a full team by default.
 
-When the runtime provides real agent or sub-agent tooling, the assistant must coordinate distinct role agents for:
+The main agent must start with the Product Manager role first. The Product Manager owns the requirement and the agent roster. Additional agents are activated only when their single responsibility is needed.
 
-- Product Manager
-- Architect
-- Developer
-- QA Tester
+Available role agents:
+
+- Product Manager: always active; owns requirement intake, scope, agent roster decisions, readiness review, user communication, and acceptance.
+- Analyst: optional; owns discovery, evidence gathering, metrics, logs, repo scan, or external research.
+- Architect: optional; owns architecture boundaries, API/data/config/deploy/migration/security/performance impact, risks, alternatives, and constraints.
+- Developer: optional until implementation is needed; owns implementation planning, code changes, self-test, and bugfix.
+- QA Tester: optional until validation risk requires it; owns test strategy, QA execution, bug reports, and retest.
+- Coordinator: optional; owns handoffs, dependencies, sequencing, and cross-agent status when multiple agents are active.
+
+Use the smallest useful roster. Each active agent must have one responsibility, one expected output, and one exit condition. Record active agents, skipped agents, and rationale in `10-collaboration-log.md` and `11-readiness-gates.md`.
 
 If real agent tooling is unavailable, the assistant must run explicit role-labeled passes in the same conversation and record the fallback in `10-collaboration-log.md`.
+
+Communication boundary:
+
+- The main agent assigns the task to the Product Manager.
+- The main agent communicates only with the Product Manager during Team Delivery Flow.
+- The Product Manager controls all optional specialist agents.
+- Specialist agents report to the Product Manager, not to the main agent.
+- The Product Manager returns consolidated decisions, risks, outputs, and next actions to the main agent and user.
 
 ## Core rule
 
 Implementation must not start immediately after a user gives a feature idea.
 
-Before development starts, the workflow must complete three preparation loops plus PM review:
+Before development starts, the workflow must complete PM intake, PM roster decision, only the needed specialist loops, PM readiness review, and user confirmation.
 
-1. PM ↔ Architect architecture review loop
-2. PM ↔ Developer requirement feasibility and implementation planning loop
-3. PM ↔ QA test strategy loop
-4. PM readiness review loop
+Mandatory preparation outputs:
 
-Only after these loops are ready may the assistant ask the user to confirm implementation.
+- requirement scope and acceptance criteria
+- active agent roster and skipped-agent rationale
+- main-agent-to-PM-only communication boundary
+- architecture guidance or no-architecture-impact rationale
+- implementation plan or no-developer-needed rationale
+- test strategy owned by QA or PM
+- PM readiness review
+- explicit user confirmation before implementation
 
-## Preparation loop 0: PM ↔ Architect
+## Preparation loop 0: PM intake and roster decision
 
-The Product Manager first drafts the rough requirement, then the Architect reviews:
+The Product Manager first drafts the rough requirement, acceptance criteria, scope, and out-of-scope notes.
+
+Then the PM decides the minimum agent roster:
+
+- Activate Analyst if the task needs discovery before planning.
+- Activate Architect if the task can affect system design, contracts, data, config, deployment, migrations, security, performance, or compatibility.
+- Activate Developer if code implementation, technical decomposition, self-test, or bugfix work is needed.
+- Activate QA Tester if user-visible behavior, regression risk, compliance, bug retest, or independent validation is needed.
+- Activate Coordinator if more than two agents or parallel workstreams need handoff control.
+
+If the PM cannot decide a roster item, the PM asks the user instead of spawning extra agents speculatively.
+
+## Optional loop: PM ↔ Analyst
+
+Use this loop only when evidence is needed before planning.
+
+The Analyst reviews:
+
+- repository or feature evidence
+- logs, metrics, reports, traces, or external references
+- ambiguity that blocks PM, Architect, Developer, or QA decisions
+
+The Analyst must not decide product scope, architecture, implementation, or acceptance. The Analyst returns evidence and open questions to PM.
+
+## Optional loop: PM ↔ Architect
+
+Use this loop only when architecture impact exists or is unclear.
+
+The Architect reviews:
 
 - system boundaries and ownership impact
 - data flow, API, config, deploy, migration, and compatibility impact
+- security, performance, reliability, and operability risks
 - technical constraints the Developer must follow
-- architecture risks and mitigation options
 - implementation alternatives if the original approach is risky
 
-If the Architect cannot determine an architecture impact, the Architect must feed questions back to the PM.
-If the PM cannot answer, the PM must ask the user before the architecture guidance is finalized.
+If the Architect cannot determine an architecture impact, the Architect feeds questions back to PM. If PM cannot answer, PM asks the user before finalizing guidance.
 
-## Preparation loop 1: PM ↔ Developer
+## Conditional loop: PM ↔ Developer
 
-After Architect guidance exists, the Developer reviews:
+Use this loop when the task needs implementation planning, source changes, self-test, or bugfix work.
+
+The Developer reviews:
 
 - whether the feature is technically feasible
 - expected implementation difficulty
 - rough effort estimate
 - risky or unclear function points
 - required interfaces, data, config, permissions, or external services
-- implementation alternatives if the original idea is risky
 - concrete implementation order and file/module impact
+- self-test plan
 
-If the Developer cannot determine a function point, the Developer must feed questions back to the PM.
-If the PM cannot answer, the PM must ask the user before the development plan is finalized.
+If the Developer cannot determine a function point, the Developer feeds questions back to PM. If PM cannot answer, PM asks the user before finalizing the development plan.
 
-## Preparation loop 2: PM ↔ QA
+For documentation-only or planning-only tasks, PM may skip Developer but must record why no Developer is needed.
 
-The PM and QA must agree on how the requirement will be tested before implementation starts.
+## Conditional loop: PM ↔ QA Tester
+
+Use this loop when the task needs independent test strategy, validation, regression coverage, or bug retest.
 
 QA should clarify:
 
@@ -71,31 +119,49 @@ QA should clarify:
 - acceptance criteria mapping
 - pass/fail rules
 - regression scope
+- bugfix retest rule
 
-If QA cannot define a pass/fail rule, QA must feed questions back to PM.
-If PM cannot answer, PM must ask the user.
+If QA cannot define a pass/fail rule, QA feeds questions back to PM. If PM cannot answer, PM asks the user.
 
-## Preparation loop 3: PM readiness review
+For low-risk documentation-only or planning-only tasks, PM may skip QA but must own and record the acceptance checklist.
+
+## Optional loop: PM ↔ Coordinator
+
+Use this loop only when coordination overhead is real.
+
+The Coordinator tracks:
+
+- active agent responsibilities and exit conditions
+- dependencies and handoff order
+- cross-agent blockers
+- status summary for PM
+
+The Coordinator must not own product scope, architecture, code, tests, or acceptance.
+
+## PM readiness review
 
 Before asking the user to approve implementation, the Product Manager must re-review:
 
 - requirement scope and acceptance criteria
-- Architect guidance and unresolved architecture risks
-- Developer implementation plan and self-test plan
-- QA test cases, pass/fail rules, and regression scope
+- active agents and skipped-agent rationale
+- specialist outputs and unresolved risks
+- implementation plan or no-developer-needed rationale
+- test strategy or PM-owned acceptance checklist
 - open questions, blockers, and user-confirmation needs
 
 If this PM review fails, the task must return to the relevant preparation loop.
 
 ## User confirmation gate
 
-After PM, Architect, Developer, and QA are ready, the assistant must summarize:
+After PM readiness passes, the assistant must summarize:
 
 - requirement scope
-- architecture guidance
-- feasibility and rough effort
-- development plan
-- test strategy
+- active agents and why they were needed
+- skipped agents and why they were not needed
+- architecture guidance or no-impact rationale
+- feasibility and rough effort when Developer is active
+- development plan when implementation is needed
+- test strategy and retest rule
 - open questions
 - risks
 
@@ -108,10 +174,12 @@ Do not implement source code before explicit user confirmation.
 After readiness and user confirmation, Team Delivery Flow proceeds as:
 
 ```text
-Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+Developer implements -> Developer self-tests -> QA Tester tests when active -> Developer fixes QA bugs -> QA Tester retests when active -> PM accepts
 ```
 
-QA must retest after every bugfix. PM acceptance must not start while P0/P1 QA bugs remain open.
+QA must retest after every QA-reported bugfix. PM acceptance must not start while P0/P1 QA bugs remain open.
+
+If QA was intentionally skipped, PM must record the low-risk rationale and complete the acceptance checklist before accepting.
 
 ## Task workspace
 
@@ -156,12 +224,20 @@ Owns:
 - requirement clarification
 - user value
 - scope and out-of-scope
-- PM ↔ Architect question handling
-- PM ↔ Developer question handling
-- PM ↔ QA test criteria alignment
+- agent roster decisions
+- skipped-agent rationale
+- specialist question handling
 - readiness re-review before implementation
 - acceptance criteria
 - final acceptance decision
+
+### Analyst
+
+Owns:
+- discovery and evidence gathering
+- logs, metrics, reports, traces, and repo scan summaries
+- factual uncertainty reduction
+- evidence-backed questions for PM
 
 ### Architect
 
@@ -169,7 +245,7 @@ Owns:
 - architecture review
 - technical direction and constraints
 - system boundary and ownership checks
-- API, data, config, deploy, migration, and compatibility impact
+- API, data, config, deploy, migration, security, performance, and compatibility impact
 - architecture risk and mitigation notes
 
 ### Developer
@@ -185,7 +261,7 @@ Owns:
 - self-test evidence
 - bug fixes
 
-### QA
+### QA Tester
 
 Owns:
 - test strategy
@@ -195,6 +271,16 @@ Owns:
 - pass/fail criteria
 - feature test status updates
 - regression status
+- bugfix retest
+
+### Coordinator
+
+Owns:
+- handoff map
+- dependency tracking
+- cross-agent sequencing
+- blocker routing
+- status rollup for PM
 
 ## Feature status board
 
@@ -237,8 +323,10 @@ Detailed plans, implementation notes, test reports, feature status, bugfix logs,
 Recommended task-level status values:
 
 ```text
-intake -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
+intake -> roster-decision -> discovery -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
 ```
+
+Skip optional statuses when the corresponding agent is not active, but record the skip rationale.
 
 If rejected by QA or PM, move back to:
 
@@ -248,8 +336,9 @@ bugfixing
 
 ## Stage report
 
-After the task reaches `qa-passed`, `accepted`, or `delivered`, the assistant should output a concrete stage report to the user, summarizing:
+After the task reaches readiness, `qa-passed`, `accepted`, or `delivered`, the assistant should output a concrete stage report to the user, summarizing:
 
+- active agents and skipped agents
 - completed feature points
 - test status
 - bugs found and fixed
@@ -259,4 +348,4 @@ After the task reaches `qa-passed`, `accepted`, or `delivered`, the assistant sh
 
 ## Safety
 
-Team Delivery Flow may create and update files under `docs/tasks/`, `docs/PLAN.md`, and related docs. It must not implement source code before the task workspace, product requirement, development plan, and test plan are ready and explicitly approved by the user.
+Team Delivery Flow may create and update files under `docs/tasks/`, `docs/PLAN.md`, and related docs. It must not implement source code before the task workspace, product requirement, readiness gates, implementation plan or no-developer-needed rationale, test strategy, PM readiness review, and explicit user approval are complete.

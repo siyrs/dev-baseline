@@ -1,6 +1,6 @@
 ---
 name: dev-baseline
-description: Documentation-first project workflow for Codex and Claude Code. Use when the user invokes /dev-baseline, /dev-baseline-task, /dev-baseline-report, or /dev-baseline-git-sync; also use for standard development workflow, team delivery tasks, project reports, quality checks, Git/GitHub/GitLab requests, sprint/release planning, metrics, dashboards, and general project workflow requests.
+description: Documentation-first project workflow for Codex and Claude Code. Use when the user invokes /dev-baseline, /dev-baseline-task, /dev-baseline-report, or /dev-baseline-git-sync; also use for PM-led dynamic team delivery tasks, project reports, quality checks, Git/GitHub/GitLab requests, sprint/release planning, metrics, dashboards, and general project workflow requests.
 ---
 
 # Dev Baseline
@@ -30,36 +30,54 @@ Use `/dev-baseline-git-sync` only for the safe add/commit/fetch/merge/push short
 - Choose one mode before acting.
 - Keep `docs/PLAN.md` as a dashboard and index.
 - Put detailed task records under `docs/tasks/<task-folder>/`.
-- Team delivery tasks enable Agent Mode by default: coordinate Product Manager, Architect, Developer, and QA Tester roles before implementation.
+- Team delivery tasks use PM-led Agent Mode by default: the main agent starts the Product Manager first, then the PM activates only the smallest set of single-responsibility agents needed for the task.
+- Do not spawn Architect, Developer, QA Tester, Coordinator, Analyst, or other specialist agents without a concrete reason recorded in `10-collaboration-log.md` and `11-readiness-gates.md`.
 - Do not implement multi-step work until the user approves a plan or task readiness gates are complete.
 - Do not commit, push, merge, release, or deploy unless the user explicitly asks for that operation or invokes `/dev-baseline-git-sync`.
 - Keep generated reports separate from production source changes.
 
-## Default Agent Mode
+## PM-led Agent Mode
 
-When routing to Team Delivery Flow, use real Codex sub-agent tooling when it is available. Spawn or coordinate distinct role agents for:
+When routing to Team Delivery Flow, use real Codex sub-agent tooling when it is available.
 
-- Product Manager: requirement intake, scope, acceptance, and final review.
-- Architect: architecture impact, boundaries, risks, and technical direction.
-- Developer: concrete implementation plan, execution, self-test, and bugfix.
-- QA Tester: concrete test cases, QA execution, bug reports, and retest.
+The main agent must start with exactly one required role:
 
-If real sub-agent tooling is unavailable, perform explicit role-labeled passes in the same conversation and record the fallback in `docs/tasks/<task-folder>/10-collaboration-log.md`.
+- Product Manager: requirement intake, scope, agent roster decisions, readiness review, acceptance, and final user-facing summary.
 
-Before implementation starts, the required role sequence is:
+Communication boundary:
+
+- The main agent assigns the task to the Product Manager and then communicates only with the Product Manager during Team Delivery Flow.
+- The Product Manager controls all optional specialist agents, including Analyst, Architect, Developer, QA Tester, Coordinator, or any future specialist role.
+- Optional specialist agents report to the Product Manager, not to the main agent.
+- The main agent must not directly prompt, coordinate, or accept deliverables from specialist agents except through the Product Manager's summary.
+
+The Product Manager decides whether to activate additional single-responsibility agents. Prefer the minimum viable roster:
+
+- Analyst: activate only for discovery, evidence gathering, repo scan, logs, metrics, or external research.
+- Architect: activate only for architecture, API, data, config, deploy, migration, security, performance, or compatibility impact.
+- Developer: activate only when implementation planning, code changes, self-test, or bugfix work is needed.
+- QA Tester: activate only when test strategy, user-visible validation, regression risk, or bug retest requires an independent validation pass.
+- Coordinator: activate only when multiple active agents create handoff, dependency, scheduling, or cross-workstream risk.
+
+Do not create all agents by default. Each active agent must have one responsibility, one expected output, and an exit condition. If real sub-agent tooling is unavailable, perform explicit role-labeled passes in the same conversation and record the fallback in `docs/tasks/<task-folder>/10-collaboration-log.md`.
+
+Before implementation starts, the required sequence is:
 
 1. Product Manager drafts and clarifies the requirement.
-2. Architect gives architecture guidance and risk review.
-3. Developer gives a concrete implementation plan.
-4. QA Tester gives concrete test cases and pass/fail rules.
-5. Product Manager re-reviews scope, architecture guidance, development plan, and test plan.
-6. Only after PM review passes and the user approves implementation may Developer start coding.
+2. Product Manager records the agent roster: active agents, skipped agents, and the reason for each decision.
+3. Product Manager activates optional Analyst, Architect, Developer, QA Tester, or Coordinator agents only when their responsibility is needed.
+4. Active specialist agents produce their single-responsibility outputs.
+5. Product Manager receives all specialist outputs and resolves cross-agent questions.
+6. Product Manager re-reviews scope, specialist outputs, open questions, risks, test strategy, and readiness.
+7. Only after PM review passes and the user approves implementation may implementation start.
 
 After coding starts, the required execution loop is:
 
 ```text
-Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+Developer implements -> Developer self-tests -> QA Tester tests when active -> Developer fixes QA bugs -> QA Tester retests when active -> PM accepts
 ```
+
+If the PM intentionally skips QA for a low-risk task, the PM must record the rationale and own the acceptance checklist. Do not skip QA retest when QA has reported bugs.
 
 ## Routing
 

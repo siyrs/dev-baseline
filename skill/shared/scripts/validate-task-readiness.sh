@@ -34,10 +34,14 @@ fi
 echo "Task readiness files are present: $workspace"
 
 required_markers=(
-  "Architect role active"
+  "PM-led Agent Roster"
+  "Product Manager agent active first"
+  "Main agent only interacts with PM"
+  "Specialist agents report only to PM"
+  "Skipped agents recorded with rationale"
   "Architecture Review"
-  "Concrete implementation plan"
-  "Concrete test cases"
+  "Concrete implementation plan or PM no-developer rationale"
+  "Test strategy owner assigned"
   "PM Readiness Review"
 )
 
@@ -49,7 +53,7 @@ for marker in "${required_markers[@]}"; do
 done
 
 if [[ ${#missing_markers[@]} -gt 0 ]]; then
-  echo "Readiness gates are missing required Agent Mode markers:" >&2
+  echo "Readiness gates are missing required PM-led Agent Mode markers:" >&2
   printf ' - %s\n' "${missing_markers[@]}" >&2
   exit 1
 fi

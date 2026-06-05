@@ -24,7 +24,7 @@ Everything else is routed through the main `/dev-baseline` command and repositor
 | Command | Use it for |
 |---|---|
 | `/dev-baseline` | General workflow: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | PM / Architect / Developer / QA team delivery task workflow |
+| `/dev-baseline-task` | PM-led dynamic team delivery task workflow with minimal single-responsibility agents |
 | `/dev-baseline-report` | Project and task reports |
 | `/dev-baseline-git-sync` | Safe one-step Git sync: add, commit, fetch, merge, push |
 
@@ -40,20 +40,24 @@ Start real feature work with:
 
 The workflow follows:
 
-1. Agent Mode is enabled by default for PM, Architect, Developer, and QA.
-2. PM drafts the requirement.
-3. Architect reviews architecture impact, constraints, risks, and alternatives.
-4. Developer gives a concrete implementation plan.
-5. QA and PM define concrete test cases, pass/fail rules, and retest expectations.
-6. PM re-reviews requirement, architecture guidance, development plan, and test plan.
-7. The assistant asks the user to confirm implementation.
-8. Developer implements after confirmation.
-9. Developer self-tests.
-10. QA tests and reports.
-11. Developer fixes bugs.
-12. QA retests.
-13. PM accepts or rejects.
-14. Delivery summary and reports are generated.
+1. The main agent assigns the task to the Product Manager agent first.
+2. PM drafts the requirement and acceptance criteria.
+3. PM records the minimum agent roster: active agents, skipped agents, and rationale.
+4. PM activates Analyst only when discovery or evidence is needed.
+5. PM activates Architect only when architecture or cross-cutting technical impact exists.
+6. PM activates Developer only when implementation planning, code, self-test, or bugfix is needed.
+7. PM activates QA Tester only when validation, regression, or retest needs an independent pass.
+8. PM activates Coordinator only when multiple agents create handoff or dependency risk.
+9. Active agents produce focused single-responsibility outputs and report only to PM.
+10. PM re-reviews requirement, roster, specialist outputs, plan, tests, risks, and open questions.
+11. The assistant asks the user to confirm implementation.
+12. Developer implements after confirmation when Developer is active.
+13. Developer self-tests.
+14. QA tests and retests when QA is active; otherwise PM records a low-risk acceptance checklist.
+15. PM accepts or rejects.
+16. Delivery summary and reports are generated.
+
+During team delivery, the main agent interacts only with PM. PM controls specialist agents and returns consolidated progress, risks, and results.
 
 ---
 
@@ -165,7 +169,7 @@ bash scripts/validate-skill.sh
 - Claude Code users
 - Codex users
 - solo developers who want structure
-- small teams that need PM / Architect / Developer / QA records
+- small teams that need auditable PM-led role records without unnecessary agents
 - long-running projects where context loss and scope drift are common
 
 ---

@@ -1,6 +1,6 @@
 ---
 name: dev-baseline-task
-description: Create and manage a team delivery task workspace with PM, Architect, Developer, QA, readiness gates, feature status tracking, testing, bugfix, acceptance, and delivery records.
+description: Create and manage a PM-led dynamic team delivery task workspace with readiness gates, minimal single-responsibility agents, feature status tracking, testing, bugfix, acceptance, and delivery records.
 disable-model-invocation: true
 ---
 
@@ -8,7 +8,11 @@ disable-model-invocation: true
 
 Use this skill when a new development task should follow the standard team delivery flow.
 
-Team delivery uses Agent Mode by default. Use real role agents when available; otherwise run explicit PM, Architect, Developer, and QA role-labeled passes and record the fallback in `10-collaboration-log.md`.
+Team delivery uses PM-led Agent Mode by default. The main agent starts the Product Manager first. The PM then activates only the smallest useful set of single-responsibility agents, such as Architect, Developer, QA Tester, Coordinator, or Analyst. Do not spawn every role by default.
+
+Use real role agents when available; otherwise run explicit role-labeled passes and record the fallback in `10-collaboration-log.md`.
+
+Communication boundary: the main agent assigns the task to PM and then only interacts with PM. PM controls all optional specialist agents. Specialist agents report to PM, not to the main agent.
 
 ## Triggers
 
@@ -31,6 +35,20 @@ Recommended command:
 bash shared/scripts/create-task-workspace.sh <version> <task-name>
 ```
 
+## Agent roster rules
+
+The required first role is Product Manager.
+
+The PM owns the roster decision:
+
+- Activate Analyst only for discovery, evidence, metrics, logs, repo scan, or research.
+- Activate Architect only for architecture, API, data, config, deploy, migration, security, performance, or compatibility impact.
+- Activate Developer only when implementation planning, code changes, self-test, or bugfix work is needed.
+- Activate QA Tester only when independent test strategy, validation, regression, or bug retest is needed.
+- Activate Coordinator only when multiple active agents create handoff, dependency, sequencing, or cross-workstream risk.
+
+Each active agent must have exactly one responsibility, one expected output, and one exit condition. Skipped agents must be recorded with a reason.
+
 ## Required preparation before implementation
 
 Implementation must not start immediately after the user gives a feature idea.
@@ -38,22 +56,25 @@ Implementation must not start immediately after the user gives a feature idea.
 Before implementation, complete:
 
 1. PM drafts the requirement in `01-product-requirement.md`.
-2. Architect reviews architecture impact, constraints, risks, and alternatives in `02-development-plan.md` and `11-readiness-gates.md`.
-3. Developer reviews feasibility, risk, difficulty, rough effort, and gives a concrete implementation plan in `02-development-plan.md` and `11-readiness-gates.md`.
-4. PM, Architect, and Developer resolve unclear function points. Questions that cannot be answered must go back to the user.
-5. QA and PM define concrete test cases, scope, data, environment, pass/fail rules, and bugfix retest rules in `04-test-plan.md` and `11-readiness-gates.md`.
-6. PM re-reviews the requirement, Architect guidance, Developer plan, QA test plan, open questions, and risks.
-7. The assistant summarizes scope, architecture guidance, feasibility, plan, tests, open questions, and risks, then asks the user to confirm starting implementation.
+2. PM records the active/skipped agent roster and rationale in `10-collaboration-log.md` and `11-readiness-gates.md`.
+3. Active specialist agents produce only their assigned outputs.
+4. Active specialist agents report only to PM.
+5. PM asks the user when PM or active specialists cannot resolve a question.
+6. PM ensures architecture guidance or a no-architecture-impact rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
+7. PM ensures an implementation plan or a no-developer-needed rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
+8. PM ensures test strategy is owned by QA or PM in `04-test-plan.md` and `11-readiness-gates.md`.
+9. PM re-reviews requirement scope, specialist outputs, test plan, open questions, and risks.
+10. The assistant summarizes scope, active agents, skipped agents, readiness, plan, tests, open questions, and risks, then asks the user to confirm starting implementation.
 
 ## Required execution loop
 
 After readiness and user confirmation:
 
 ```text
-Developer implements -> Developer self-tests -> QA tests -> Developer fixes QA bugs -> QA retests -> PM accepts
+Developer implements -> Developer self-tests -> QA tests when active -> Developer fixes QA bugs -> QA retests when active -> PM accepts
 ```
 
-Do not skip QA retest after bugfixes.
+Do not skip QA retest after QA-reported bugfixes. If QA is intentionally skipped for a low-risk task, PM must record the rationale and own the acceptance checklist.
 
 ## Feature status tracking
 
@@ -69,7 +90,7 @@ Rejected items move to `bugfixing` before returning to self-test and QA test.
 
 ## Collaboration log
 
-Record PM, Architect, Developer, QA, and user communication in `10-collaboration-log.md`.
+Record PM, every active specialist agent, skipped-agent rationale, fallback passes, and user communication in `10-collaboration-log.md`.
 
 ## Stage report
 
@@ -83,9 +104,10 @@ After readiness, implementation, QA, bugfix, acceptance, or delivery stages, upd
 
 - Task workspace:
 - Current phase:
+- Active agents:
+- Skipped agents:
 - PM readiness:
-- Architect readiness:
-- Developer feasibility:
-- QA readiness:
+- Specialist readiness:
+- Test readiness:
 - User confirmation required:
 - Next action:

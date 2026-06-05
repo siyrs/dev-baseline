@@ -1,19 +1,24 @@
 # Team Delivery Flow
 
-Use this flow when starting or managing a real development task with PM, Architect, Developer, QA, bugfix, acceptance, and delivery stages.
+Use this flow when starting or managing a real development task with PM-led dynamic agents, readiness gates, bugfix, acceptance, and delivery stages.
 
-## Default Agent Mode
+## PM-led Agent Mode
 
-Team Delivery Flow uses Agent Mode by default.
+Team Delivery Flow uses Agent Mode by default, but the full team is not spawned by default.
 
-When Codex sub-agent tooling is available, coordinate separate role agents:
+The main agent starts the Product Manager first. The PM then activates the smallest useful set of single-responsibility agents:
 
-- Product Manager
-- Architect
-- Developer
-- QA Tester
+- Analyst: discovery, evidence, logs, metrics, repo scan, or research.
+- Architect: architecture, API, data, config, deploy, migration, security, performance, compatibility, risks, or constraints.
+- Developer: implementation planning, code changes, self-test, or bugfix.
+- QA Tester: test strategy, validation, regression, bug reports, or retest.
+- Coordinator: dependencies, handoffs, sequencing, and status when multiple agents are active.
+
+Record active agents, skipped agents, and rationale in `10-collaboration-log.md` and `11-readiness-gates.md`. Each active agent must have one responsibility, one expected output, and one exit condition.
 
 If sub-agent tooling is unavailable, perform explicit role-labeled passes and record the fallback in `10-collaboration-log.md`.
+
+Communication boundary: the main agent assigns the task to PM and only interacts with PM. PM controls all optional specialist agents, and specialists report to PM rather than the main agent.
 
 ## Workspace
 
@@ -28,23 +33,27 @@ Implementation must not start immediately after a feature idea.
 Before coding starts:
 
 1. PM drafts requirement and acceptance criteria.
-2. Architect reviews architecture impact, boundaries, risks, alternatives, and technical constraints.
-3. Developer reviews feasibility, difficulty, rough effort, risks, unclear function points, and gives a concrete implementation plan.
-4. PM asks the user when PM/Architect/Developer cannot resolve a question.
-5. QA and PM define concrete test cases, test scope, test data, environment, and pass/fail rules.
-6. PM re-reviews requirement scope, Architect guidance, Developer plan, QA test plan, open questions, and risks.
-7. The assistant summarizes scope, architecture guidance, feasibility, development plan, test strategy, open questions, and risks.
-8. The user explicitly confirms implementation.
+2. PM records active agents, skipped agents, and reasons.
+3. PM activates optional specialist agents only when needed.
+4. Active specialists produce focused outputs.
+5. Active specialists report only to PM.
+6. PM asks the user when PM or active specialists cannot resolve a question.
+7. PM ensures architecture guidance or no-architecture-impact rationale exists.
+8. PM ensures implementation plan or no-developer-needed rationale exists.
+9. PM ensures test strategy is owned by QA or PM.
+10. PM re-reviews requirement scope, specialist outputs, test plan, open questions, and risks.
+11. The assistant summarizes scope, active agents, skipped agents, readiness, plan, test strategy, open questions, and risks.
+12. The user explicitly confirms implementation.
 
 ## Execution loop
 
 After readiness and user confirmation:
 
 ```text
-Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+Developer implements -> Developer self-tests -> QA Tester tests when active -> Developer fixes QA bugs -> QA Tester retests when active -> PM accepts
 ```
 
-Do not skip QA retest after bugfixes. Do not move to PM acceptance while P0/P1 QA bugs remain open.
+Do not skip QA retest after QA-reported bugfixes. If QA is skipped for a low-risk task, PM must record the rationale and own the acceptance checklist.
 
 ## Documents
 

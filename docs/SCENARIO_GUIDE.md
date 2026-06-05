@@ -24,11 +24,12 @@ Expected result:
 
 Expected result:
 - task workspace created under `docs/tasks/`
-- Agent Mode enabled for PM, Architect, Developer, and QA
+- main agent assigned the task to PM first
+- main agent only interacts with PM during team delivery
 - PM requirement draft created
-- Architect architecture review requested
-- Developer concrete implementation plan requested
-- QA concrete test cases requested
+- minimum agent roster recorded with active/skipped rationale
+- Analyst, Architect, Developer, QA Tester, and Coordinator activated only when needed
+- specialist outputs recorded with single responsibility and exit condition
 - PM readiness review prepared
 - user confirmation gate prepared
 
@@ -40,7 +41,8 @@ Expected result:
 
 Expected result:
 - readiness gates inspected
-- missing PM/Architect/Developer/QA preparation identified
+- missing PM roster, specialist output, test strategy, or user confirmation identified
+- skipped-agent rationale checked instead of requiring every role
 - next action recommended
 
 ## Scenario 4: Implement after confirmation
@@ -52,7 +54,7 @@ Use a normal implementation confirmation only after the readiness gates are comp
 ```
 
 Expected result:
-- Developer follows the approved development plan
+- Developer follows the approved development plan when Developer is active
 - feature statuses are updated
 - implementation notes and self-test evidence are recorded
 
@@ -63,10 +65,10 @@ Expected result:
 ```
 
 Expected result:
-- QA report is reviewed
+- QA report is reviewed when QA is active
 - bugs move to `bugfixing`
 - developer records bugfix log
-- QA retests
+- QA retests when QA reported the bug
 
 ## Scenario 6: Product acceptance
 

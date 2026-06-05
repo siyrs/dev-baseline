@@ -16,24 +16,39 @@ Do not commit or push unless the user explicitly triggers Git publish mode or in
 
 ## Team Delivery Agent Mode
 
-When a request routes to `/dev-baseline-task` or Team Delivery Flow, enable Agent Mode by default.
+When a request routes to `/dev-baseline-task` or Team Delivery Flow, enable PM-led Agent Mode by default.
 
-Use real Codex sub-agent tooling when it is available. Coordinate distinct Product Manager, Architect, Developer, and QA Tester roles. If real sub-agents are unavailable, run explicit role-labeled passes in this conversation and record the fallback in `docs/tasks/<task>/10-collaboration-log.md`.
+The main agent starts by creating or simulating only the Product Manager role. The Product Manager owns requirement intake, scope, the dynamic agent roster, readiness review, and final acceptance.
+
+The main agent only interacts with the Product Manager in Team Delivery Flow. It assigns the incoming task to PM, receives PM summaries, and does not directly prompt, coordinate, or accept work from Analyst, Architect, Developer, QA Tester, Coordinator, or other specialist agents. Specialists are controlled by PM and report back to PM.
+
+The PM then activates the smallest useful set of single-responsibility agents:
+
+- Analyst: discovery, evidence gathering, metrics, logs, repo scan, or external research.
+- Architect: architecture boundaries, API/data/config/deploy/migration/security/performance impact, risks, and constraints.
+- Developer: implementation plan, code changes, self-test, and bugfix.
+- QA Tester: test strategy, QA execution, bug reports, and retest.
+- Coordinator: handoffs, dependencies, sequencing, and cross-agent status when multiple agents are active.
+
+Do not spawn every role by default. Each active agent must have one responsibility, one output, and one exit condition. If real sub-agents are unavailable, run explicit role-labeled passes in this conversation and record the fallback in `docs/tasks/<task>/10-collaboration-log.md`.
 
 Before implementation starts, the required sequence is:
 
 1. Product Manager drafts and clarifies the requirement.
-2. Architect gives architecture guidance, constraints, risks, and alternatives.
-3. Developer gives a concrete implementation plan.
-4. QA Tester gives concrete test cases, pass/fail rules, and bugfix retest expectations.
-5. Product Manager re-reviews the requirement, Architect guidance, Developer plan, QA test plan, open questions, and risks.
-6. The user explicitly approves implementation.
+2. Product Manager records active agents, skipped agents, and reasons.
+3. Product Manager activates optional specialist agents only when needed.
+4. Active specialists produce their focused outputs.
+5. Active specialists report only to Product Manager.
+6. Product Manager re-reviews the requirement, specialist outputs, open questions, risks, and test strategy.
+7. The user explicitly approves implementation.
 
 After approval, follow this loop:
 
 ```text
-Developer implements -> Developer self-tests -> QA Tester tests -> Developer fixes QA bugs -> QA Tester retests -> PM accepts
+Developer implements -> Developer self-tests -> QA Tester tests when active -> Developer fixes QA bugs -> QA Tester retests when active -> PM accepts
 ```
+
+If QA is intentionally skipped for a low-risk task, PM must record the rationale and own the acceptance checklist. If QA found bugs, do not skip QA retest.
 
 ## Mode selection
 

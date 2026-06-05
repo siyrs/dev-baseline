@@ -9,7 +9,7 @@ The same command map is shipped in the standard `skill/` package for both Codex 
 | Command | Purpose |
 |---|---|
 | `/dev-baseline` | General workflow entrypoint: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | Standard team delivery task workflow: PM, Architect, Developer, QA, readiness gates, bugfix, acceptance, delivery |
+| `/dev-baseline-task` | PM-led dynamic team delivery workflow: minimal single-responsibility agents, readiness gates, bugfix, acceptance, delivery |
 | `/dev-baseline-report` | Project or task reports, especially HTML reports |
 | `/dev-baseline-git-sync` | Safe one-step Git sync: add, commit, fetch, merge, push |
 

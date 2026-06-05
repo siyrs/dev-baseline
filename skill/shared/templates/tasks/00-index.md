@@ -11,8 +11,10 @@
 
 ## Task Status Flow
 ```text
-intake -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
+intake -> roster-decision -> discovery -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
 ```
+
+Skip optional statuses when the PM records why the corresponding agent is not needed.
 
 ## Feature Status Values
 ```text
@@ -43,27 +45,32 @@ bugfixing
 | Gate | Owner | Required Result | Status | Notes |
 |---|---|---|---|---|
 | Requirement draft | Product Manager | Scope and acceptance criteria drafted | todo |  |
-| Agent mode | PM + Architect + Developer + QA | Real agents used, or role-labeled fallback recorded | todo |  |
-| Architecture review | Architect | Architecture guidance, constraints, and risks documented | todo |  |
-| Feasibility review | Developer | Feasible / risky / blocked + rough effort + concrete plan | todo |  |
+| PM-led agent roster | Product Manager | Main agent started PM first; active/skipped agents and rationale recorded | todo |  |
+| Discovery / analysis | PM or Analyst | Evidence gathered, or skip rationale recorded | todo |  |
+| Architecture review | PM or Architect | Architecture guidance, or no-impact rationale recorded | todo |  |
+| Feasibility review | PM or Developer | Implementation plan, or no-developer-needed rationale recorded | todo |  |
 | Requirement clarification | Product Manager + User | Open questions answered | todo |  |
-| Test strategy | QA + Product Manager | Concrete test cases and pass/fail criteria agreed | todo |  |
-| PM readiness review | Product Manager | Requirement, architecture, development plan, and test plan approved | todo |  |
+| Test strategy | PM or QA Tester | Concrete test cases/pass rules, or PM-owned acceptance checklist | todo |  |
+| Coordination plan | PM or Coordinator | Handoffs/dependencies recorded when needed | todo |  |
+| PM readiness review | Product Manager | Requirement, roster, specialist outputs, plan, and tests reviewed | todo |  |
 | User implementation confirmation | User | Explicit approval to start development | todo |  |
 
 ## Progress Summary
 | Stage | Owner | Status | Updated at | Notes |
 |---|---|---|---|---|
 | Product requirement | PM | todo |  |  |
-| Architecture review | Architect | todo |  |  |
-| Feasibility review | Developer | todo |  |  |
-| Test strategy | QA | todo |  |  |
+| Agent roster | PM | todo |  |  |
+| Discovery / analysis | PM or Analyst | todo |  |  |
+| Architecture review | PM or Architect | todo |  |  |
+| Feasibility review | PM or Developer | todo |  |  |
+| Test strategy | PM or QA | todo |  |  |
+| Coordination | PM or Coordinator | todo |  |  |
 | PM readiness review | PM | todo |  |  |
-| Development plan | Developer | todo |  |  |
-| Implementation | Developer | todo |  |  |
-| Self-test | Developer | todo |  |  |
-| QA test | QA | todo |  |  |
-| Bugfix | Developer | todo |  |  |
+| Development plan | Developer when active | todo |  |  |
+| Implementation | Developer when active | todo |  |  |
+| Self-test | Developer when active | todo |  |  |
+| QA test | QA when active | todo |  |  |
+| Bugfix | Developer when active | todo |  |  |
 | Acceptance | PM | todo |  |  |
 | Delivery | Team | todo |  |  |
 

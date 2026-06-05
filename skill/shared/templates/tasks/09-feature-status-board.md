@@ -1,8 +1,8 @@
 # Feature Status Board
 
-Track each function point across PM, Architect, Developer, QA, and Acceptance.
+Track each function point across PM, active specialist agents, validation, and acceptance.
 
-## Status Values
+## Status Flow
 
 ```text
 not-started -> in-progress -> implemented -> self-tested -> qa-testing -> qa-passed -> accepted
@@ -10,14 +10,12 @@ not-started -> in-progress -> implemented -> self-tested -> qa-testing -> qa-pas
 
 Rejected items move to `bugfixing` before returning to self-test and QA test.
 
-## Feature Status
+## Board
 
-| Function Point | PM | Architect | Developer | QA | Acceptance | Owner | Updated At | Notes |
+| Function Point | Requirement | Specialist Review | Implementation | Validation | Acceptance | Owner | Updated At | Notes |
 |---|---|---|---|---|---|---|---|---|
-| FP-001 | confirmed | reviewed | not-started | not-started | not-started | Developer |  |  |
+| FP-001 | confirmed | not-needed | not-started | not-started | not-started | PM |  |  |
 
-## Stage Events
+## Agent Notes
 
-| Time | Function Point | From | To | Owner | Notes |
-|---|---|---|---|---|---|
-|  |  |  |  |  |  |
+Record which specialist agents are active in `10-collaboration-log.md`. Use `not-needed` when PM intentionally skips a specialist role.
