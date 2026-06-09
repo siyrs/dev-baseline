@@ -6,7 +6,7 @@
 
 Dev Baseline turns AI-assisted coding into a documented, reviewable, team-style delivery workflow.
 
-It intentionally keeps the visible skill surface focused:
+Visible skill commands stay intentionally focused:
 
 ```text
 /dev-baseline
@@ -15,7 +15,7 @@ It intentionally keeps the visible skill surface focused:
 /dev-baseline-git-sync
 ```
 
-Everything else is routed through the main `/dev-baseline` command and repository scripts/references.
+Everything else is routed through `/dev-baseline` with repository scripts, references, and task records.
 
 ---
 
@@ -24,9 +24,88 @@ Everything else is routed through the main `/dev-baseline` command and repositor
 | Command | Use it for |
 |---|---|
 | `/dev-baseline` | General workflow: init, review, planning, quality, Git, GitHub/GitLab, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | PM-led dynamic team delivery task workflow with minimal single-responsibility agents |
+| `/dev-baseline-task` | PM-led team delivery task workflow with minimal single-responsibility agents |
 | `/dev-baseline-report` | Project and task reports |
 | `/dev-baseline-git-sync` | Safe one-step Git sync: add, commit, fetch, merge, push |
+
+---
+
+## Skill Flow Diagrams
+
+### `/dev-baseline`: general router
+
+```mermaid
+flowchart TD
+  A[User request] --> B{Intent}
+  B --> C[Init / review / planning]
+  B --> D[Quality / GitHub / GitLab / sprint / release / metrics / dashboard]
+  B --> E[Git publish request]
+  C --> F[Read repo and docs]
+  D --> G[Use shared scripts and references]
+  E --> H[Run publish gate before publish]
+  F --> I[Report next action]
+  G --> I
+  H --> I
+```
+
+### `/dev-baseline-task`: PM-led team delivery
+
+```mermaid
+flowchart TD
+  A[Create task workspace] --> B[PM drafts scope, FP, AC]
+  B --> C[PM chooses minimal agent roster]
+  C --> D{Need specialists?}
+  D -->|yes| E[PM issues scoped handoff packets]
+  D -->|no| F[PM records skip rationale]
+  E --> G[Specialists report only to PM]
+  F --> H[PM readiness review]
+  G --> H
+  H --> I{User confirms implementation?}
+  I -->|no| B
+  I -->|yes| J[Developer implements when active]
+  J --> K[Self-test and evidence]
+  K --> L[QA / PM validation]
+  L --> M[PM acceptance]
+  M --> N[Delivery summary]
+```
+
+Living contract rule:
+
+```text
+Initial plan is the starting intent, not an immutable command.
+Tactical changes are allowed.
+Changes that affect FP, AC, architecture constraints, test scope, delivery risk, or final acceptance must be recorded as contract deltas in 14-change-request-log.md.
+Final review uses the latest effective contract plus evidence.
+```
+
+### `/dev-baseline-report`: project or task report
+
+```mermaid
+flowchart TD
+  A[Report request] --> B{Target}
+  B -->|Project| C[Inspect repo facts, docs, and git state]
+  B -->|Task| D[Inspect task workspace records]
+  C --> E[Generate HTML report]
+  D --> E
+  E --> F[Return path, included sections, missing docs, next action]
+```
+
+### `/dev-baseline-git-sync`: safe Git sync
+
+```mermaid
+flowchart TD
+  A[Git sync request] --> B[Check worktree state]
+  B --> C[Secret scan]
+  C --> D{Safe to continue?}
+  D -->|no| E[Stop and report blocker]
+  D -->|yes| F[Stage and commit local changes when present]
+  F --> G[Fetch remote]
+  G --> H[Merge upstream]
+  H --> I{Conflict?}
+  I -->|yes| E
+  I -->|no| J[Push synchronized branch]
+  J --> K[Report branch, commit, remote, notes]
+```
 
 ---
 
@@ -38,26 +117,7 @@ Start real feature work with:
 /dev-baseline-task create v0.3.2 用户登录功能
 ```
 
-The workflow follows:
-
-1. The main agent assigns the task to the Product Manager agent first.
-2. PM drafts the requirement and acceptance criteria.
-3. PM records the minimum agent roster: active agents, skipped agents, and rationale.
-4. PM activates Analyst only when discovery or evidence is needed.
-5. PM activates Architect only when architecture or cross-cutting technical impact exists.
-6. PM activates Developer only when implementation planning, code, self-test, or bugfix is needed.
-7. PM activates QA Tester only when validation, regression, or retest needs an independent pass.
-8. PM activates Coordinator only when multiple agents create handoff or dependency risk.
-9. Active agents produce focused single-responsibility outputs and report only to PM.
-10. PM re-reviews requirement, roster, specialist outputs, plan, tests, risks, and open questions.
-11. The assistant asks the user to confirm implementation.
-12. Developer implements after confirmation when Developer is active.
-13. Developer self-tests.
-14. QA tests and retests when QA is active; otherwise PM records a low-risk acceptance checklist.
-15. PM accepts or rejects.
-16. Delivery summary and reports are generated.
-
-During team delivery, the main agent interacts only with PM. PM controls specialist agents and returns consolidated progress, risks, and results.
+During team delivery, the main agent interacts only with PM. PM controls specialist agents, records active/skipped rationale, manages readiness, and summarizes progress, risks, contract deltas, evidence, and results.
 
 ---
 
@@ -75,7 +135,7 @@ Examples:
 /dev-baseline 运行质量门禁
 ```
 
-No separate visible skill command is required for these, except the dedicated Git sync shortcut below.
+No separate visible skill command is required for these, except the dedicated Git sync shortcut.
 
 ---
 
@@ -110,21 +170,11 @@ Reports are generated as HTML by default for better navigation and readability.
 
 ## Install
 
-Dev Baseline now ships one standard skill package under `skill/`. Codex and Claude Code install the same package; only the destination directory differs.
+Dev Baseline ships one standard skill package under `skill/`. Codex and Claude Code install the same package; only the destination directory differs.
 
 Personal installs replace the existing `dev-baseline` skill directory with a fresh copy and back up old Dev Baseline standalone entrypoints such as `dev-baseline-git-sync`, so duplicated commands do not remain after reinstall.
 
 The `codex/` and `claude/` directories are thin adapter notes only. Shared skills, agents, hooks, references, and templates live in `skill/`.
-
-Codex project overlays are generated from common `skill/agents` plus the small `skill/codex-agent-overrides` directory.
-
-The official installer is a Bash script. If the target environment cannot run
-`.sh` files, ask the installing AI agent to read
-`scripts/install-dev-baseline.sh` and perform the same filesystem operations in
-the local shell or generate an equivalent script for that platform. The script
-is intentionally plain: copy `skill/` to the target skills directory, archive
-old `dev-baseline` backups outside the visible skills root, and generate project
-overlays from the same canonical package.
 
 Codex personal skill:
 
