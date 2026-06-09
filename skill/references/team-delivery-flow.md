@@ -53,8 +53,6 @@ Final review uses the latest effective contract:
 initial requirement + recorded contract deltas + final acceptance evidence
 ```
 
-`16-execution-contract.md` may summarize the latest effective contract for cross-tool handoff clarity, but it is optional and not a hard lock.
-
 ## Execution loop
 
 ```text
@@ -81,7 +79,6 @@ Do not skip QA retest after QA-reported bugfixes. If QA is skipped for a low-ris
 - `13-decision-log.md`
 - `14-change-request-log.md`
 - `15-risk-register.md`
-- `16-execution-contract.md` optional latest-effective-contract summary
 
 ## Command
 
