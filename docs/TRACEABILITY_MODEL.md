@@ -1,6 +1,6 @@
 # Traceability Model
 
-Dev Baseline uses repository documents as the source of truth for delivery traceability.
+Dev Baseline uses repository task documents as the source of truth for delivery traceability.
 
 ## Core chain
 
@@ -8,13 +8,13 @@ Dev Baseline uses repository documents as the source of truth for delivery trace
 FP -> AC -> TC -> Evidence -> Acceptance
 ```
 
-| Object | Meaning | Primary file |
+| Object | Meaning | Compact file |
 |---|---|---|
-| FP | Function point | `01-product-requirement.md`, `09-feature-status-board.md` |
-| AC | Acceptance criterion | `01-product-requirement.md`, `07-acceptance-report.md` |
-| TC | Test case | `04-test-plan.md`, `05-test-report.md` |
-| Evidence | Link, screenshot, log, command, or PM checklist evidence | `05-test-report.md`, `07-acceptance-report.md` |
-| Acceptance | PM acceptance result | `07-acceptance-report.md` |
+| FP | Function point | `01-task-contract.md`, `03-work-log.md` |
+| AC | Acceptance criterion | `01-task-contract.md`, `06-readiness-acceptance.md` |
+| TC | Test case | `04-validation.md` |
+| Evidence | Link, screenshot, log, command, or checklist evidence | `04-validation.md`, `06-readiness-acceptance.md` |
+| Acceptance | PM acceptance result | `06-readiness-acceptance.md` |
 
 ## Supporting chain
 
@@ -22,13 +22,13 @@ FP -> AC -> TC -> Evidence -> Acceptance
 DEC / CR / RISK / BUG -> affected FP / AC -> updated plan and evidence
 ```
 
-| Object | Meaning | Primary file |
+| Object | Meaning | Compact file |
 |---|---|---|
-| DEC | Decision | `13-decision-log.md` |
-| CR | Contract delta / change record | `14-change-request-log.md` |
-| RISK | Risk | `15-risk-register.md` |
-| BUG | Bug found during QA or review | `05-test-report.md`, `06-bugfix-log.md` |
-| RTC | Retest case | `04-test-plan.md`, `05-test-report.md` |
+| DEC | Decision | `05-governance-log.md` |
+| CR | Contract delta / change record | `05-governance-log.md` |
+| RISK | Risk | `05-governance-log.md` |
+| BUG | Bug found during validation or review | `03-work-log.md`, `04-validation.md` |
+| RTC | Retest case | `04-validation.md` |
 
 ## Traceability rules
 
@@ -39,7 +39,7 @@ DEC / CR / RISK / BUG -> affected FP / AC -> updated plan and evidence
 - Contract deltas that affect FP, AC, tests, risks, or final acceptance should update the affected records before acceptance.
 - Implementation details do not need delta records when final acceptance is unchanged.
 - Every open high-impact risk should have an owner and mitigation before implementation starts.
-- Every accepted risk should be visible in the stage user report.
+- Every accepted risk should be visible in the delivery summary.
 
 ## Cross-tool consistency rule
 
@@ -51,13 +51,13 @@ The reviewer validates the latest effective contract:
 initial requirement + recorded contract deltas + final acceptance report + test and evidence records
 ```
 
-`16-execution-contract.md` may summarize that latest effective contract when useful, but review does not require a frozen contract file when the task workspace already records the target and deltas clearly.
+Compact workspaces keep that evidence in `01-task-contract.md`, `04-validation.md`, `05-governance-log.md`, and `06-readiness-acceptance.md`.
 
 ## Minimum validation questions
 
 1. Are all required function points represented?
 2. Does each function point have acceptance criteria?
-3. Does each acceptance criterion have test coverage or a PM checklist rationale?
+3. Does each acceptance criterion have validation coverage or a PM checklist rationale?
 4. Does evidence exist for passed criteria?
 5. Are contract-changing deltas recorded and reconciled?
 6. Were risks mitigated, closed, or explicitly accepted?
