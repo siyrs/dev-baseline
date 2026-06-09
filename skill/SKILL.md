@@ -79,6 +79,8 @@ Developer implements -> Developer self-tests -> QA Tester tests when active -> D
 
 If the PM intentionally skips QA for a low-risk task, the PM must record the rationale and own the acceptance checklist. Do not skip QA retest when QA has reported bugs.
 
+For cross-tool delivery, the defining tool must record `16-execution-contract.md`; the implementing tool works against that contract; the reviewing tool validates the result against the contract, traceability records, and evidence.
+
 ## Routing
 
 - Team delivery task: read `references/team-delivery-flow.md`.
@@ -92,31 +94,49 @@ If the PM intentionally skips QA for a low-risk task, the PM must record the rat
 
 ## Repository Assets
 
-Prefer repository-provided scripts and templates when they exist:
+Prefer repository-provided scripts, templates, references, and governance docs when they exist.
+
+Task scripts:
 
 - `shared/scripts/create-task-workspace.sh`
 - `shared/scripts/validate-task-readiness.sh`
+- `shared/scripts/validate-task-traceability.sh`
 - `shared/scripts/advance-task-status.sh`
-- `shared/scripts/git-sync.sh`
 - `shared/scripts/generate-task-report.sh`
-- `shared/scripts/generate-html-report.sh`
 - `shared/scripts/generate-task-dashboard.sh`
 - `shared/scripts/task-github-summary.sh`
 - `shared/scripts/task-dashboard-summary.sh`
+
+Git and gate scripts:
+
+- `shared/scripts/git-sync.sh`
 - `shared/scripts/git-summarize-diff.sh`
-- `shared/scripts/create-sprint-workspace.sh`
-- `shared/scripts/create-release-workspace.sh`
-- `shared/scripts/generate-metrics-report.sh`
+- `shared/scripts/git-block-dangerous.sh`
 - `shared/scripts/quality-gate.sh`
+- `shared/scripts/publish-gate.sh`
 - `shared/scripts/check-secrets.sh`
 - `shared/scripts/check-doc-sync.sh`
-- shared/scripts/validate-baseline-docs.sh`n- scripts/validate-script-preambles.sh: validates script shebangs, Bash syntax, and resolver integrity before packaging.
-- `shared/scripts/git-block-dangerous.sh`
+- `shared/scripts/validate-baseline-docs.sh`
+
+Packaging validation scripts:
+
+- `scripts/validate-skill.sh`
+- `scripts/validate-command-surface.sh`
+- `scripts/validate-script-preambles.sh`
+- `scripts/sync-skill-shared.sh`
+
+Governance docs:
+
+- `docs/AGENT_CONTRACTS.md`
+- `docs/ARCHITECTURE_GOVERNANCE.md`
+- `docs/GATE_MODEL.md`
+- `docs/MODEL_HANDOFF_CONSISTENCY.md`
+- `docs/PACKAGING_ARCHITECTURE.md`
+- `docs/STATE_MODEL.md`
+- `docs/TRACEABILITY_MODEL.md`
 
 If a script is unavailable or cannot run, explain the blocker and perform the equivalent safe inspection or document update manually.
 
 ## Important
 
 Most features are capabilities, not standalone visible skills. Use natural language under `/dev-baseline`.
-
-- `shared/scripts/publish-gate.sh`: runs publish-time safety checks before push, upstream, tag, or release actions.
