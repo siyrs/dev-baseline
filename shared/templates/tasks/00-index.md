@@ -43,11 +43,13 @@ bugfixing
 - [13 Decision Log](./13-decision-log.md)
 - [14 Change Request Log](./14-change-request-log.md)
 - [15 Risk Register](./15-risk-register.md)
+- [16 Execution Contract](./16-execution-contract.md)
 
 ## Preparation Gates
 | Gate | Owner | Required Result | Status | Notes |
 |---|---|---|---|---|
 | Requirement draft | Product Manager | Scope and acceptance criteria drafted | todo |  |
+| Execution contract | Product Manager | Cross-tool task contract completed or not needed with rationale | todo |  |
 | PM-led agent roster | Product Manager | Main agent started PM first; active/skipped agents and rationale recorded | todo |  |
 | Discovery / analysis | PM or Analyst | Evidence gathered, or skip rationale recorded | todo |  |
 | Architecture review | PM or Architect | Architecture guidance, or no-impact rationale recorded | todo |  |
@@ -58,6 +60,7 @@ bugfixing
 | Decision log | Product Manager | Key decisions and rationale recorded | todo |  |
 | Change request review | Product Manager | Scope changes captured or none declared | todo |  |
 | Risk register | Product Manager + active specialists | Risks tracked with owner and status | todo |  |
+| Traceability review | PM or QA | FP -> AC -> TC -> evidence -> acceptance chain checked | todo |  |
 | PM readiness review | Product Manager | Requirement, roster, specialist outputs, plan, and tests reviewed | todo |  |
 | User implementation confirmation | User | Explicit approval to start development | todo |  |
 
@@ -65,6 +68,7 @@ bugfixing
 | Stage | Owner | Status | Updated at | Notes |
 |---|---|---|---|---|
 | Product requirement | PM | todo |  |  |
+| Execution contract | PM | todo |  |  |
 | Agent roster | PM | todo |  |  |
 | Discovery / analysis | PM or Analyst | todo |  |  |
 | Architecture review | PM or Architect | todo |  |  |
@@ -74,6 +78,7 @@ bugfixing
 | Decision log | PM | todo |  |  |
 | Change requests | PM | todo |  |  |
 | Risk register | PM + specialists | todo |  |  |
+| Traceability | PM or QA | todo |  |  |
 | PM readiness review | PM | todo |  |  |
 | Development plan | Developer when active | todo |  |  |
 | Implementation | Developer when active | todo |  |  |
