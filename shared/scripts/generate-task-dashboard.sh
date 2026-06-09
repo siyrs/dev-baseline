@@ -2,10 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
-
 
 tasks_dir="${1:-${REPO_ROOT}/docs/tasks}"
 out="${tasks_dir}/dashboard.html"
@@ -50,7 +48,7 @@ rows=""
 total=0
 ready=0
 in_dev=0
-qa=0
+validation=0
 delivered=0
 
 while IFS= read -r dir; do
@@ -72,18 +70,25 @@ while IFS= read -r dir; do
   [[ -n "$owner" ]] || owner="-"
 
   case "$status" in
-    ready-for-development) ready=$((ready + 1)) ;;
+    readiness|ready-for-development) ready=$((ready + 1)) ;;
     in-development|self-tested) in_dev=$((in_dev + 1)) ;;
-    qa-testing|bugfixing|qa-passed) qa=$((qa + 1)) ;;
+    validation|qa-testing|bugfixing|qa-passed) validation=$((validation + 1)) ;;
     delivered|accepted) delivered=$((delivered + 1)) ;;
   esac
 
-  feature_count=$(count_pattern "$dir/09-feature-status-board.md" '^| FP-')
-  bug_count=$(count_pattern "$dir/05-test-report.md" '^| BUG-')
-  risk_count=$(count_pattern "$dir/15-risk-register.md" '^| RISK-')
-  cr_count=$(count_pattern "$dir/14-change-request-log.md" '^| CR-')
-  report=$(latest_report "$dir")
+  if [[ -f "$dir/01-task-contract.md" ]]; then
+    feature_count=$(count_pattern "$dir/01-task-contract.md" '^| FP-')
+    bug_count=$(count_pattern "$dir/03-work-log.md" '^| BUG-')
+    risk_count=$(count_pattern "$dir/05-governance-log.md" '^| RISK-')
+    delta_count=$(count_pattern "$dir/05-governance-log.md" '^| CR-')
+  else
+    feature_count=$(count_pattern "$dir/09-feature-status-board.md" '^| FP-')
+    bug_count=$(count_pattern "$dir/05-test-report.md" '^| BUG-')
+    risk_count=$(count_pattern "$dir/15-risk-register.md" '^| RISK-')
+    delta_count=$(count_pattern "$dir/14-change-request-log.md" '^| CR-')
+  fi
 
+  report=$(latest_report "$dir")
   report_cell="-"
   if [[ -n "$report" ]]; then
     report_cell="<a href=\"${report}\">latest report</a>"
@@ -99,7 +104,7 @@ while IFS= read -r dir; do
   <td>${feature_count}</td>
   <td>${bug_count}</td>
   <td>${risk_count}</td>
-  <td>${cr_count}</td>
+  <td>${delta_count}</td>
   <td>${report_cell}</td>
 </tr>
 EOF
@@ -115,22 +120,18 @@ cat > "$out" <<EOF
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dev Baseline Task Dashboard</title>
 <style>
-:root{--bg:#0f172a;--panel:#111827;--card:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--border:#334155;--accent:#38bdf8}
-body{margin:0;background:radial-gradient(circle at top left,#1e3a8a 0,transparent 30rem),var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{padding:32px;background:rgba(17,24,39,.86);border-bottom:1px solid var(--border)}
+body{margin:0;background:#0f172a;color:#e5e7eb;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:32px;background:#111827;border-bottom:1px solid #334155}
 main{padding:24px;max-width:1500px;margin:0 auto}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin:20px 0}
-.card{background:rgba(31,41,55,.9);border:1px solid var(--border);border-radius:16px;padding:16px}
-.card strong{display:block;color:var(--accent);font-size:28px}
-.card span{color:var(--muted)}
-table{width:100%;border-collapse:collapse;background:rgba(17,24,39,.9);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-th,td{padding:12px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+.card{background:#1f2937;border:1px solid #334155;border-radius:16px;padding:16px}
+.card strong{display:block;color:#38bdf8;font-size:28px}
+.card span{color:#94a3b8}
+table{width:100%;border-collapse:collapse;background:#111827;border:1px solid #334155;border-radius:16px;overflow:hidden}
+th,td{padding:12px;border-bottom:1px solid #334155;text-align:left;vertical-align:top}
 th{background:#1f2937;color:#dbeafe}
-tr:hover{background:#172033}
-code{color:#bae6fd}
-a{color:#7dd3fc}
-.badge{display:inline-block;padding:3px 8px;border:1px solid var(--border);border-radius:999px;background:#0b1220}
-.notice{color:var(--muted);margin-top:12px}
+code{color:#bae6fd} a{color:#7dd3fc}.badge{display:inline-block;padding:3px 8px;border:1px solid #334155;border-radius:999px;background:#0b1220}
+.notice{color:#94a3b8;margin-top:12px}
 </style>
 </head>
 <body>
@@ -141,33 +142,22 @@ a{color:#7dd3fc}
 <main>
   <div class="cards">
     <div class="card"><strong>${total}</strong><span>Total tasks</span></div>
-    <div class="card"><strong>${ready}</strong><span>Ready for development</span></div>
+    <div class="card"><strong>${ready}</strong><span>Ready</span></div>
     <div class="card"><strong>${in_dev}</strong><span>In development</span></div>
-    <div class="card"><strong>${qa}</strong><span>QA / bugfix</span></div>
+    <div class="card"><strong>${validation}</strong><span>Validation / bugfix</span></div>
     <div class="card"><strong>${delivered}</strong><span>Accepted / delivered</span></div>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>Folder</th>
-        <th>Task</th>
-        <th>Version</th>
-        <th>Status</th>
-        <th>Owner</th>
-        <th>Features</th>
-        <th>Bugs</th>
-        <th>Risks</th>
-        <th>CRs</th>
-        <th>Report</th>
+        <th>Folder</th><th>Task</th><th>Version</th><th>Status</th><th>Owner</th>
+        <th>FPs</th><th>Bugs</th><th>Risks</th><th>Deltas</th><th>Report</th>
       </tr>
     </thead>
-    <tbody>
-      ${rows}
-    </tbody>
+    <tbody>${rows}</tbody>
   </table>
-
-  <p class="notice">Tip: use <code>/dev-baseline-task &lt;workspace&gt; 检查状态</code> to inspect a task in detail.</p>
+  <p class="notice">Tip: compact task workspaces use 00-index plus 01-07 task records.</p>
 </main>
 </body>
 </html>
