@@ -52,39 +52,23 @@ skill/shared/scripts/generate-task-report.sh
 skill/shared/scripts/generate-task-dashboard.sh
 skill/shared/scripts/task-dashboard-summary.sh
 
-# Task workspace templates
+# Compact task workspace templates
 shared/templates/tasks/00-index.md
-shared/templates/tasks/01-product-requirement.md
-shared/templates/tasks/02-development-plan.md
-shared/templates/tasks/03-implementation-notes.md
-shared/templates/tasks/04-test-plan.md
-shared/templates/tasks/05-test-report.md
-shared/templates/tasks/06-bugfix-log.md
-shared/templates/tasks/07-acceptance-report.md
-shared/templates/tasks/08-delivery-summary.md
-shared/templates/tasks/09-feature-status-board.md
-shared/templates/tasks/10-collaboration-log.md
-shared/templates/tasks/11-readiness-gates.md
-shared/templates/tasks/12-stage-user-report.md
-shared/templates/tasks/13-decision-log.md
-shared/templates/tasks/14-change-request-log.md
-shared/templates/tasks/15-risk-register.md
+shared/templates/tasks/01-task-contract.md
+shared/templates/tasks/02-delivery-plan.md
+shared/templates/tasks/03-work-log.md
+shared/templates/tasks/04-validation.md
+shared/templates/tasks/05-governance-log.md
+shared/templates/tasks/06-readiness-acceptance.md
+shared/templates/tasks/07-delivery-summary.md
 skill/shared/templates/tasks/00-index.md
-skill/shared/templates/tasks/01-product-requirement.md
-skill/shared/templates/tasks/02-development-plan.md
-skill/shared/templates/tasks/03-implementation-notes.md
-skill/shared/templates/tasks/04-test-plan.md
-skill/shared/templates/tasks/05-test-report.md
-skill/shared/templates/tasks/06-bugfix-log.md
-skill/shared/templates/tasks/07-acceptance-report.md
-skill/shared/templates/tasks/08-delivery-summary.md
-skill/shared/templates/tasks/09-feature-status-board.md
-skill/shared/templates/tasks/10-collaboration-log.md
-skill/shared/templates/tasks/11-readiness-gates.md
-skill/shared/templates/tasks/12-stage-user-report.md
-skill/shared/templates/tasks/13-decision-log.md
-skill/shared/templates/tasks/14-change-request-log.md
-skill/shared/templates/tasks/15-risk-register.md
+skill/shared/templates/tasks/01-task-contract.md
+skill/shared/templates/tasks/02-delivery-plan.md
+skill/shared/templates/tasks/03-work-log.md
+skill/shared/templates/tasks/04-validation.md
+skill/shared/templates/tasks/05-governance-log.md
+skill/shared/templates/tasks/06-readiness-acceptance.md
+skill/shared/templates/tasks/07-delivery-summary.md
 
 # Gate and validation scripts
 shared/scripts/publish-gate.sh
