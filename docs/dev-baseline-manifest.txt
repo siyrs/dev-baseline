@@ -22,6 +22,15 @@ skill/agents/qa-tester.md
 skill/codex-agent-overrides/git-manager.md
 skill/codex-agent-overrides/quality-auditor.md
 
+# Architecture and governance docs
+docs/AGENT_CONTRACTS.md
+docs/ARCHITECTURE_GOVERNANCE.md
+docs/GATE_MODEL.md
+docs/MODEL_HANDOFF_CONSISTENCY.md
+docs/PACKAGING_ARCHITECTURE.md
+docs/STATE_MODEL.md
+docs/TRACEABILITY_MODEL.md
+
 # Team-flow references
 shared/references/team-delivery-flow.md
 skill/shared/references/team-delivery-flow.md
@@ -30,12 +39,14 @@ skill/references/team-delivery-flow.md
 # Team-flow scripts
 shared/scripts/create-task-workspace.sh
 shared/scripts/validate-task-readiness.sh
+shared/scripts/validate-task-traceability.sh
 shared/scripts/advance-task-status.sh
 shared/scripts/generate-task-report.sh
 shared/scripts/generate-task-dashboard.sh
 shared/scripts/task-dashboard-summary.sh
 skill/shared/scripts/create-task-workspace.sh
 skill/shared/scripts/validate-task-readiness.sh
+skill/shared/scripts/validate-task-traceability.sh
 skill/shared/scripts/advance-task-status.sh
 skill/shared/scripts/generate-task-report.sh
 skill/shared/scripts/generate-task-dashboard.sh
@@ -58,6 +69,7 @@ shared/templates/tasks/12-stage-user-report.md
 shared/templates/tasks/13-decision-log.md
 shared/templates/tasks/14-change-request-log.md
 shared/templates/tasks/15-risk-register.md
+shared/templates/tasks/16-execution-contract.md
 skill/shared/templates/tasks/00-index.md
 skill/shared/templates/tasks/01-product-requirement.md
 skill/shared/templates/tasks/02-development-plan.md
@@ -74,9 +86,10 @@ skill/shared/templates/tasks/12-stage-user-report.md
 skill/shared/templates/tasks/13-decision-log.md
 skill/shared/templates/tasks/14-change-request-log.md
 skill/shared/templates/tasks/15-risk-register.md
+skill/shared/templates/tasks/16-execution-contract.md
 
-
+# Gate and validation scripts
 shared/scripts/publish-gate.sh
-
 skill/shared/scripts/publish-gate.sh
+scripts/validate-command-surface.sh
 scripts/validate-script-preambles.sh
