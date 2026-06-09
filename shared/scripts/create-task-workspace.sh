@@ -6,18 +6,6 @@ SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SHARED_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-cd "$REPO_ROOT"
-
-# Create a Dev Baseline team delivery task workspace.
-# Usage:
-#   bash shared/scripts/create-task-workspace.sh <version> <task-name> [--update-plan]
-# Example:
-#   bash shared/scripts/create-task-workspace.sh v0.3.2 "team delivery flow" --update-plan
-
 usage() {
   echo "Usage: bash shared/scripts/create-task-workspace.sh <version> <task-name> [--update-plan]" >&2
 }
@@ -116,6 +104,29 @@ EOF
   echo "PLAN index updated: docs/PLAN.md"
 }
 
+copy_compact_templates() {
+  local template_dir="$1"
+  local target_dir="$2"
+  local compact_files=(
+    "00-index.md"
+    "01-task-contract.md"
+    "02-delivery-plan.md"
+    "03-work-log.md"
+    "04-validation.md"
+    "05-governance-log.md"
+    "06-readiness-acceptance.md"
+    "07-delivery-summary.md"
+  )
+
+  for file in "${compact_files[@]}"; do
+    if [[ ! -f "$template_dir/$file" ]]; then
+      echo "Missing compact task template: $template_dir/$file" >&2
+      exit 1
+    fi
+    cp "$template_dir/$file" "$target_dir/$file"
+  done
+}
+
 slug=$(printf '%s' "$task_name" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9一-龥]+/-/g; s/^-+|-+$//g')
 date_part=$(date +"%Y%m%d")
 workspace_rel="docs/tasks/${date_part}-${version}-${slug}"
@@ -132,9 +143,8 @@ if [[ -e "$workspace" ]]; then
 fi
 
 mkdir -p "$workspace"
-cp "$template_dir"/*.md "$workspace"/
+copy_compact_templates "$template_dir" "$workspace"
 
-# Fill basic placeholders in index when possible.
 if [[ -f "$workspace/00-index.md" ]]; then
   sed -i.bak "s/- Task name:/- Task name: ${task_name}/" "$workspace/00-index.md" || true
   sed -i.bak "s/- Version:/- Version: ${version}/" "$workspace/00-index.md" || true
