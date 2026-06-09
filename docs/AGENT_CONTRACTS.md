@@ -11,7 +11,7 @@ The main agent owns workflow routing and user-facing interaction. During Team De
 - not directly assign work to optional specialists
 - not accept specialist output except through PM summary
 - not start implementation before readiness gates and user confirmation pass
-- not treat implementation confirmation as permission to commit or push
+- not treat implementation confirmation as permission to publish Git changes
 
 ## Product Manager contract
 
@@ -23,7 +23,7 @@ The Product Manager owns:
 - agent roster decisions
 - skipped-agent rationale
 - specialist handoff packets
-- decision log, change request log, and risk register ownership
+- decision log, contract delta log, and risk register ownership
 - readiness review
 - user communication
 - final acceptance decision
@@ -40,7 +40,7 @@ Every specialist must:
 - stay inside the packet boundary
 - report only to PM
 - return unresolved questions to PM
-- avoid decisions outside its role boundary
+- avoid decisions outside its role boundary unless recorded as a contract delta
 - declare whether its exit condition is met
 
 ## Specialist Handoff Packet schema
@@ -81,13 +81,13 @@ Exit condition met: yes/no
 
 ## Boundary violation examples
 
-- Analyst changes product scope.
-- Architect implements code.
-- Developer changes acceptance criteria.
+- Analyst silently changes product scope.
+- Architect silently changes implementation scope.
+- Developer silently changes acceptance criteria.
 - QA approves product acceptance.
 - Coordinator changes priority or scope.
 - Main agent directly coordinates specialists during Team Delivery Flow.
-- Any specialist performs out-of-contract work without PM-approved change request.
+- Any specialist changes the effective task contract without recording a contract delta.
 
 ## Fallback role-labeled passes
 
@@ -105,4 +105,4 @@ Fallback passes must follow the same role boundaries as real agents.
 
 When one model tool defines the task and another implements it, the handoff boundary is the repository task workspace, not hidden conversation context.
 
-The defining tool must produce `16-execution-contract.md`. The implementing tool must work against that contract. The reviewing tool must compare implementation output against that contract and recorded evidence.
+The defining tool records intent, FP, AC, constraints, and evidence expectations. The implementing tool may adapt tactics and record contract deltas when the review target changes. The reviewing tool compares output against the latest effective contract and recorded evidence.
