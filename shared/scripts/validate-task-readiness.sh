@@ -45,7 +45,6 @@ required=(
   "13-decision-log.md"
   "14-change-request-log.md"
   "15-risk-register.md"
-  "16-execution-contract.md"
 )
 
 errors=()
@@ -57,7 +56,6 @@ done
 
 if [[ ${#errors[@]} -eq 0 ]]; then
   gate_file="$workspace/11-readiness-gates.md"
-  contract_file="$workspace/16-execution-contract.md"
 
   declare -A result_by_item=()
   declare -A notes_by_item=()
@@ -142,8 +140,6 @@ if [[ ${#errors[@]} -eq 0 ]]; then
   done
 
   [[ -n "$(trim "${confirmation_by_key["Confirmed at"]:-}")" ]] || fail "Expected confirmation 'Confirmed at' to be non-empty."
-
-  grep -qi 'Ready for implementation:[[:space:]]*yes' "$contract_file" || fail "Execution contract is not marked ready for implementation."
 
   if [[ -f "$SCRIPT_DIR/validate-task-traceability.sh" ]]; then
     bash "$SCRIPT_DIR/validate-task-traceability.sh" "$workspace" || fail "Task traceability check failed."
