@@ -28,7 +28,6 @@ required=(
   "13-decision-log.md"
   "14-change-request-log.md"
   "15-risk-register.md"
-  "16-execution-contract.md"
 )
 
 for file in "${required[@]}"; do
@@ -42,18 +41,22 @@ if [[ ${#errors[@]} -eq 0 ]]; then
   [[ ${#fp_ids[@]} -gt 0 ]] || fail "No function points found in 01-product-requirement.md."
   [[ ${#ac_ids[@]} -gt 0 ]] || fail "No acceptance criteria found in 01-product-requirement.md."
 
-  for fp in "${fp_ids[@]}"; do
-    grep -q "$fp" "$workspace/16-execution-contract.md" || fail "Function point $fp is missing from 16-execution-contract.md."
-  done
-
   for ac in "${ac_ids[@]}"; do
     grep -q "$ac" "$workspace/04-test-plan.md" || fail "Acceptance criterion $ac has no related test case in 04-test-plan.md."
     grep -q "$ac" "$workspace/07-acceptance-report.md" || fail "Acceptance criterion $ac is missing from 07-acceptance-report.md."
-    grep -q "$ac" "$workspace/16-execution-contract.md" || fail "Acceptance criterion $ac is missing from 16-execution-contract.md."
+    if [[ -f "$workspace/16-execution-contract.md" ]]; then
+      grep -q "$ac" "$workspace/16-execution-contract.md" || echo "Warning: $ac is not summarized in optional 16-execution-contract.md" >&2
+    fi
   done
 
-  if grep -Eq '^\|[[:space:]]*CR-[0-9]+.*approved.*\|[[:space:]]*(open|in-progress)[[:space:]]*\|' "$workspace/14-change-request-log.md"; then
-    fail "Approved change requests must be closed or reconciled before acceptance."
+  if [[ -f "$workspace/16-execution-contract.md" ]]; then
+    for fp in "${fp_ids[@]}"; do
+      grep -q "$fp" "$workspace/16-execution-contract.md" || echo "Warning: $fp is not summarized in optional 16-execution-contract.md" >&2
+    done
+  fi
+
+  if grep -Eq '^\|[[:space:]]*CR-[0-9]+.*\|[[:space:]]*(pending|applied|approved)[[:space:]]*\|.*\|[[:space:]]*(open|in-progress)[[:space:]]*\|' "$workspace/14-change-request-log.md"; then
+    fail "Contract deltas that affect final acceptance must be closed or reconciled before acceptance."
   fi
 
   if grep -Eq '^\|[[:space:]]*RISK-[0-9]+.*\|[[:space:]]*high[[:space:]]*\|[[:space:]]*high[[:space:]]*\|[[:space:]]*\|' "$workspace/15-risk-register.md"; then
