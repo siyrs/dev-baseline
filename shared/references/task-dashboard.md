@@ -1,15 +1,18 @@
 # Task Dashboard Mode
 
-Use Task Dashboard Mode to generate a project-level HTML dashboard for task workspaces.
+Use Task Dashboard Mode to generate a project-level HTML dashboard for compact task workspaces.
 
 ## Inputs
 
+Compact task inputs:
+
 - `docs/tasks/*/00-index.md`
-- `docs/tasks/*/09-feature-status-board.md`
-- `docs/tasks/*/05-test-report.md`
-- optional `docs/tasks/*/14-change-request-log.md`
-- optional `docs/tasks/*/15-risk-register.md`
+- `docs/tasks/*/01-task-contract.md`
+- `docs/tasks/*/03-work-log.md`
+- `docs/tasks/*/05-governance-log.md`
 - task stage reports
+
+Legacy task workspaces may still be read by fallback scripts, but new tasks use the compact 00 + 01-07 document set.
 
 ## Output
 
@@ -30,10 +33,10 @@ bash shared/scripts/generate-task-dashboard.sh
 - version
 - current status
 - current owner
-- feature status count
+- function point count
 - bug count
 - risk count
-- change request count
+- contract delta count
 - latest stage report link
 - recommended next action
 
