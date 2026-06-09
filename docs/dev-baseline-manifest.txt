@@ -69,7 +69,6 @@ shared/templates/tasks/12-stage-user-report.md
 shared/templates/tasks/13-decision-log.md
 shared/templates/tasks/14-change-request-log.md
 shared/templates/tasks/15-risk-register.md
-shared/templates/tasks/16-execution-contract.md
 skill/shared/templates/tasks/00-index.md
 skill/shared/templates/tasks/01-product-requirement.md
 skill/shared/templates/tasks/02-development-plan.md
@@ -86,7 +85,6 @@ skill/shared/templates/tasks/12-stage-user-report.md
 skill/shared/templates/tasks/13-decision-log.md
 skill/shared/templates/tasks/14-change-request-log.md
 skill/shared/templates/tasks/15-risk-register.md
-skill/shared/templates/tasks/16-execution-contract.md
 
 # Gate and validation scripts
 shared/scripts/publish-gate.sh
