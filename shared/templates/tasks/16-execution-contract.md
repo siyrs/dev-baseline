@@ -1,88 +1,55 @@
-# Execution Contract
+# Living Contract Summary
 
-This file is the cross-agent and cross-tool source of truth for implementation and review.
+This optional file summarizes the latest effective contract when a task crosses model tools or long-running sessions.
 
-## Contract Metadata
+It is not a hard lock. The task contract may evolve during implementation. Contract-changing deltas belong in `14-change-request-log.md`; this file may be updated to summarize the current effective target.
 
-- Contract ID:
+## Metadata
+
 - Task workspace:
-- Created at:
-- Created by tool/model:
-- Intended executor tool/model:
-- Intended reviewer tool/model:
-- Contract status: draft/ready/changed/superseded
+- Created / updated at:
+- Defining tool/model:
+- Implementing tool/model:
+- Reviewing tool/model:
+- Contract status: draft/current/superseded
 - Supersedes:
 
-## Requirement Summary
+## Effective Intent
 
-- 
+- User goal:
+- In scope:
+- Out of scope:
+- Key assumptions:
 
-## In Scope
+## Effective Acceptance
 
-- 
-
-## Out of Scope
-
-- 
-
-## Function Points
-
-| FP ID | Function Point | Required | Notes |
-|---|---|---|---|
-| FP-001 |  | yes/no |  |
-
-## Acceptance Criteria
-
-| AC ID | Related FP | Criteria | Pass Rule | Evidence Required |
+| AC ID | Related FP | Current Criteria | Pass Rule | Evidence Expected |
 |---|---|---|---|---|
 | AC-001 | FP-001 |  |  | link/screenshot/log/command/checklist |
 
-## Architecture Contract
+## Constraints To Preserve
 
-- Architecture impact level: A0/A1/A2/A3/A4
-- Architecture guidance or no-impact rationale:
-- Constraints for implementation:
-- Compatibility / migration impact:
-- Rollback expectation:
+- Architecture / API / data / config / deploy constraints:
+- Test or evidence constraints:
+- Explicit non-goals:
 
-## Implementation Contract
+## Contract Deltas Applied
 
-- Expected files/modules to change:
-- Forbidden files/modules:
-- Required implementation order:
-- Allowed assumptions:
-- Disallowed assumptions:
+| Delta ID | Summary | Accepted / Applied By | Evidence / Notes |
+|---|---|---|---|
+| CR-001 |  |  |  |
 
-## Test and Evidence Contract
-
-- Test strategy owner: QA/PM
-- Required test cases:
-- Required evidence type:
-- Regression scope:
-- Bugfix retest rule:
-
-## Change Control
-
-- Out-of-contract changes allowed: yes/no
-- Change request required before out-of-contract work: yes
-- Change request log: `14-change-request-log.md`
-
-## Reviewer Checklist
+## Final Review Checklist
 
 | Check | Result | Evidence / Notes |
 |---|---|---|
-| Implementation matches in-scope function points | yes/no/conditional |  |
-| No out-of-scope work without approved CR | yes/no/conditional |  |
-| Acceptance criteria are covered by test cases | yes/no/conditional |  |
-| Required evidence is present | yes/no/conditional |  |
-| Architecture constraints were followed | yes/no/conditional |  |
+| Final result satisfies latest effective AC | yes/no/conditional |  |
+| Contract deltas are visible and justified | yes/no/conditional |  |
+| Evidence covers accepted behavior | yes/no/conditional |  |
 | Risks and accepted deviations are visible | yes/no/conditional |  |
-| Final result matches defining tool intent | yes/no/conditional |  |
 
-## Contract Decision
+## Notes
 
-- Ready for implementation: yes/no
-- Ready for cross-tool handoff: yes/no
-- PM approved at:
-- User approved at:
-- Notes:
+- Use this file when it helps cross-tool handoff clarity.
+- Do not require this file to repeat every implementation detail.
+- Final review should compare delivery against the latest effective contract, not hidden conversation memory.
