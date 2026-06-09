@@ -28,6 +28,19 @@ Create it with:
 bash shared/scripts/create-task-workspace.sh <version> <task-name>
 ```
 
+Default documents:
+
+```text
+00-index.md
+01-task-contract.md
+02-delivery-plan.md
+03-work-log.md
+04-validation.md
+05-governance-log.md
+06-readiness-acceptance.md
+07-delivery-summary.md
+```
+
 ## Before implementation
 
 Implementation must not start immediately after a feature idea.
@@ -37,18 +50,16 @@ Before coding starts:
 1. PM drafts scope, function points, and acceptance criteria.
 2. PM records active/skipped agents and reasons.
 3. PM gathers specialist outputs only when needed.
-4. PM ensures plan, test strategy, risks, and evidence expectations are clear.
+4. PM ensures plan, validation strategy, risks, and evidence expectations are clear.
 5. PM records decisions, contract deltas, and risks.
-6. PM completes readiness review.
+6. PM completes readiness review in `06-readiness-acceptance.md`.
 7. The user explicitly confirms implementation.
-
-`11-readiness-gates.md` is enforceable. Allowed Result values are `yes`, `no`, `not-needed`, and `blocked`.
 
 ## Living contract
 
 The initial plan is the starting intent, not an immutable command. The implementer may adjust tactical details when final acceptance does not change.
 
-Record a contract delta in `14-change-request-log.md` only when a change affects function points, acceptance criteria, architecture constraints, test scope, delivery risk, or final acceptance.
+Record a contract delta in `05-governance-log.md` only when a change affects function points, acceptance criteria, architecture constraints, test scope, delivery risk, or final acceptance.
 
 Final review uses:
 
@@ -60,25 +71,4 @@ initial requirement + recorded contract deltas + final acceptance evidence
 
 ```text
 Developer implements -> Developer self-tests -> QA tests when active -> Developer fixes QA bugs -> QA retests when active -> PM accepts
-```
-
-## Required documents
-
-```text
-00-index.md
-01-product-requirement.md
-02-development-plan.md
-03-implementation-notes.md
-04-test-plan.md
-05-test-report.md
-06-bugfix-log.md
-07-acceptance-report.md
-08-delivery-summary.md
-09-feature-status-board.md
-10-collaboration-log.md
-11-readiness-gates.md
-12-stage-user-report.md
-13-decision-log.md
-14-change-request-log.md
-15-risk-register.md
 ```
