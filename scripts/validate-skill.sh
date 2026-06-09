@@ -31,20 +31,37 @@ grep -q "^name: dev-baseline-task" skill/skills/dev-baseline-task/SKILL.md || { 
 grep -q "^name: dev-baseline-report" skill/skills/dev-baseline-report/SKILL.md || { echo "Missing canonical report skill." >&2; exit 1; }
 grep -q "^name: dev-baseline-git-sync" skill/skills/dev-baseline-git-sync/SKILL.md || { echo "Missing canonical git-sync skill." >&2; exit 1; }
 
+compact_docs=(
+  "01-task-contract.md"
+  "02-delivery-plan.md"
+  "03-work-log.md"
+  "04-validation.md"
+  "05-governance-log.md"
+  "06-readiness-acceptance.md"
+  "07-delivery-summary.md"
+)
+
 for task_index in shared/templates/tasks/00-index.md skill/shared/templates/tasks/00-index.md; do
-  for expected_doc in "13-decision-log.md" "14-change-request-log.md" "15-risk-register.md" "16-execution-contract.md"; do
+  for expected_doc in "${compact_docs[@]}"; do
     grep -q "$expected_doc" "$task_index" || { echo "Task index missing $expected_doc: $task_index" >&2; exit 1; }
   done
 done
 
-for contract in shared/templates/tasks/16-execution-contract.md skill/shared/templates/tasks/16-execution-contract.md; do
-  grep -q "^# Execution Contract" "$contract" || { echo "Missing execution contract title: $contract" >&2; exit 1; }
-  grep -q "Ready for implementation" "$contract" || { echo "Execution contract missing readiness decision: $contract" >&2; exit 1; }
+for contract in shared/templates/tasks/01-task-contract.md skill/shared/templates/tasks/01-task-contract.md; do
+  grep -q "Function Points" "$contract" || { echo "Task contract missing function points: $contract" >&2; exit 1; }
+  grep -q "Acceptance Criteria" "$contract" || { echo "Task contract missing acceptance criteria: $contract" >&2; exit 1; }
 done
 
-grep -q "Specialist Handoff Packet" shared/templates/tasks/10-collaboration-log.md || { echo "Missing handoff packet template." >&2; exit 1; }
-grep -q "Related AC" shared/templates/tasks/04-test-plan.md || { echo "Missing AC traceability in test plan." >&2; exit 1; }
-grep -q "Evidence Link" shared/templates/tasks/05-test-report.md || { echo "Missing evidence fields in test report." >&2; exit 1; }
-grep -q "AC Coverage Summary" shared/templates/tasks/07-acceptance-report.md || { echo "Missing AC coverage summary." >&2; exit 1; }
+for validation in shared/templates/tasks/04-validation.md skill/shared/templates/tasks/04-validation.md; do
+  grep -q "Related AC" "$validation" || { echo "Validation template missing AC mapping: $validation" >&2; exit 1; }
+  grep -q "Evidence" "$validation" || { echo "Validation template missing evidence fields: $validation" >&2; exit 1; }
+done
+
+for governance in shared/templates/tasks/05-governance-log.md skill/shared/templates/tasks/05-governance-log.md; do
+  grep -q "Contract Deltas" "$governance" || { echo "Governance log missing contract deltas: $governance" >&2; exit 1; }
+  grep -q "Risks" "$governance" || { echo "Governance log missing risks: $governance" >&2; exit 1; }
+done
+
+grep -q "Living contract" skill/skills/dev-baseline-task/SKILL.md || { echo "Task skill missing living contract rule." >&2; exit 1; }
 
 echo "dev-baseline standard skill package looks good."
