@@ -69,15 +69,19 @@ Codex 和 Claude Code 都使用 `skill/` 标准包里的同一套命令地图。
 | 脚本 | 用途 |
 |---|---|
 | `shared/scripts/create-task-workspace.sh` | 创建任务工作区 |
-| `shared/scripts/git-sync.sh` | 安全执行 add、commit、fetch、merge、push |
 | `shared/scripts/validate-task-readiness.sh` | 检查任务是否可以开始实现 |
+| `shared/scripts/validate-task-traceability.sh` | 检查 FP、AC、TC、证据和验收链路 |
 | `shared/scripts/advance-task-status.sh` | 追加功能点状态事件 |
 | `shared/scripts/generate-task-report.sh` | 生成单任务 HTML 报告 |
 | `shared/scripts/generate-html-report.sh` | 生成项目 HTML 报告 |
 | `shared/scripts/generate-task-dashboard.sh` | 生成任务仪表盘 |
-| `shared/scripts/quality-gate.sh` | 执行质量门禁 |
+| `shared/scripts/quality-gate.sh` | 执行项目质量门禁 |
+| `shared/scripts/publish-gate.sh` | 执行发布前检查：密钥、Git 命令安全、分支/upstream、diff 范围 |
+| `shared/scripts/git-sync.sh` | 安全执行 add、commit、fetch、merge、push |
 | `shared/scripts/check-secrets.sh` | Git 发布前检查疑似密钥 |
 | `shared/scripts/check-doc-sync.sh` | 检查文档同步风险 |
+| `scripts/validate-command-surface.sh` | 校验允许暴露的命令面 |
+| `scripts/validate-script-preambles.sh` | 校验脚本 shebang、Bash 语法和路径解析器 |
 
 ## PLAN.md 职责
 
@@ -88,5 +92,3 @@ Codex 和 Claude Code 都使用 `skill/` 标准包里的同一套命令地图。
 ```text
 docs/tasks/<task-folder>/
 ```
-
-| `shared/scripts/publish-gate.sh` | 运行发布前门禁：密钥扫描、危险 Git 命令防护、分支/upstream 和 diff 范围。 |
