@@ -49,6 +49,25 @@ The PM owns the roster decision:
 
 Each active agent must have exactly one responsibility, one expected output, and one exit condition. Skipped agents must be recorded with a reason.
 
+## Cross-tool execution contract
+
+When one model tool defines the task and another model tool implements or reviews it, `16-execution-contract.md` is mandatory.
+
+The defining tool records:
+
+- requirement summary
+- in scope and out of scope
+- function points
+- acceptance criteria and pass rules
+- architecture constraints or no-impact rationale
+- implementation constraints
+- test and evidence expectations
+- reviewer checklist
+
+The implementing tool must work against the execution contract and must not reinterpret hidden context from another tool. Out-of-contract work requires an approved change request in `14-change-request-log.md`.
+
+The reviewing tool validates the final result against the execution contract, traceability records, and evidence, not against conversation memory.
+
 ## Required preparation before implementation
 
 Implementation must not start immediately after the user gives a feature idea.
@@ -59,16 +78,17 @@ Before implementation, complete:
 
 1. PM drafts the requirement in `01-product-requirement.md`.
 2. PM records the active/skipped agent roster and rationale in `10-collaboration-log.md` and `11-readiness-gates.md`.
-3. Active specialist agents produce only their assigned outputs.
-4. Active specialist agents report only to PM.
-5. PM asks the user when PM or active specialists cannot resolve a question.
-6. PM ensures architecture guidance or a no-architecture-impact rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
-7. PM ensures an implementation plan or a no-developer-needed rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
-8. PM ensures test strategy is owned by QA or PM in `04-test-plan.md` and `11-readiness-gates.md`.
-9. PM ensures every Acceptance Criteria item has related test cases and evidence fields ready for acceptance coverage review.
-10. PM records important decisions, scope changes, and risks in `13-decision-log.md`, `14-change-request-log.md`, and `15-risk-register.md`.
-11. PM re-reviews requirement scope, specialist outputs, test plan, open questions, changes, decisions, and risks.
-12. The assistant summarizes scope, active agents, skipped agents, readiness, plan, tests, open questions, changes, decisions, and risks, then asks the user to confirm starting implementation.
+3. PM completes `16-execution-contract.md` for cross-tool work, or records why no cross-tool contract is needed.
+4. Active specialist agents produce only their assigned outputs.
+5. Active specialist agents report only to PM.
+6. PM asks the user when PM or active specialists cannot resolve a question.
+7. PM ensures architecture guidance or a no-architecture-impact rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
+8. PM ensures an implementation plan or a no-developer-needed rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
+9. PM ensures test strategy is owned by QA or PM in `04-test-plan.md` and `11-readiness-gates.md`.
+10. PM ensures every Acceptance Criteria item has related test cases and evidence fields ready for acceptance coverage review.
+11. PM records important decisions, scope changes, and risks in `13-decision-log.md`, `14-change-request-log.md`, and `15-risk-register.md`.
+12. PM re-reviews requirement scope, specialist outputs, execution contract, test plan, open questions, changes, decisions, and risks.
+13. The assistant summarizes scope, active agents, skipped agents, readiness, contract, plan, tests, open questions, changes, decisions, and risks, then asks the user to confirm starting implementation.
 
 ## Required execution loop
 
@@ -121,6 +141,7 @@ After readiness, implementation, QA, bugfix, acceptance, or delivery stages, upd
 When the Product Manager activates an optional specialist, PM must first create a `Specialist Handoff Packet` in `docs/tasks/<task-folder>/10-collaboration-log.md`. The main agent does not hand work directly to specialists.
 
 Each packet must define the specialist role, context files, decision needed, responsibility boundary, expected output, exit condition, sequencing, resolved PM questions, and questions the specialist is still allowed to ask. Specialists report only to PM and must stay within the packet boundary.
+
 ## Task Creation Plan Index
 
 When creating a task workspace, keep `docs/PLAN.md` as the project dashboard when the user wants the task visible from the main index:
