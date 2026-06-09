@@ -72,26 +72,14 @@ pre{white-space:pre-wrap;word-break:break-word;background:#020617;border:1px sol
 <main>
 EOF
 
-if [[ -f "$workspace/01-task-contract.md" ]]; then
-  section "Index" "00-index.md" >> "$out"
-  section "Task Contract" "01-task-contract.md" >> "$out"
-  section "Delivery Plan" "02-delivery-plan.md" >> "$out"
-  section "Work Log" "03-work-log.md" >> "$out"
-  section "Validation" "04-validation.md" >> "$out"
-  section "Governance Log" "05-governance-log.md" >> "$out"
-  section "Readiness and Acceptance" "06-readiness-acceptance.md" >> "$out"
-  section "Delivery Summary" "07-delivery-summary.md" >> "$out"
-else
-  section "Index" "00-index.md" >> "$out"
-  section "Readiness" "11-readiness-gates.md" >> "$out"
-  section "Feature Status" "09-feature-status-board.md" >> "$out"
-  section "Test Plan" "04-test-plan.md" >> "$out"
-  section "Test Report" "05-test-report.md" >> "$out"
-  section "Bugfix Log" "06-bugfix-log.md" >> "$out"
-  section "Acceptance" "07-acceptance-report.md" >> "$out"
-  section "Delivery Summary" "08-delivery-summary.md" >> "$out"
-  section "Stage User Report" "12-stage-user-report.md" >> "$out"
-fi
+section "Index" "00-index.md" >> "$out"
+section "Task Contract" "01-task-contract.md" >> "$out"
+section "Delivery Plan" "02-delivery-plan.md" >> "$out"
+section "Work Log" "03-work-log.md" >> "$out"
+section "Validation" "04-validation.md" >> "$out"
+section "Governance Log" "05-governance-log.md" >> "$out"
+section "Readiness and Acceptance" "06-readiness-acceptance.md" >> "$out"
+section "Delivery Summary" "07-delivery-summary.md" >> "$out"
 
 cat >> "$out" <<EOF
 </main>
