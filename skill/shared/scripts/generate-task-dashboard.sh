@@ -54,7 +54,8 @@ delivered=0
 while IFS= read -r dir; do
   [[ -d "$dir" ]] || continue
   index="$dir/00-index.md"
-  [[ -f "$index" ]] || continue
+  contract="$dir/01-task-contract.md"
+  [[ -f "$index" && -f "$contract" ]] || continue
 
   total=$((total + 1))
 
@@ -76,17 +77,10 @@ while IFS= read -r dir; do
     delivered|accepted) delivered=$((delivered + 1)) ;;
   esac
 
-  if [[ -f "$dir/01-task-contract.md" ]]; then
-    feature_count=$(count_pattern "$dir/01-task-contract.md" '^| FP-')
-    bug_count=$(count_pattern "$dir/03-work-log.md" '^| BUG-')
-    risk_count=$(count_pattern "$dir/05-governance-log.md" '^| RISK-')
-    delta_count=$(count_pattern "$dir/05-governance-log.md" '^| CR-')
-  else
-    feature_count=$(count_pattern "$dir/09-feature-status-board.md" '^| FP-')
-    bug_count=$(count_pattern "$dir/05-test-report.md" '^| BUG-')
-    risk_count=$(count_pattern "$dir/15-risk-register.md" '^| RISK-')
-    delta_count=$(count_pattern "$dir/14-change-request-log.md" '^| CR-')
-  fi
+  feature_count=$(count_pattern "$dir/01-task-contract.md" '^| FP-')
+  bug_count=$(count_pattern "$dir/03-work-log.md" '^| BUG-')
+  risk_count=$(count_pattern "$dir/05-governance-log.md" '^| RISK-')
+  delta_count=$(count_pattern "$dir/05-governance-log.md" '^| CR-')
 
   report=$(latest_report "$dir")
   report_cell="-"
@@ -141,7 +135,7 @@ code{color:#bae6fd} a{color:#7dd3fc}.badge{display:inline-block;padding:3px 8px;
 </header>
 <main>
   <div class="cards">
-    <div class="card"><strong>${total}</strong><span>Total tasks</span></div>
+    <div class="card"><strong>${total}</strong><span>Total compact tasks</span></div>
     <div class="card"><strong>${ready}</strong><span>Ready</span></div>
     <div class="card"><strong>${in_dev}</strong><span>In development</span></div>
     <div class="card"><strong>${validation}</strong><span>Validation / bugfix</span></div>
@@ -157,7 +151,7 @@ code{color:#bae6fd} a{color:#7dd3fc}.badge{display:inline-block;padding:3px 8px;
     </thead>
     <tbody>${rows}</tbody>
   </table>
-  <p class="notice">Tip: compact task workspaces use 00-index plus 01-07 task records.</p>
+  <p class="notice">Compact task workspaces use 00-index plus 01-07 task records.</p>
 </main>
 </body>
 </html>
