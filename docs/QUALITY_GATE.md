@@ -1,79 +1,40 @@
 # Quality and Release Gates
 
-Dev Baseline uses separate gates. Keep them separate so project quality, publish safety, task implementation readiness, and traceability do not blur into one checklist.
+Dev Baseline keeps project quality, publish safety, task readiness, and traceability as separate gates.
 
 ## 1. Project quality gate
-
-Use this before finishing normal project work, documentation updates, template changes, or skill packaging changes.
 
 ```bash
 bash shared/scripts/quality-gate.sh
 ```
 
-This gate checks:
-
-- Stack detection can run.
-- Baseline documentation structure is valid.
-- Shared docs, scripts, references, and templates stay synchronized with the packaged skill mirror.
-- Secret scan passes for changed files.
-- Documentation sync uses `origin/${BASE_REF:-$GITHUB_BASE_REF}...HEAD` in PR/CI runs and falls back to `git diff --name-only HEAD` for local working-tree checks.
-
-This gate intentionally does not decide whether a Git publish action is safe. Publish safety belongs to `publish-gate.sh`.
+Checks stack detection, baseline docs, mirror sync, sensitive-file scan, and documentation sync.
 
 ## 2. Publish gate
-
-Use this immediately before pushing, setting upstream, creating tags, or preparing a release.
 
 ```bash
 bash shared/scripts/publish-gate.sh "git push"
 ```
 
-For a first push that intentionally sets upstream, pass the intended command explicitly:
-
-```bash
-bash shared/scripts/publish-gate.sh "git push -u origin <branch>"
-```
-
-This gate checks:
-
-- Secret scan passes.
-- Git command safety guard passes for the intended publish command.
-- Current branch is named and has an upstream, or the intended command explicitly sets one.
-- No merge, rebase, or unresolved conflict state is active.
-- Diff scope is printed so the publisher can review changed files, staged diff, and unstaged diff before publishing.
-
-Tag creation, release creation, branch reset, and other high-risk operations must be handled as separately approved operations.
+Checks sensitive files, intended Git command safety, branch/upstream state, conflict state, and diff scope before publishing.
 
 ## 3. Task readiness gate
-
-Use this before implementation starts in a task workspace.
 
 ```bash
 bash shared/scripts/validate-task-readiness.sh docs/tasks/<task-folder>
 ```
 
-This gate checks the task workspace, PM-led readiness review, active/skipped agent decisions, execution contract, QA retest rules, open blockers, traceability, and explicit user confirmation.
+Checks the task workspace, PM-led readiness review, active/skipped agent decisions, QA retest rules, open blockers, traceability, and explicit user confirmation.
 
 ## 4. Task traceability gate
-
-Use this before cross-tool handoff review, QA pass, PM acceptance, or delivery.
 
 ```bash
 bash shared/scripts/validate-task-traceability.sh docs/tasks/<task-folder>
 ```
 
-This gate checks:
-
-- Function points exist.
-- Acceptance criteria exist.
-- Acceptance criteria map to test cases.
-- Acceptance criteria appear in the execution contract and acceptance report.
-- Approved change requests are reconciled.
-- High/high risks have mitigation or are explicitly accepted.
+Checks FP, AC, test coverage, acceptance report coverage, contract deltas, and risks.
 
 ## 5. Packaging and command-surface gates
-
-Use these before publishing a Dev Baseline package update:
 
 ```bash
 bash scripts/validate-command-surface.sh
@@ -81,11 +42,11 @@ bash scripts/validate-script-preambles.sh
 bash scripts/validate-skill.sh
 ```
 
-These gates check visible command policy, script syntax, resolver integrity, manifest assets, and packaged mirror sync.
+Checks visible command policy, script syntax, resolver integrity, manifest assets, and packaged mirror sync.
 
 ## Recommended order
 
-- Before implementation: run `validate-task-readiness.sh` for the task workspace.
-- Before cross-tool review or acceptance: run `validate-task-traceability.sh`.
-- Before closing project-quality work: run `quality-gate.sh`.
-- Before publishing to a remote or release surface: run `publish-gate.sh` with the intended Git or GitHub command.
+1. Before implementation: task readiness gate.
+2. Before cross-tool review or acceptance: task traceability gate.
+3. Before closing project-quality work: project quality gate.
+4. Before publishing: publish gate with the intended command.
