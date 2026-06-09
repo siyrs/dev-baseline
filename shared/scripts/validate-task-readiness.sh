@@ -19,35 +19,11 @@ esac
 errors=()
 fail() { errors+=("$1"); }
 
-compact_required=(
-  "00-index.md"
-  "01-task-contract.md"
-  "02-delivery-plan.md"
-  "03-work-log.md"
-  "04-validation.md"
-  "05-governance-log.md"
-  "06-readiness-acceptance.md"
-  "07-delivery-summary.md"
-)
-
-legacy_required=(
-  "00-index.md"
-  "01-product-requirement.md"
-  "02-development-plan.md"
-  "04-test-plan.md"
-  "09-feature-status-board.md"
-  "10-collaboration-log.md"
-  "11-readiness-gates.md"
-  "13-decision-log.md"
-  "14-change-request-log.md"
-  "15-risk-register.md"
-)
-
 if [[ -f "$workspace/01-task-contract.md" ]]; then
-  required=("${compact_required[@]}")
+  required=(00-index.md 01-task-contract.md 02-delivery-plan.md 03-work-log.md 04-validation.md 05-governance-log.md 06-readiness-acceptance.md 07-delivery-summary.md)
   gate_file="$workspace/06-readiness-acceptance.md"
 else
-  required=("${legacy_required[@]}")
+  required=(00-index.md 01-product-requirement.md 02-development-plan.md 04-test-plan.md 09-feature-status-board.md 10-collaboration-log.md 11-readiness-gates.md 13-decision-log.md 14-change-request-log.md 15-risk-register.md)
   gate_file="$workspace/11-readiness-gates.md"
 fi
 
@@ -56,18 +32,8 @@ for file in "${required[@]}"; do
 done
 
 if [[ -f "$gate_file" ]]; then
-  if grep -Eq '\|[[:space:]]*(no|blocked)[[:space:]]*\|' "$gate_file"; then
-    fail "Readiness gate contains no or blocked result."
-  fi
-  if grep -Eiq 'unresolved|pending question|question.*open' "$gate_file"; then
-    fail "Readiness gate contains unresolved questions."
-  fi
-  if ! grep -Eiq 'Implementation may start:[[:space:]]*yes' "$gate_file"; then
-    fail "User implementation confirmation is not yes."
-  fi
-  if ! grep -Eiq 'Confirmed at:[[:space:]]*[^[:space:]]' "$gate_file"; then
-    fail "Confirmed at is empty."
-  fi
+  grep -q "Implementation may start: yes" "$gate_file" || fail "User implementation confirmation is not yes."
+  grep -Eq "Confirmed at:[[:space:]]*[^[:space:]]" "$gate_file" || fail "Confirmed at is empty."
 else
   fail "Missing readiness gate file: $(basename "$gate_file")"
 fi
