@@ -7,7 +7,7 @@ Dev Baseline separates global workflow mode, task phase, feature status, gate re
 | Layer | Scope | Examples |
 |---|---|---|
 | Global mode | Current assistant workflow | init, backlog-review, optimization-review, planning, execution, git-publish |
-| Task phase | Task workspace lifecycle | intake, readiness, in-development, qa-testing, acceptance, delivered |
+| Task phase | Task workspace lifecycle | intake, readiness, in-development, validation, acceptance, delivered |
 | Feature status | Function point lifecycle | not-started, in-progress, implemented, self-tested, qa-testing, qa-passed, accepted |
 | Gate result | Gate item evaluation | yes, no, not-needed, blocked |
 | Contract delta | Change to final review target | pending, applied, approved, rejected, deferred, closed |
@@ -23,13 +23,13 @@ Dev Baseline separates global workflow mode, task phase, feature status, gate re
 
 ## Task phase rules
 
-Recommended task-level phase flow:
+Recommended compact task-level phase flow:
 
 ```text
-intake -> roster-decision -> discovery -> architecture-review -> feasibility-review -> test-strategy -> pm-readiness-review -> ready-for-development -> in-development -> self-tested -> qa-testing -> bugfixing -> qa-passed -> acceptance -> accepted -> delivered
+intake -> readiness -> in-development -> self-tested -> validation -> bugfixing -> accepted -> delivered
 ```
 
-Optional phases may be skipped only when PM records a rationale.
+Optional specialist phases may be skipped only when PM records a rationale.
 
 ## Feature status rules
 
@@ -42,7 +42,7 @@ not-started -> in-progress -> implemented -> self-tested -> qa-testing -> qa-pas
 Rejected function points return to:
 
 ```text
-bugfixing -> self-tested -> qa-testing
+bugfixing -> self-tested -> validation
 ```
 
 ## Gate result rules
@@ -63,7 +63,7 @@ The latest effective contract is the current review target:
 initial requirement + recorded contract deltas + final acceptance evidence
 ```
 
-The latest effective contract lives in the task workspace records. It does not require a separate frozen contract file.
+The latest effective contract lives in the compact task workspace records. It does not require a separate frozen contract file.
 
 ## Cross-session state
 
@@ -79,10 +79,10 @@ When the user says `continue`, `start`, or `提交并推送`, the assistant shou
 
 ## Cross-tool state
 
-When different tools participate, they rely on repository state:
+When different tools participate, they rely on compact task records:
 
-- `01-product-requirement.md`, `14-change-request-log.md`, and `07-acceptance-report.md` for the latest effective contract
-- `11-readiness-gates.md` for implementation authorization
-- `09-feature-status-board.md` for function-point progress
-- `05-test-report.md` and `07-acceptance-report.md` for validation and acceptance evidence
-- `15-risk-register.md` for risks and blockers
+- `01-task-contract.md` for scope, FP, AC, and effective target
+- `03-work-log.md` for agent activity, feature status, implementation, and bugfix
+- `04-validation.md` for validation coverage and evidence
+- `05-governance-log.md` for decisions, contract deltas, risks, and blockers
+- `06-readiness-acceptance.md` for implementation authorization and PM acceptance
