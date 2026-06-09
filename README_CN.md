@@ -52,7 +52,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  A[创建任务工作区] --> B[PM 定义范围、FP、AC]
+  A[创建 compact 任务工作区] --> B[PM 定义范围、FP、AC]
   B --> C[PM 决定最小 agent 阵容]
   C --> D{需要专家?}
   D -->|需要| E[PM 发出限定边界的交接包]
@@ -64,8 +64,9 @@ flowchart TD
   I -->|否| B
   I -->|是| J[实现与自测]
   J --> K[QA 或 PM 验证]
-  K --> L[PM 验收]
-  L --> M[交付总结]
+  K --> L[记录目标变化]
+  L --> M[PM 验收]
+  M --> N[交付总结]
 ```
 
 动态契约规则：
@@ -73,9 +74,22 @@ flowchart TD
 ```text
 初始计划是任务意图，不是不可变命令。
 实施方可以独立调整战术细节。
-影响 FP、AC、架构约束、测试范围、交付风险或最终验收的变化，记录到 14-change-request-log.md。
+影响 FP、AC、架构约束、测试范围、交付风险或最终验收的变化，记录到 05-governance-log.md。
 最终复核看最新生效契约和证据。
 ```
+
+Compact 团队任务文档：
+
+| 文件 | 作用 |
+|---|---|
+| `00-index.md` | 入口、状态、下一步 |
+| `01-task-contract.md` | 范围、FP、AC、最新目标 |
+| `02-delivery-plan.md` | 架构、实现、自测、回滚 |
+| `03-work-log.md` | Agent 阵容、交接、功能状态、实现、修复 |
+| `04-validation.md` | 测试计划、结果、证据、复测 |
+| `05-governance-log.md` | 决策、契约变化、风险 |
+| `06-readiness-acceptance.md` | 准备门禁、用户确认、PM 验收 |
+| `07-delivery-summary.md` | 阶段报告、交付范围、后续事项 |
 
 ### `/dev-baseline-report`：项目或任务报告
 
