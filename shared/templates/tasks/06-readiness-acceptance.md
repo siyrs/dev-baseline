@@ -6,7 +6,7 @@
 yes | no | not-needed | blocked
 ```
 
-`not-needed` requires a rationale. Implementation is blocked by any `no`, `blocked`, unresolved question, missing QA retest rule when QA is active, or empty user confirmation time.
+`not-needed` requires a rationale.
 
 ## Readiness Gates
 | Item | Result | Owner | Notes |
