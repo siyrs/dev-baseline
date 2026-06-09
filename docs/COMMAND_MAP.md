@@ -69,15 +69,19 @@ These do not need separate visible skill commands. Use `/dev-baseline-git-sync` 
 | Script | Purpose |
 |---|---|
 | `shared/scripts/create-task-workspace.sh` | Create a task workspace from templates |
-| `shared/scripts/git-sync.sh` | Safely add, commit, fetch, merge, and push |
 | `shared/scripts/validate-task-readiness.sh` | Check whether a task can start implementation |
+| `shared/scripts/validate-task-traceability.sh` | Check FP to AC to TC to evidence to acceptance traceability |
 | `shared/scripts/advance-task-status.sh` | Append feature status events |
 | `shared/scripts/generate-task-report.sh` | Generate an HTML report for one task |
 | `shared/scripts/generate-html-report.sh` | Generate a project-level HTML report |
 | `shared/scripts/generate-task-dashboard.sh` | Generate a task dashboard |
 | `shared/scripts/quality-gate.sh` | Run project quality gate checks |
+| `shared/scripts/publish-gate.sh` | Run pre-publish checks for secrets, Git command safety, branch/upstream, and diff scope |
+| `shared/scripts/git-sync.sh` | Safely add, commit, fetch, merge, and push |
 | `shared/scripts/check-secrets.sh` | Detect likely secrets before Git publish |
 | `shared/scripts/check-doc-sync.sh` | Detect likely missing doc sync |
+| `scripts/validate-command-surface.sh` | Validate the allowed visible command surface |
+| `scripts/validate-script-preambles.sh` | Validate script shebangs, Bash syntax, and resolver integrity |
 
 ## PLAN.md Role
 
@@ -88,5 +92,3 @@ Detailed task records belong in:
 ```text
 docs/tasks/<task-folder>/
 ```
-
-| `shared/scripts/publish-gate.sh` | Run pre-publish gate checks: secrets, dangerous Git command guard, branch/upstream, and diff scope. |
