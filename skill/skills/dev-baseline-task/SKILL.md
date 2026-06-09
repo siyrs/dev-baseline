@@ -8,11 +8,9 @@ disable-model-invocation: true
 
 Use this skill when a new development task should follow the standard team delivery flow.
 
-Team delivery uses PM-led Agent Mode by default. The main agent starts the Product Manager first. The PM then activates only the smallest useful set of single-responsibility agents, such as Architect, Developer, QA Tester, Coordinator, or Analyst. Do not spawn every role by default.
+Team delivery uses PM-led Agent Mode by default. The main agent starts the Product Manager first. The PM activates only the smallest useful set of single-responsibility agents. Do not spawn every role by default.
 
-Use real role agents when available; otherwise run explicit role-labeled passes and record the fallback in `10-collaboration-log.md`.
-
-Communication boundary: the main agent assigns the task to PM and then only interacts with PM. PM controls all optional specialist agents. Specialist agents report to PM, not to the main agent.
+Communication boundary: the main agent assigns the task to PM and then only interacts with PM. PM controls all optional specialist agents. Specialists report to PM, not to the main agent.
 
 ## Triggers
 
@@ -35,60 +33,59 @@ Recommended command:
 bash shared/scripts/create-task-workspace.sh <version> <task-name>
 ```
 
+Use `--update-plan` only when the user wants the task visible from `docs/PLAN.md`:
+
+```bash
+bash shared/scripts/create-task-workspace.sh <version> "<task-name>" --update-plan
+```
+
 ## Agent roster rules
 
 The required first role is Product Manager.
 
 The PM owns the roster decision:
 
-- Activate Analyst only for discovery, evidence, metrics, logs, repo scan, or research.
-- Activate Architect only for architecture, API, data, config, deploy, migration, security, performance, or compatibility impact.
-- Activate Developer only when implementation planning, code changes, self-test, or bugfix work is needed.
-- Activate QA Tester only when independent test strategy, validation, regression, or bug retest is needed.
-- Activate Coordinator only when multiple active agents create handoff, dependency, sequencing, or cross-workstream risk.
+- Analyst: discovery, evidence, metrics, logs, repo scan, or research.
+- Architect: architecture, API, data, config, deploy, migration, security, performance, compatibility, risks, or constraints.
+- Developer: implementation planning, code changes, self-test, or bugfix.
+- QA Tester: independent test strategy, validation, regression, bug reporting, or retest.
+- Coordinator: handoffs, dependency, sequencing, or cross-workstream status when coordination overhead is real.
 
-Each active agent must have exactly one responsibility, one expected output, and one exit condition. Skipped agents must be recorded with a reason.
+Each active agent must have one responsibility, one expected output, and one exit condition. Skipped agents must be recorded with a reason.
 
-## Cross-tool execution contract
+## Living contract rule
 
-When one model tool defines the task and another model tool implements or reviews it, `16-execution-contract.md` is mandatory.
+Task documents are the shared source of truth across model tools.
 
-The defining tool records:
+The initial task plan is not an immutable command. It is the starting intent. During real implementation, the implementing tool may adjust details, technical approach, tests, or the effective acceptance contract when delivery constraints require it.
 
-- requirement summary
-- in scope and out of scope
-- function points
-- acceptance criteria and pass rules
-- architecture constraints or no-impact rationale
-- implementation constraints
-- test and evidence expectations
-- reviewer checklist
+Do not block independent AI reasoning with overly detailed implementation rules. Instead, prevent silent drift:
 
-The implementing tool must work against the execution contract and must not reinterpret hidden context from another tool. Out-of-contract work requires an approved change request in `14-change-request-log.md`.
+- tactical implementation details may change freely when final acceptance does not change;
+- changes that affect function points, acceptance criteria, architecture constraints, test scope, delivery risk, or final acceptance must be recorded in the task workspace;
+- final review uses the latest effective contract: initial requirement + recorded contract deltas + final acceptance evidence.
 
-The reviewing tool validates the final result against the execution contract, traceability records, and evidence, not against conversation memory.
+Use `14-change-request-log.md` as a lightweight contract delta log. Use `16-execution-contract.md` only when a cross-tool handoff needs a compact summary of the latest effective contract; it is optional, not a hard lock.
 
 ## Required preparation before implementation
 
 Implementation must not start immediately after the user gives a feature idea.
 
-`11-readiness-gates.md` is an enforceable gate, not only a checklist. `Result` values must be `yes`, `no`, `not-needed`, or `blocked`. Use `not-needed` only with a rationale in `Notes`. Implementation is blocked by any `no`, `blocked`, `unknown`, missing rationale, unresolved question, missing QA retest rule when QA is active, or empty `Confirmed at`.
-
 Before implementation, complete:
 
 1. PM drafts the requirement in `01-product-requirement.md`.
 2. PM records the active/skipped agent roster and rationale in `10-collaboration-log.md` and `11-readiness-gates.md`.
-3. PM completes `16-execution-contract.md` for cross-tool work, or records why no cross-tool contract is needed.
-4. Active specialist agents produce only their assigned outputs.
-5. Active specialist agents report only to PM.
-6. PM asks the user when PM or active specialists cannot resolve a question.
-7. PM ensures architecture guidance or a no-architecture-impact rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
-8. PM ensures an implementation plan or a no-developer-needed rationale exists in `02-development-plan.md` and `11-readiness-gates.md`.
-9. PM ensures test strategy is owned by QA or PM in `04-test-plan.md` and `11-readiness-gates.md`.
-10. PM ensures every Acceptance Criteria item has related test cases and evidence fields ready for acceptance coverage review.
-11. PM records important decisions, scope changes, and risks in `13-decision-log.md`, `14-change-request-log.md`, and `15-risk-register.md`.
-12. PM re-reviews requirement scope, specialist outputs, execution contract, test plan, open questions, changes, decisions, and risks.
-13. The assistant summarizes scope, active agents, skipped agents, readiness, contract, plan, tests, open questions, changes, decisions, and risks, then asks the user to confirm starting implementation.
+3. Active specialists produce only their assigned outputs and report only to PM.
+4. PM asks the user when PM or active specialists cannot resolve a question.
+5. PM ensures architecture guidance or a no-impact rationale exists.
+6. PM ensures an implementation plan or no-developer-needed rationale exists.
+7. PM ensures test strategy is owned by QA or PM.
+8. PM ensures acceptance criteria have related test/evidence expectations.
+9. PM records important decisions, contract deltas, and risks in `13-decision-log.md`, `14-change-request-log.md`, and `15-risk-register.md`.
+10. PM re-reviews requirement scope, specialist outputs, plan, tests, open questions, deltas, decisions, and risks.
+11. The assistant summarizes readiness and asks the user to confirm starting implementation.
+
+`11-readiness-gates.md` is enforceable: `Result` values must be `yes`, `no`, `not-needed`, or `blocked`. Implementation is blocked by any `no`, `blocked`, `unknown`, missing `not-needed` rationale, unresolved question, missing QA retest rule when QA is active, or empty `Confirmed at`.
 
 ## Required execution loop
 
@@ -114,15 +111,13 @@ Rejected items move to `bugfixing` before returning to self-test and QA test.
 
 ## Collaboration log
 
-Record PM, every active specialist agent, skipped-agent rationale, fallback passes, and user communication in `10-collaboration-log.md`.
+Record PM, every active specialist agent, skipped-agent rationale, fallback passes, user communication, and specialist handoff packets in `10-collaboration-log.md`.
+
+When PM activates an optional specialist, PM creates a `Specialist Handoff Packet` first. The main agent does not hand work directly to specialists.
 
 ## Stage report
 
 After readiness, implementation, QA, bugfix, acceptance, or delivery stages, update `12-stage-user-report.md` and summarize progress to the user.
-
-## PLAN.md role
-
-`docs/PLAN.md` is only a dashboard and index. Detailed records belong in the task workspace.
 
 ## Output format
 
@@ -133,21 +128,6 @@ After readiness, implementation, QA, bugfix, acceptance, or delivery stages, upd
 - PM readiness:
 - Specialist readiness:
 - Test readiness:
+- Contract deltas:
 - User confirmation required:
 - Next action:
-
-## Specialist Handoff Packet
-
-When the Product Manager activates an optional specialist, PM must first create a `Specialist Handoff Packet` in `docs/tasks/<task-folder>/10-collaboration-log.md`. The main agent does not hand work directly to specialists.
-
-Each packet must define the specialist role, context files, decision needed, responsibility boundary, expected output, exit condition, sequencing, resolved PM questions, and questions the specialist is still allowed to ask. Specialists report only to PM and must stay within the packet boundary.
-
-## Task Creation Plan Index
-
-When creating a task workspace, keep `docs/PLAN.md` as the project dashboard when the user wants the task visible from the main index:
-
-```bash
-bash shared/scripts/create-task-workspace.sh <version> "<task-name>" --update-plan
-```
-
-The optional `--update-plan` flag appends a task index row with workspace, status, owner, and next action. Do not use the flag when the user explicitly wants a workspace-only draft.
