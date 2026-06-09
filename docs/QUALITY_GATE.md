@@ -1,6 +1,6 @@
 # Quality and Release Gates
 
-Dev Baseline uses three separate gates. Keep them separate so project quality, publish safety, and task implementation readiness do not blur into one checklist.
+Dev Baseline uses separate gates. Keep them separate so project quality, publish safety, task implementation readiness, and traceability do not blur into one checklist.
 
 ## 1. Project quality gate
 
@@ -37,12 +37,12 @@ bash shared/scripts/publish-gate.sh "git push -u origin <branch>"
 This gate checks:
 
 - Secret scan passes.
-- Dangerous Git command guard passes for the intended publish command.
+- Git command safety guard passes for the intended publish command.
 - Current branch is named and has an upstream, or the intended command explicitly sets one.
 - No merge, rebase, or unresolved conflict state is active.
 - Diff scope is printed so the publisher can review changed files, staged diff, and unstaged diff before publishing.
 
-Commands such as force push, hard reset, clean, manual tag creation, and release creation are blocked by `git-block-dangerous.sh` unless the workflow is intentionally changed and reviewed.
+Tag creation, release creation, branch reset, and other high-risk operations must be handled as separately approved operations.
 
 ## 3. Task readiness gate
 
@@ -52,10 +52,40 @@ Use this before implementation starts in a task workspace.
 bash shared/scripts/validate-task-readiness.sh docs/tasks/<task-folder>
 ```
 
-This gate checks the task workspace, PM-led readiness review, active/skipped agent decisions, QA retest rules, open blockers, and explicit user confirmation.
+This gate checks the task workspace, PM-led readiness review, active/skipped agent decisions, execution contract, QA retest rules, open blockers, traceability, and explicit user confirmation.
+
+## 4. Task traceability gate
+
+Use this before cross-tool handoff review, QA pass, PM acceptance, or delivery.
+
+```bash
+bash shared/scripts/validate-task-traceability.sh docs/tasks/<task-folder>
+```
+
+This gate checks:
+
+- Function points exist.
+- Acceptance criteria exist.
+- Acceptance criteria map to test cases.
+- Acceptance criteria appear in the execution contract and acceptance report.
+- Approved change requests are reconciled.
+- High/high risks have mitigation or are explicitly accepted.
+
+## 5. Packaging and command-surface gates
+
+Use these before publishing a Dev Baseline package update:
+
+```bash
+bash scripts/validate-command-surface.sh
+bash scripts/validate-script-preambles.sh
+bash scripts/validate-skill.sh
+```
+
+These gates check visible command policy, script syntax, resolver integrity, manifest assets, and packaged mirror sync.
 
 ## Recommended order
 
 - Before implementation: run `validate-task-readiness.sh` for the task workspace.
+- Before cross-tool review or acceptance: run `validate-task-traceability.sh`.
 - Before closing project-quality work: run `quality-gate.sh`.
 - Before publishing to a remote or release surface: run `publish-gate.sh` with the intended Git or GitHub command.
