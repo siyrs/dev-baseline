@@ -8,110 +8,88 @@ Typical cross-tool chain:
 Tool 1 / Codex defines the task -> Tool 2 / Claude Code implements and validates -> Tool 1 / Codex reviews the result
 ```
 
-Using the same Dev Baseline skill is necessary but not sufficient. Target consistency is guaranteed only when all tools work against the same recorded task contract, acceptance criteria, traceability records, and evidence.
+Using the same Dev Baseline skill gives all tools the same workflow language, templates, and gates. It does not automatically share hidden conversation context. The repository task workspace is the synchronization boundary.
 
-## Required shared source of truth
+## Core principle: living contract
 
-Every cross-tool task must have a task workspace and an execution contract:
+The task contract is allowed to evolve during implementation.
+
+Do not treat the initial plan as an immutable command. Treat silent drift as invalid.
+
+An implementing tool may adjust implementation details, technical approach, tests, or even the effective acceptance contract when real delivery constraints require it. The responsibility is to keep the user goal, final acceptance standard, and evidence trail reviewable.
+
+## Shared source of truth
+
+For cross-tool work, the task workspace is the source of truth:
 
 ```text
-docs/tasks/<task-folder>/16-execution-contract.md
+docs/tasks/<task-folder>/
 ```
 
-The execution contract is the handoff artifact from the task-defining tool to the implementing tool and the later reviewing tool.
+The minimum shared target is:
 
-It must define:
-
-- task identity and workspace
-- defining tool / model and intended executor / reviewer
-- requirement summary
-- in scope and out of scope
+- requirement scope and out-of-scope notes
 - function points
-- acceptance criteria
-- architectural constraints or no-impact rationale
-- implementation constraints
-- test and evidence expectations
-- files or modules expected to change when known
-- explicit non-goals
-- review checklist for the final reviewer
+- acceptance criteria and pass rules
+- architecture constraints or no-impact rationale
+- test strategy or PM-owned checklist
+- contract deltas when the target changes
+- evidence for the final accepted behavior
 
-## Contract ownership
+`16-execution-contract.md` may summarize the latest effective contract when a handoff needs extra clarity, but it is a summary artifact, not a hard lock.
 
-- The defining tool owns the initial task contract.
-- The Product Manager owns contract completeness before implementation starts.
-- The implementing tool must not reinterpret scope outside the contract.
-- The reviewing tool validates implementation output against the contract rather than against conversation memory.
+## What may change freely
 
-## When the contract is insufficient
+The implementing tool may decide tactical details without extra process when they do not change the effective acceptance target:
 
-If the contract lacks acceptance criteria, implementation boundaries, test expectations, or architecture constraints, the implementing tool must return the task to PM instead of guessing.
+- internal implementation approach
+- local refactoring
+- file-internal structure
+- equivalent test command or test data adjustment
+- implementation order
+- wording that does not change scope or acceptance
 
-A cross-tool task is not ready for implementation when any of these are missing:
+These changes can be recorded in implementation notes when useful, but they do not need a change request.
 
-- at least one confirmed function point
-- acceptance criteria for each required function point
-- test strategy or PM-owned acceptance checklist
-- evidence expectations for acceptance
-- out-of-scope notes
-- architecture impact decision or no-impact rationale
+## What must be recorded as a contract delta
 
-## Required implementation behavior
+Any change that affects the final review target must be recorded before acceptance:
 
-The implementing tool must record:
+- function point added, removed, split, or merged
+- acceptance criteria or pass rule changed
+- out-of-scope work pulled into scope
+- architecture, API, data, config, deploy, migration, security, performance, or compatibility impact changed
+- test scope reduced or evidence expectation changed
+- delivery risk changes materially
 
-- which contract version it used
-- which function points were implemented
-- which files were changed
-- which acceptance criteria were addressed
-- which tests or evidence prove the work
-- any deviation request before making out-of-contract changes
+Record these in `14-change-request-log.md` as a contract delta. Approval may be explicit, deferred to PM acceptance, or documented as implementer-applied when delivery constraints required immediate action. The key rule is that the change must not be silent.
 
-Out-of-contract work must be recorded as a change request in `14-change-request-log.md` and approved before implementation continues.
+## Review rule
 
-## Required review behavior
-
-The reviewing tool must compare final work against:
-
-- `16-execution-contract.md`
-- `01-product-requirement.md`
-- `02-development-plan.md`
-- `04-test-plan.md`
-- `05-test-report.md`
-- `07-acceptance-report.md`
-- `09-feature-status-board.md`
-- `14-change-request-log.md`
-- `15-risk-register.md`
-
-The review result must answer:
+The reviewing tool validates the result against the latest effective contract:
 
 ```text
-Did the implementation satisfy the defining tool's recorded task contract?
+initial task contract
++ recorded contract deltas
++ final acceptance report
++ test and evidence records
+= latest effective contract
 ```
 
-The answer must be `yes`, `no`, or `conditional`, with evidence.
-
-## Same skill, different tools
-
-When different tools use the same Dev Baseline skill, they share the workflow rules, but they do not automatically share hidden context. The repository documents are the synchronization boundary.
-
-Therefore, do not rely on conversation memory across tools. Record the task contract, readiness gates, traceability, decisions, changes, risks, and evidence in the repository before handing off.
-
-## Minimum cross-tool gate
-
-Before a task moves from defining tool to implementing tool:
+The final review should answer:
 
 ```text
-Task contract complete -> readiness gates complete -> user confirms implementation
+Does the delivered work satisfy the latest effective contract, and are any target changes visible and justified?
 ```
 
-Before a task moves from implementing tool to reviewing tool:
+Valid review results are `yes`, `no`, or `conditional` with evidence.
+
+## Minimal cross-tool flow
 
 ```text
-Implementation notes complete -> self-test evidence recorded -> QA/PM validation recorded -> traceability check passes
+Defining tool records initial intent, FP, AC, and major constraints.
+Implementing tool can adapt, but records contract deltas when FP/AC/scope/risk/evidence changes.
+Reviewing tool checks the latest effective contract and evidence, not hidden conversation memory.
 ```
 
-Before acceptance:
-
-```text
-Reviewer confirms contract alignment -> PM accepts or rejects
-```
+This keeps rules lightweight while preserving target consistency across tools.
