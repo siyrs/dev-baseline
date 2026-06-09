@@ -1,6 +1,6 @@
 # Workflow State Model
 
-Dev Baseline separates global workflow mode, task phase, feature status, gate results, and publish eligibility.
+Dev Baseline separates global workflow mode, task phase, feature status, gate results, contract deltas, and publish eligibility.
 
 ## State layers
 
@@ -10,15 +10,16 @@ Dev Baseline separates global workflow mode, task phase, feature status, gate re
 | Task phase | Task workspace lifecycle | intake, readiness, in-development, qa-testing, acceptance, delivered |
 | Feature status | Function point lifecycle | not-started, in-progress, implemented, self-tested, qa-testing, qa-passed, accepted |
 | Gate result | Gate item evaluation | yes, no, not-needed, blocked |
+| Contract delta | Change to final review target | pending, applied, approved, rejected, deferred, closed |
 | Publish eligibility | Git publish safety | unknown, safe, blocked |
 
 ## Global mode rules
 
 - `execution` requires an approved plan or approved task readiness gate.
-- `git-publish` requires explicit user intent and does not imply permission to edit files.
+- `git-publish` requires explicit user intent.
 - `planning` may update planning docs but must not implement production code.
 - `optimization-review` may propose improvements but must not silently add them to the active plan.
-- `report` generation must keep generated artifacts separate from production source changes.
+- `report` generation keeps generated artifacts separate from production source changes.
 
 ## Task phase rules
 
@@ -46,7 +47,7 @@ bugfixing -> self-tested -> qa-testing
 
 ## Gate result rules
 
-Gate results are not task phases. They describe whether specific transition conditions are satisfied.
+Gate results are not task phases. They describe whether transition conditions are satisfied.
 
 Allowed readiness gate results:
 
@@ -54,13 +55,15 @@ Allowed readiness gate results:
 yes | no | not-needed | blocked
 ```
 
-## Publish eligibility rules
+## Living contract rules
 
-Publish eligibility is separate from implementation and acceptance.
+The latest effective contract is the current review target:
 
-- A task can be accepted but not safe to publish.
-- A branch can be safe to publish while a task remains unaccepted only when the user explicitly requests Git publish and the diff scope is intentional.
-- Publish gate pass does not authorize source edits.
+```text
+initial requirement + recorded contract deltas + final acceptance evidence
+```
+
+`16-execution-contract.md` may summarize this state when useful. It is not required as a frozen contract.
 
 ## Cross-session state
 
@@ -76,10 +79,10 @@ When the user says `continue`, `start`, or `提交并推送`, the assistant shou
 
 ## Cross-tool state
 
-When different tools participate, they must rely on repository state:
+When different tools participate, they rely on repository state:
 
-- `16-execution-contract.md` for target consistency
+- `01-product-requirement.md`, `14-change-request-log.md`, and `07-acceptance-report.md` for the latest effective contract
 - `11-readiness-gates.md` for implementation authorization
 - `09-feature-status-board.md` for function-point progress
 - `05-test-report.md` and `07-acceptance-report.md` for validation and acceptance evidence
-- `14-change-request-log.md` and `15-risk-register.md` for deviations and blockers
+- `15-risk-register.md` for risks and blockers
