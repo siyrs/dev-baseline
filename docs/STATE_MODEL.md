@@ -63,7 +63,7 @@ The latest effective contract is the current review target:
 initial requirement + recorded contract deltas + final acceptance evidence
 ```
 
-`16-execution-contract.md` may summarize this state when useful. It is not required as a frozen contract.
+The latest effective contract lives in the task workspace records. It does not require a separate frozen contract file.
 
 ## Cross-session state
 
