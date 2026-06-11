@@ -20,7 +20,7 @@ Visible skill commands:
 | Command | Use it for |
 |---|---|
 | `/dev-baseline` | General routing: init, review, planning, quality, Git, providers, sprint, release, metrics, dashboard |
-| `/dev-baseline-task` | PM-led team delivery with compact task records and minimal agents |
+| `/dev-baseline-task` | PM-led team delivery with compact task records and minimal or custom agents |
 | `/dev-baseline-report` | Project and task reports |
 | `/dev-baseline-git-sync` | Safe one-step local/remote synchronization |
 
@@ -46,21 +46,28 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  A[Create compact task workspace] --> B[PM drafts contract: scope, FP, AC]
-  B --> C[PM chooses minimal agent roster]
-  C --> D{Need specialists?}
-  D -->|yes| E[PM issues scoped handoff packets]
-  D -->|no| F[PM records skip rationale]
-  E --> G[Specialists report only to PM]
-  F --> H[PM readiness review]
-  G --> H
-  H --> I{User confirms implementation?}
-  I -->|no| B
-  I -->|yes| J[Implement and self-test]
-  J --> K[Validate evidence]
-  K --> L[Record contract deltas if target changed]
-  L --> M[PM acceptance]
-  M --> N[Delivery summary]
+  A[Create compact task workspace] --> B[PM captures initial request]
+  B --> C[PM drafts scope, FP, AC]
+  C --> D[PM chooses minimal roster]
+  D --> E{Need default or custom specialists?}
+  E -->|default| F[PM issues scoped handoff packets]
+  E -->|custom| G[PM records custom specialist prompt]
+  E -->|none| H[PM records skip rationale]
+  F --> I[Specialists report only to PM]
+  G --> I
+  H --> J{Code changes needed?}
+  I --> J
+  J -->|yes| K[Architect + Developer elaborate workable plan]
+  J -->|no| L[Record no-developer rationale]
+  K --> M[PM readiness review]
+  L --> M
+  M --> N{User confirms implementation?}
+  N -->|no| C
+  N -->|yes| O[Implement and self-test]
+  O --> P[Validate evidence]
+  P --> Q[Record contract deltas if target changed]
+  Q --> R[PM acceptance]
+  R --> S[Delivery summary]
 ```
 
 Living contract rule:
@@ -79,7 +86,7 @@ Compact team task documents:
 | `00-index.md` | Entry, status, next action |
 | `01-task-contract.md` | Scope, FP, AC, latest target |
 | `02-delivery-plan.md` | Architecture, implementation, self-test, rollback |
-| `03-work-log.md` | Agent roster, handoffs, feature status, implementation, bugfix |
+| `03-work-log.md` | Agent roster, custom prompts, handoffs, feature status, implementation, bugfix |
 | `04-validation.md` | Test plan, results, evidence, retest |
 | `05-governance-log.md` | Decisions, contract deltas, risks |
 | `06-readiness-acceptance.md` | Readiness gate, user confirmation, PM acceptance |
@@ -119,7 +126,7 @@ flowchart TD
 /dev-baseline-task create v0.3.2 用户登录功能
 ```
 
-During team delivery, the main agent interacts only with PM. PM controls specialists, readiness, contract deltas, validation evidence, risks, and acceptance.
+During team delivery, the main agent interacts only with PM. PM controls specialists, may define custom specialists when needed, ensures one-line requests are elaborated into workable plans before implementation, and owns readiness, contract deltas, validation evidence, risks, and acceptance.
 
 ## Install
 
