@@ -14,6 +14,8 @@ PM activates the smallest useful set of optional single-responsibility agents:
 - QA Tester: validation, regression, bug reports, or retest.
 - Coordinator: handoffs, dependencies, sequencing, and cross-agent status when coordination overhead is real.
 
+PM may define a custom specialist when the default roles do not cover the needed expertise. Record its initialization prompt in `03-work-log.md`: role name, mission, boundaries, context files, expected output, exit condition, and return format. Custom specialists still report only to PM.
+
 Communication boundary: the main agent assigns the task to PM and only interacts with PM. PM controls optional specialists, and specialists report to PM.
 
 ## Workspace
@@ -41,13 +43,18 @@ bash shared/scripts/create-task-workspace.sh <version> <task-name>
 
 ## Preparation before implementation
 
+A one-line requirement can start intake. Before coding, PM must make it implementable.
+
 1. PM drafts requirement, scope, function points, and acceptance criteria.
-2. PM records active agents, skipped agents, and reasons.
+2. PM records active agents, skipped agents, custom specialists, and reasons.
 3. PM gathers focused specialist outputs only when needed.
-4. PM ensures plan, validation strategy, risks, and evidence expectations are clear.
-5. PM records decisions, contract deltas, and risks.
-6. PM completes readiness review in `06-readiness-acceptance.md`.
-7. The user explicitly confirms implementation.
+4. Architect and Developer collaborate through PM on a workable implementation approach when code changes are needed.
+5. PM ensures plan, validation strategy, risks, and evidence expectations are clear.
+6. PM records decisions, contract deltas, and risks.
+7. PM completes readiness review in `06-readiness-acceptance.md`.
+8. The user explicitly confirms implementation.
+
+The implementation approach should guide work without prescribing exact code edits.
 
 ## Living Contract Rule
 
