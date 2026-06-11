@@ -2,6 +2,11 @@
 
 Shared task target for PM, implementer, reviewer, and user.
 
+## Initial Request
+- Raw user request:
+- One-line requirement accepted for intake: yes/no
+- Needs elaboration before implementation: yes/no
+
 ## Requirement Summary
 - 
 
@@ -20,6 +25,11 @@ Shared task target for PM, implementer, reviewer, and user.
 | AC ID | Related FP | Criteria | Pass Rule | Evidence Required |
 |---|---|---|---|---|
 | AC-001 | FP-001 |  |  | evidence |
+
+## Open Questions
+| Question | Owner | Need User Confirmation | Status | Answer / Notes |
+|---|---|---|---|---|
+|  | PM | yes/no | open |  |
 
 ## Living Contract Notes
 - Initial plan is starting intent, not an immutable command.
