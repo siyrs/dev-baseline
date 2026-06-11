@@ -14,6 +14,10 @@ PM activates only the smallest useful set of optional specialists:
 - QA Tester: validation, regression, bug report, and retest.
 - Coordinator: handoff and dependency control when coordination overhead is real.
 
+The default list is not closed. PM may create an ad-hoc specialist when the task needs another perspective, such as Security Reviewer, Data Migration Reviewer, Performance Reviewer, Release Operator, Documentation Owner, UX Reviewer, or Domain Expert.
+
+A custom specialist must have an initialization prompt recorded in `03-work-log.md`: role name, mission, boundaries, context files, expected output, exit condition, and what must be returned to PM. Custom specialists report only to PM.
+
 Each active specialist needs one responsibility, one expected output, and one exit condition. Skipped specialists need a rationale.
 
 ## Workspace
@@ -43,17 +47,20 @@ Default documents:
 
 ## Before implementation
 
-Implementation must not start immediately after a feature idea.
+A one-line requirement is enough for intake, but not enough for implementation.
 
 Before coding starts:
 
 1. PM drafts scope, function points, and acceptance criteria.
-2. PM records active/skipped agents and reasons.
+2. PM records active/skipped agents, custom specialists, and reasons.
 3. PM gathers specialist outputs only when needed.
-4. PM ensures plan, validation strategy, risks, and evidence expectations are clear.
-5. PM records decisions, contract deltas, and risks.
-6. PM completes readiness review in `06-readiness-acceptance.md`.
-7. The user explicitly confirms implementation.
+4. Architect and Developer collaborate through PM to produce a workable implementation approach when code changes are needed.
+5. PM ensures plan, validation strategy, risks, and evidence expectations are clear.
+6. PM records decisions, contract deltas, and risks.
+7. PM completes readiness review in `06-readiness-acceptance.md`.
+8. The user explicitly confirms implementation.
+
+The plan should guide implementation without freezing exact code edits.
 
 ## Living contract
 
