@@ -9,6 +9,14 @@
 | Developer | no | Implementation / self-test / bugfix |  |  |  |
 | QA Tester | no | Validation / retest |  |  |  |
 | Coordinator | no | Handoffs / dependency status |  |  |  |
+| Custom Specialist | no | PM-defined |  |  |  |
+
+## Custom Specialist Prompts
+| Time | Role Name | Why Needed | Mission | Boundary | Expected Output | Exit Condition | Return To PM |
+|---|---|---|---|---|---|---|---|
+|  |  |  |  |  |  |  |  |
+
+Prompt checklist: role name, mission, responsibility boundary, context files, expected output, exit condition, allowed decisions, decisions to return to PM, and evidence to provide.
 
 ## Specialist Handoffs
 | Time | From | To | Topic | Boundary | Status | Notes |
