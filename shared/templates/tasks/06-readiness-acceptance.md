@@ -14,9 +14,11 @@ yes | no | not-needed | blocked
 | Product Manager active first | no | PM |  |
 | Main agent only interacts with PM | no | PM |  |
 | Active/skipped agents and rationale recorded | no | PM |  |
+| Custom specialists defined or marked not-needed | no | PM | prompt recorded in 03-work-log.md when used |
 | Specialist outputs or skip rationale reviewed | no | PM |  |
 | Requirement and acceptance criteria reviewed | no | PM |  |
 | Architecture guidance or no-impact rationale reviewed | no | PM |  |
+| Architect + Developer elaboration completed or not-needed | no | PM | required when code changes are needed |
 | Implementation plan or no-developer-needed rationale reviewed | no | PM |  |
 | Test strategy and evidence expectations reviewed | no | PM/QA |  |
 | Decisions, deltas, and risks reviewed | no | PM |  |
