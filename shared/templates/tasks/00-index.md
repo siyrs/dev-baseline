@@ -35,7 +35,7 @@ Rejected feature points return to `bugfixing` before validation resumes.
 |---|---|
 | 01 Task Contract | Scope, FP, AC, and living contract target |
 | 02 Delivery Plan | Architecture, implementation, self-test, rollback |
-| 03 Work Log | Agent roster, handoffs, feature status, implementation, bugfix |
+| 03 Work Log | Agent roster, custom prompts, handoffs, feature status, implementation, bugfix |
 | 04 Validation | Test plan, test results, evidence, retest |
 | 05 Governance Log | Decisions, contract deltas, risks |
 | 06 Readiness and Acceptance | Readiness gate, user confirmation, PM acceptance |
@@ -46,7 +46,9 @@ Rejected feature points return to `bugfixing` before validation resumes.
 |---|---|---|---|---|
 | Task contract | Product Manager | Scope, FP, AC, pass rules, and evidence expectations drafted | todo |  |
 | PM-led agent roster | Product Manager | Active/skipped agents and rationale recorded | todo |  |
+| Custom specialist prompts | Product Manager | Custom specialists defined or marked not-needed | todo |  |
 | Delivery plan | PM or active specialists | Architecture, implementation, test, and rollback notes ready | todo |  |
+| Architect + Developer elaboration | PM / Architect / Developer | Workable implementation approach ready or not-needed rationale recorded | todo |  |
 | Governance review | PM | Decisions, contract deltas, and risks reviewed | todo |  |
 | Traceability review | PM or QA | FP -> AC -> validation -> acceptance chain checked | todo |  |
 | User implementation confirmation | User | Explicit approval to start development | todo |  |
