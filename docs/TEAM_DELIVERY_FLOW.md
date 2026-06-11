@@ -16,6 +16,10 @@ PM activates only the smallest useful set of optional single-responsibility agen
 - QA Tester: test strategy, validation, regression, bug reports, or retest.
 - Coordinator: dependencies, handoffs, sequencing, and cross-agent status when coordination overhead is real.
 
+The list above is the default roster, not a closed set. PM may define an ad-hoc specialist when the task needs expertise outside the default roles, such as Security Reviewer, Data Migration Reviewer, Performance Reviewer, Release Operator, Documentation Owner, UX Reviewer, or Domain Expert.
+
+A PM-defined specialist must have a one-time initialization prompt recorded in `03-work-log.md` before activation. The prompt should define role name, mission, boundaries, context files, expected output, exit condition, and what must be returned to PM. Custom specialists still report only to PM and must not change the task contract silently.
+
 Communication boundary: main agent talks to PM; PM controls optional specialists; specialists report to PM.
 
 ## Workspace
@@ -50,11 +54,26 @@ The default workspace uses a compact 8-file docset.
 | `00-index.md` | Entry, status, next action |
 | `01-task-contract.md` | Scope, FP, AC, latest target |
 | `02-delivery-plan.md` | Architecture, implementation, self-test, rollback |
-| `03-work-log.md` | Agent roster, handoffs, feature status, implementation, bugfix |
+| `03-work-log.md` | Agent roster, handoffs, custom specialist prompts, feature status, implementation, bugfix |
 | `04-validation.md` | Test plan, results, evidence, retest |
 | `05-governance-log.md` | Decisions, contract deltas, risks |
 | `06-readiness-acceptance.md` | Readiness gate, user confirmation, PM acceptance |
 | `07-delivery-summary.md` | Stage report, delivered scope, follow-up |
+
+## Requirement elaboration before implementation
+
+A task may start from a one-line user request. The one-line request is enough for intake, but not enough for implementation.
+
+Before coding starts, PM must ensure the request is elaborated into a workable delivery plan. When implementation is needed, Architect and Developer should collaborate through PM to turn the requirement into:
+
+- clear function points and acceptance criteria
+- architecture impact or no-impact rationale
+- implementation approach and sequencing
+- likely files or modules, at area level when exact files are uncertain
+- assumptions, constraints, dependencies, and risks
+- self-test and validation expectations
+
+This plan should be concrete enough to guide implementation, but it does not need to prescribe exact code edits. Implementation may still adapt tactics under the Living Contract Rule.
 
 ## Preparation before implementation
 
@@ -63,11 +82,11 @@ Implementation must not start immediately after a feature idea.
 Before coding starts:
 
 1. PM drafts requirement scope, out-of-scope notes, function points, and acceptance criteria.
-2. PM records active agents, skipped agents, and rationale.
+2. PM records active agents, skipped agents, and rationale, including any custom specialist prompt.
 3. PM activates optional specialists only when needed.
 4. Active specialists produce focused outputs and report only to PM.
 5. PM ensures architecture guidance or no-impact rationale exists.
-6. PM ensures implementation plan or no-developer-needed rationale exists.
+6. PM ensures Architect/Developer collaboration has produced a workable implementation approach when code changes are needed.
 7. PM ensures test strategy and AC-to-evidence expectations exist.
 8. PM records important decisions, contract deltas, and risks.
 9. PM performs readiness review.
