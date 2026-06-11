@@ -1,11 +1,9 @@
-name: Release v0.3.0
+name: Release on tag
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/release-v0.3.0.yml
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
@@ -19,10 +17,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Create or repair v0.3.0 release
+      - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: v0.3.0
+          TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
 
@@ -31,14 +29,19 @@ jobs:
             exit 0
           fi
 
-          if ! git ls-remote --tags origin "refs/tags/${TAG}" | grep -q "refs/tags/${TAG}"; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git tag "$TAG" "$GITHUB_SHA"
-            git push origin "$TAG"
+          notes_file="docs/releases/${TAG}.md"
+          if [[ ! -f "$notes_file" ]]; then
+            notes_file=""
           fi
 
-          gh release create "$TAG" \
-            --title "$TAG" \
-            --notes-file docs/releases/v0.3.0.md \
-            --target "$TAG"
+          if [[ -n "$notes_file" ]]; then
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file "$notes_file" \
+              --target "$TAG"
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --generate-notes \
+              --target "$TAG"
+          fi
