@@ -13,6 +13,15 @@
 | Security / performance / reliability impact |  |  |
 | Constraints for implementation |  |  |
 
+## Architect + Developer Elaboration
+| Item | Output | Owner | Notes |
+|---|---|---|---|
+| Requirement interpretation |  | PM + Architect + Developer |  |
+| Implementation approach |  | Developer | high-level, not exact code edits |
+| Architecture constraints applied |  | Architect |  |
+| Sequencing |  | Developer |  |
+| Open questions for PM/User |  | PM |  |
+
 ## Implementation Plan
 | FP ID | Implementation Steps | Owner | Status | Notes |
 |---|---|---|---|---|
@@ -36,6 +45,7 @@
 
 ## Developer Readiness
 - Architecture guidance reviewed: yes/no
+- Architect + Developer elaboration completed or not needed: yes/no
 - Implementation plan ready: yes/no
 - Ready to implement after user confirmation: yes/no
 - Notes:
