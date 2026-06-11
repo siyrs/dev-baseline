@@ -28,9 +28,25 @@ PM activates the smallest useful set of optional specialists:
 - QA Tester: test strategy, validation, regression, bug reports, or retest.
 - Coordinator: handoffs, dependencies, sequencing, or cross-workstream status when coordination overhead is real.
 
+PM may define a custom specialist when the default roles do not cover the task need. Record the custom specialist prompt in `03-work-log.md` before activation. The prompt must include role name, mission, boundaries, context files, expected output, exit condition, and what to return to PM.
+
 Communication boundary: main agent talks to PM. PM controls optional specialists. Specialists report to PM.
 
 Each active specialist needs one responsibility, one expected output, and one exit condition. Skipped specialists need a recorded reason.
+
+## Requirement elaboration
+
+A one-line requirement is enough for task intake, but implementation requires a workable plan.
+
+When code changes are needed, Architect and Developer should collaborate through PM before implementation starts. Their output goes into `02-delivery-plan.md` and should cover:
+
+- architecture impact or no-impact rationale
+- implementation approach and sequencing
+- likely files, modules, or areas to change
+- assumptions, constraints, dependencies, and risks
+- self-test and validation expectations
+
+This should be concrete enough to guide work, but it does not need to prescribe exact code edits. Implementation can still adapt tactics under the Living Contract Rule.
 
 ## Living contract rule
 
@@ -38,7 +54,7 @@ Task documents are the shared source of truth across tools and sessions.
 
 The initial task plan is the starting intent. Implementation may adapt tactics, technical approach, tests, or acceptance wording when real delivery constraints require it.
 
-Target-changing deltas must be recorded in `14-change-request-log.md` when they affect:
+Target-changing deltas must be recorded in `05-governance-log.md` when they affect:
 
 - function points
 - acceptance criteria or pass rules
@@ -60,16 +76,16 @@ initial requirement + recorded contract deltas + final acceptance evidence
 Implementation starts only after:
 
 1. PM drafts requirement, scope, function points, and acceptance criteria.
-2. PM records active/skipped agents and rationale.
+2. PM records active/skipped agents, custom specialists, and rationale.
 3. Active specialists produce focused outputs and report only to PM.
 4. PM ensures architecture guidance or no-impact rationale exists.
-5. PM ensures implementation plan or no-developer-needed rationale exists.
+5. PM ensures Architect/Developer elaboration produced a workable implementation approach when code changes are needed.
 6. PM ensures test strategy and AC-to-evidence expectations exist.
 7. PM records decisions, contract deltas, and risks.
 8. PM performs readiness review.
 9. User confirms implementation.
 
-`11-readiness-gates.md` is enforceable. Valid `Result` values are `yes`, `no`, `not-needed`, and `blocked`.
+`06-readiness-acceptance.md` is enforceable. Valid `Result` values are `yes`, `no`, `not-needed`, and `blocked`.
 
 ## Execution loop
 
@@ -82,15 +98,15 @@ QA retests QA-reported bugfixes. When QA is skipped for a low-risk task, PM reco
 ## Required records
 
 - product requirement and acceptance criteria
-- agent roster and handoff notes
-- development plan or no-developer-needed rationale
+- agent roster, custom specialist prompts, and handoff notes
+- delivery plan or no-developer-needed rationale
 - test plan or PM checklist
 - feature status board
 - readiness gates
 - decision log
 - contract delta log
 - risk register
-- test report and acceptance report
+- validation and acceptance evidence
 - stage user report
 
 ## Output format
@@ -98,6 +114,7 @@ QA retests QA-reported bugfixes. When QA is skipped for a low-risk task, PM reco
 - Task workspace:
 - Current phase:
 - Active agents:
+- Custom specialists:
 - Skipped agents:
 - PM readiness:
 - Test readiness:
