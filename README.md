@@ -24,6 +24,14 @@ Visible skill commands:
 | `/dev-baseline-report` | Project and task reports |
 | `/dev-baseline-git-sync` | Safe one-step local/remote synchronization |
 
+## v0.3.0 Highlights
+
+- Compact team task workspace: `00-index.md` plus `01-07` task records.
+- PM-led dynamic roster with default specialists and PM-defined custom specialists.
+- One-line requirements can start intake, but implementation requires Architect + Developer elaboration when code changes are needed.
+- Living Contract rule: tactical changes are allowed; target-changing deltas are recorded in `05-governance-log.md`.
+- Compact-first readiness, traceability, report, dashboard, metrics, and status scripts.
+
 ## Skill Flow Diagrams
 
 ### `/dev-baseline`: general router
@@ -123,7 +131,7 @@ flowchart TD
 ## Start a Team Delivery Task
 
 ```text
-/dev-baseline-task create v0.3.2 用户登录功能
+/dev-baseline-task create v0.3.0 用户登录功能
 ```
 
 During team delivery, the main agent interacts only with PM. PM controls specialists, may define custom specialists when needed, ensures one-line requests are elaborated into workable plans before implementation, and owns readiness, contract deltas, validation evidence, risks, and acceptance.
