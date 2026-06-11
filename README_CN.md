@@ -24,6 +24,14 @@ Dev Baseline 把 AI 辅助开发变成一套可记录、可审查、可验收的
 | `/dev-baseline-report` | 项目和任务报告 |
 | `/dev-baseline-git-sync` | 安全的一键本地/远程同步 |
 
+## v0.3.0 重点变化
+
+- Compact 团队任务工作区：`00-index.md` 加 `01-07` 任务记录。
+- PM 主导动态 agent 阵容，支持默认专家和 PM 自定义专家。
+- 一句话需求可以进入 intake，但涉及代码实现时，开始前需要架构师 + 开发协同拆解可执行方案。
+- 动态契约规则：允许战术调整；影响目标的变化记录到 `05-governance-log.md`。
+- 创建、准备度、追踪、报告、仪表盘、指标、状态推进脚本都以 compact 文档为主。
+
 ## Skill 流程图
 
 ### `/dev-baseline`：通用路由入口
@@ -123,7 +131,7 @@ flowchart TD
 ## 开始团队交付任务
 
 ```text
-/dev-baseline-task create v0.3.2 用户登录功能
+/dev-baseline-task create v0.3.0 用户登录功能
 ```
 
 团队模式下，主 agent 只和 PM 交互。PM 控制专家，可以按需定义自定义专家；一句话需求可以进入 intake，但实现前必须由 PM 组织架构师和开发把需求拆成可执行方案。PM 负责准备度、契约变化、验证证据、风险和验收。
