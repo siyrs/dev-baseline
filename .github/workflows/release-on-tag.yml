@@ -1,0 +1,47 @@
+name: Release on tag
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+            exit 0
+          fi
+
+          notes_file="docs/releases/${TAG}.md"
+          if [[ ! -f "$notes_file" ]]; then
+            notes_file=""
+          fi
+
+          if [[ -n "$notes_file" ]]; then
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file "$notes_file" \
+              --target "$TAG"
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --generate-notes \
+              --target "$TAG"
+          fi
